@@ -31,9 +31,11 @@ CREATE TABLE restaurants (
     opening_hours TIME NULL,
     closing_hours TIME NULL,
     manager_id_users BIGINT(20) NOT NULL,
+    id_zones BIGINT(20) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (manager_id_users) REFERENCES users(id_users)
+    FOREIGN KEY (manager_id_users) REFERENCES users(id_users),
+    FOREIGN KEY (id_zones) REFERENCES zones(id_zones)
 ) ENGINE=InnoDB;
 
 CREATE TABLE tags (
@@ -53,7 +55,7 @@ CREATE TABLE restaurant_tags (
     FOREIGN KEY (tag_id_tags) REFERENCES tags(id_tags)
 ) ENGINE=InnoDB;
 
-CREATE TABLE foods_images (
+CREATE TABLE food_images (
     id_foods_images BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
     restaurant_id_restaurants BIGINT(20) NOT NULL,
     image_url LONGTEXT NOT NULL,
@@ -73,3 +75,22 @@ CREATE TABLE reviews (
     FOREIGN KEY (user_id_users) REFERENCES users(id_users),
     FOREIGN KEY (restaurant_id_restaurants) REFERENCES restaurants(id_restaurants)
 ) ENGINE=InnoDB;
+
+CREATE TABLE favorites (
+    id_favorites BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
+    user_id_users BIGINT(20) NOT NULL,
+    restaurant_id_restaurants BIGINT(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id_users) REFERENCES users(id_users),
+    FOREIGN KEY (restaurant_id_restaurants) REFERENCES restaurants(id_restaurants)
+) ENGINE=InnoDB;
+
+
+CREATE TABLE zones (
+    id_zones BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
+    name_zone VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+

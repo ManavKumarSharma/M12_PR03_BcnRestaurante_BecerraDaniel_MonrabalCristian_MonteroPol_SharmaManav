@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Role;
+use App\Models\Rol;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class RoleFactory extends Factory {
-    protected $model = Role::class;
+class RolFactory extends Factory {
+    protected $model = Rol::class;
 
     public function definition() {
         return [

@@ -5,17 +5,15 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up()
-    {
-        Schema::create('roles', function (Blueprint $table) {
+    public function up() {
+        Schema::create('rol', function (Blueprint $table) {
             $table->id('id_rol');
-            $table->string('name', 255);
+            $table->string('name');
             $table->timestamps();
         });
     }
 
-    public function down()
-    {
-        Schema::dropIfExists('roles');
+    public function down() {
+        Schema::dropIfExists('rol');
     }
 };

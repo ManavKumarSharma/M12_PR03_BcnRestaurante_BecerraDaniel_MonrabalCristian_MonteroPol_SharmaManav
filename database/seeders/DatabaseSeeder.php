@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
+use App\Models\Rol;
 use App\Models\User;
 use App\Models\Restaurant;
 use App\Models\Tag;
@@ -12,7 +12,7 @@ use App\Models\Review;
 class DatabaseSeeder extends Seeder {
     public function run() {
         // Crear roles
-        Role::factory()->count(3)->create();
+        Rol::factory()->count(3)->create();
 
         // Crear usuarios (admin, manager, user)
         User::factory()->create([

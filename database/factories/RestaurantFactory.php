@@ -1,8 +1,8 @@
 <?php
 namespace Database\Factories;
 
-
 use App\Models\Restaurant;
+use App\Models\Zone; 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RestaurantFactory extends Factory {
@@ -18,9 +18,11 @@ class RestaurantFactory extends Factory {
             'phone' => $this->faker->numerify('9########'),
             'opening_hours' => $this->faker->time(),
             'closing_hours' => $this->faker->time(),
-            'manager_id_users' => \App\Models\User::where('id_rol', 2)->inRandomOrder()->first()->id_users ?? 1,
+            'id_manager' => \App\Models\User::where('id_rol', 2)->inRandomOrder()->first()->id_users ?? 1,
+            'id_zone' => Zone::inRandomOrder()->first()->id_zones ?? 1, 
             'created_at' => now(),
             'updated_at' => now(),
         ];
     }
 }
+
