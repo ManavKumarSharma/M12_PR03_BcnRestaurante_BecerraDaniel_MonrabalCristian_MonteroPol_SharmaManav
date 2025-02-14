@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class UserController 
 {
     /**
      * Muestra el formulario de edición de perfil.
@@ -35,6 +35,11 @@ class UserController extends Controller
         $current_user->name = $request->name;
         $current_user->email = $request->email;
         $current_user->phone_number = $request->phone_number;
+        $current_user->password_hash = $request->password_hash;
+        $current_user->save();
+        // Auth::user()->update($request->all());
+        return redirect()->route('user.profile');
+    
         
 
         var_dump($current_user);
@@ -45,3 +50,4 @@ class UserController extends Controller
         die();
         
     }
+}

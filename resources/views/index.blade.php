@@ -17,14 +17,19 @@
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if(Auth::check())
-                            {{ Auth::user()->name }}
+                            {{ Auth::user()->name }} (Autenticado)
                         @else
-                            Mi cuenta
+                            Mi cuenta (No autenticado)
                         @endif
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                         @if(Auth::check())
-                            <li><a class="dropdown-item" href="{{ route('logout') }}">Cerrar sesión</a></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                                </form>
+                            </li>
                             <li><a class="dropdown-item" href="#">Tus reservas</a></li>
                         @else
                             <li><a class="dropdown-item" href="#" data-modal="login-modal">Entra</a></li>
@@ -75,9 +80,7 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Correo electrónico:</label>
                     <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" onblur="validateEmail(this)">
-                    <div class="error-message">
-                        @error('email') {{ $message }} @enderror
-                    </div>
+                    <div class="error-message"></div>
                 </div>
     
                 <div class="mb-3">
@@ -87,13 +90,7 @@
                         @error('password') {{ $message }} @enderror
                     </div>
                 </div>
-    
-                @if(session('error'))
-                    <div class="text-danger">
-                        <p>{{ session('error') }}</p>
-                    </div>
-                @endif
-    
+                
                 <button type="submit" class="btn btn-primary">Iniciar sesión</button>
             </form>
         </div>

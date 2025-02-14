@@ -45,12 +45,16 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
     }
 
     public function role()
     {
         return $this->hasMany(Rol::class, 'id_rol');
+    }
+    public function getAuthPassword()
+    {
+
+        return $this->password_hash;
     }
 }
