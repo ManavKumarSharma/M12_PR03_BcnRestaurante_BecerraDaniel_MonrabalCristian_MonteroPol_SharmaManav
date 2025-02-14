@@ -35,6 +35,11 @@ class UserController
         $current_user->name = $request->name;
         $current_user->email = $request->email;
         $current_user->phone_number = $request->phone_number;
+        $current_user->password_hash = $request->password_hash;
+        $current_user->save();
+        // Auth::user()->update($request->all());
+        return redirect()->route('user.profile');
+    
         
 
         var_dump($current_user);
