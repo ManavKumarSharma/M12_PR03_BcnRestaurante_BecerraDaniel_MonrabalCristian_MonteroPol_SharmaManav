@@ -17,7 +17,7 @@
     <header class="bg-light border-bottom py-3">
         <div class="container d-flex align-items-center justify-content-between">
             <a href="#" class="navbar-brand">
-                <img src="{{ asset('images/bcn-logo.png') }}" alt="Logo" height="40">
+                <img src="{{ asset('img/bcn-logo.png') }}" alt="Logo" height="40">
             </a>
             <div class="d-none d-md-block">
                 <div class="input-group">

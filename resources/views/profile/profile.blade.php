@@ -5,12 +5,12 @@
 @section('content')
 
 <!-- Encabezado con imagen de fondo y avatar -->
-<div class="bg-dark text-white text-center py-5" style="background: url('{{ asset('images/zona-usuario.jpg') }}') center/cover no-repeat;">
+<div class="bg-dark text-white text-center py-5" style="background: url('{{ asset('img/zona-usuario.jpg') }}') center/cover no-repeat;">
     <div class="container">
         <div class="d-flex flex-column align-items-center">
             <!-- Avatar -->
             <div class="rounded-circle border border-3 border-white overflow-hidden mb-3" style="width: 100px; height: 100px;">
-                <img src="{{ asset('images/zona-usuario.jpg') }}" alt="Foto de perfil" class="img-fluid">
+                <img src="{{ asset('img/zona-usuario.jpg') }}" alt="Foto de perfil" class="img-fluid">
             </div>
             <h3 class="mb-1"></h3>
             <p class="text-light mb-3">Antigüedad: </p>
