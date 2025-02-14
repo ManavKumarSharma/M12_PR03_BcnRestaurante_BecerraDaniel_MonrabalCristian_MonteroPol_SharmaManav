@@ -10,26 +10,25 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
-
-    $user = User::where('email', $request->email)->first();
-
-    if (!$user) {
-        return back()->with('error', 'Credenciales incorrectas')->withInput();
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+    
+        $user = User::where('email', $request->email)->first();
+    
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return back()
+                ->withErrors(['email' => 'Credenciales incorrectas'])
+                ->withInput()
+                ->with('modal', 'login-modal'); // Indicar que se debe abrir el modal
+        }
+    
+        Auth::login($user);
+        return redirect('/')->with('success', 'Inicio de sesión exitoso');
     }
-
-    if (!Hash::check($request->password, $user->password_hash)) {
-        return back()->with('error', 'Credenciales incorrectas')->withInput();
-    }
-
-    Auth::login($user);
-
-    return redirect('/')->with('success', 'Inicio de sesión exitoso');
-}
+    
     
 
     public function register(Request $request)

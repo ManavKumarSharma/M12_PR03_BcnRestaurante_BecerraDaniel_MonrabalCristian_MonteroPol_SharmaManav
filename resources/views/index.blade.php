@@ -75,30 +75,30 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Correo electrónico:</label>
                     <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" onblur="validateEmail(this)">
-                    <div class="error-message" id="email-error">
+                    <div class="error-message">
                         @error('email') {{ $message }} @enderror
                     </div>
                 </div>
-            
+    
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña:</label>
                     <input type="password" id="password" name="password" class="form-control" onblur="validatePassword(this)">
-                    <div class="error-message" id="password-error">
+                    <div class="error-message">
                         @error('password') {{ $message }} @enderror
                     </div>
                 </div>
-            
+    
                 @if(session('error'))
-                    <p class="text-danger">{{ session('error') }}</p>
+                    <div class="text-danger">
+                        <p>{{ session('error') }}</p>
+                    </div>
                 @endif
-                @if(session('success'))
-                    <p class="text-success">{{ session('success') }}</p>
-                @endif
-            
+    
                 <button type="submit" class="btn btn-primary">Iniciar sesión</button>
             </form>
         </div>
     </div>
+    
 
 <div id="register-modal" class="modal">
     <div class="modal-content">
@@ -135,7 +135,7 @@
     <script src="{{ asset('js/validation_login.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            @if(session('error'))
+            @if(session('modal') == 'login-modal' || $errors->any())
                 const loginModal = document.getElementById('login-modal');
                 if (loginModal) {
                     loginModal.style.display = 'block';
