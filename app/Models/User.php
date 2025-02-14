@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Rol;
 
 class User extends Authenticatable
 {
@@ -17,8 +18,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'last_name',
         'email',
-        'password_hash',
+        'phone_number',
+        'password_hash'
     ];
 
     /**
@@ -40,15 +43,12 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'password' => 'hashed',
         ];
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getAuthPassword()
+    public function role()
     {
-        return $this->password_hash;
+        return $this->hasMany(Rol::class, 'id_rol');
     }
 }
