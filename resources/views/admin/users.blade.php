@@ -5,5 +5,5 @@
 
 {{-- Agregamos los scripts específicos de esta vista --}}
 @push('scripts')
-    <script src="{{ asset('js/usersManagement.js') }}"></script>
+    <script src="{{ asset('js/admin/usersManagement.js') }}"></script>
 @endpush

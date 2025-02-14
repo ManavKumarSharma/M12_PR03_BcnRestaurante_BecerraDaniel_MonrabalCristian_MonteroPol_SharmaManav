@@ -2,6 +2,6 @@
 
 @section('title', "Gestión de $title")
 
-@section('footer')
-    @include('admin.includes.footer')
-@endsection
+@push('scripts')
+    <script src="{{ asset('js/admin/restaurantsManagement.js') }}"></script>
+@endpush

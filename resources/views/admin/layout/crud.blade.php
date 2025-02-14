@@ -24,7 +24,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-3 mb-5 bg-white rounded">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
-                    <img src="{{ asset('images/bcnrestaurante-logo.png') }}" alt="" class="img-fluid">
+                    <img src="{{ asset('img/bcnrestaurante-logo.png') }}" alt="" class="img-fluid">
                 </a>
         
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

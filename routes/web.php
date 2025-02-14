@@ -6,7 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 
 // Rutas para el UserController
-Route::controller(UserController::class)->middleware('auth')->group(function () {
+Route::controller(UserController::class)->group(function () {
     Route::get('/admin/users', 'showUsersAdminView')->name('admin.users'); 
     Route::get('/api/users/list', 'getAllUsersFromDB');
 });
