@@ -17,7 +17,16 @@ class UserController extends Controller
     // Finalmente retornas la vista, por ejemplo:
     return view('profile.profile'); // o 'profile.profile' si está en la carpeta 'profile'
 }
+  // Método que muestra todos los usuarios
+    public function showUsersAdminView() {
+        $title = 'usuarios';
+        return view('admin.users', compact('title'));
+    }
 
+    public function getAllUsersFromDB () {
+        // Devolver todos los usuarios con el rol incluído
+        return response()->json(User::select('id_user', 'name', 'email', 'created_at')->with('role: id_rol, name')->get());
+    }
     public function update(Request $request){
         // Aquí pones la lógica que necesites (por ejemplo, actualizar los datos del usuario).
         // Finalmente rediriges a la ruta que quieras, por ejemplo:
@@ -36,5 +45,3 @@ class UserController extends Controller
         die();
         
     }
-
-}

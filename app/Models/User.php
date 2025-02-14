@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Rol;
 
 class User extends Authenticatable
 {
@@ -22,7 +23,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'phone_number',
-        'password_hash',
+        'password_hash'
     ];
 
     /**
@@ -46,5 +47,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function role()
+    {
+        return $this->hasMany(Rol::class, 'id_rol');
     }
 }
