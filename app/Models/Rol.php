@@ -9,5 +9,6 @@ class Rol extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory;
-    protected $table = 'rol';
+
+    protected $primaryKey = 'id_rol';
 }
