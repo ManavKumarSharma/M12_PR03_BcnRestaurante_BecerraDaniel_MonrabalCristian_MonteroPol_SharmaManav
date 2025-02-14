@@ -1,0 +1,41 @@
+/* HEADER SUPERIOR */
+.header-top {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+}
+.header-top .navbar-brand img {
+    height: 40px;
+}
+
+/* HEADER INFERIOR */
+.header-bottom {
+    background-color: #f26522;
+    padding: 10px 0;
+}
+.header-bottom .navbar-nav {
+    gap: 1rem;
+}
+.header-bottom .social-icons a {
+    color: #fff;
+    font-size: 1.3rem;
+    margin-left: 15px;
+}
+.header-bottom .social-icons a:hover {
+    color: #f8f9fa;
+}
+
+/* FOOTER */
+footer {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 0;
+}
+footer .footer-links a {
+    color: #ffba00;
+    text-decoration: none;
+    margin-right: 10px;
+}
+footer .footer-links a:hover {
+    text-decoration: underline;
+}
