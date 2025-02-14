@@ -10,6 +10,8 @@ CREATE TABLE rol (
 CREATE TABLE users (
     id_users BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(9) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     id_rol BIGINT(20) NOT NULL,
