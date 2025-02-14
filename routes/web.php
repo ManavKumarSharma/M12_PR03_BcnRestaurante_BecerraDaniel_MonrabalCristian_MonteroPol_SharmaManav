@@ -14,7 +14,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/admin/users', 'showUsersAdminView')->name('admin.users'); 
     Route::get('/api/users/list', 'getAllUsersFromDB');
 });
- 
+
 // Rutas para el RestaurantController
 Route::controller(RestaurantController::class)->group(function () {
     Route::get('/admin/restaurants', 'showRestaurantsAdminView')->name('admin.restaurants'); // Endpoint de CRUD restaurantes
