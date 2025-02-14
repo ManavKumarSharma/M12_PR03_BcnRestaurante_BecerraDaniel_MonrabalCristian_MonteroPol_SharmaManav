@@ -2,59 +2,39 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Rol;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    // Indica cuál es la clave primaria
+    protected $primaryKey = 'id_user';
+
+    // Campos asignables masivamente
     protected $fillable = [
         'name',
         'last_name',
         'email',
+        'password_hash',
         'phone_number',
-        'password_hash'
+        'id_rol',
+        'profile_image'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
+    // Ocultar estos campos en las respuestas JSON
     protected $hidden = [
-        'password',
+        'password_hash',
         'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Sobreescribe el método para obtener la contraseña
+     * para que use la columna "password_hash".
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-        ];
-    }
-
-    public function role()
-    {
-        return $this->hasMany(Rol::class, 'id_rol');
-    }
     public function getAuthPassword()
     {
-
         return $this->password_hash;
     }
 }
