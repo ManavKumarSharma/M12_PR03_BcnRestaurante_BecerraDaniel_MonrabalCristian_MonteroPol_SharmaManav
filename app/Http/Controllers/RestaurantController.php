@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
-class RestaurantController
+class RestaurantController extends Controller
 {
     // Método que muestra todos los restaurantes
     public function showRestaurantsAdminView() {

@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class UserController 
+class UserController extends Controller
 {
     /**
      * Muestra el formulario de edición de perfil.
@@ -40,9 +41,6 @@ class UserController
         var_dump($current_user);
         // Auth::user()->update($request->all());
         // return redirect()->route('user.profile');
-
-
         die();
-        
     }
 }
