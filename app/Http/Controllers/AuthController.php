@@ -47,12 +47,9 @@ class AuthController
         return response()->json(['success' => true, 'message' => 'Registro exitoso']);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::logout(); // Cierra la sesión del usuario
-        $request->session()->invalidate(); // Invalida la sesión
-        $request->session()->regenerateToken(); // Regenera el token de sesión
-    
-        return redirect('/')->with('success', 'Has cerrado sesión correctamente.');
+        Auth::logout();
+        return back();
     }
 }
