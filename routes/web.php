@@ -26,10 +26,14 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Rutas de registro
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register'); 
 Route::post('/register', [AuthController::class, 'register']);
 
 
 
-Route::get('/perfil', [UserController::class, 'profile'])->name('user.profile');
-Route::post('/update', [UserController::class, 'update'])->name('user.update');
+Route::middleware('auth')->group(function () {
+    Route::get('/perfil', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/perfil', [UserController::class, 'update'])->name('user.update');
+    // Otras rutas protegidas...
+});
+

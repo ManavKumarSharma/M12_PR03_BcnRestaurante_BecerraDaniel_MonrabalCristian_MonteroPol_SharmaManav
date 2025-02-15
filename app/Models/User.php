@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    public $timestamps = true;
     use Notifiable;
 
     // Indica cuál es la clave primaria
@@ -37,4 +38,5 @@ class User extends Authenticatable
     {
         return $this->password_hash;
     }
+    
 }
