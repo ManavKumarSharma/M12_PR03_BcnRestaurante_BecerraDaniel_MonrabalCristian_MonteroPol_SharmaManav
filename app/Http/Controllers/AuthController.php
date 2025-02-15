@@ -21,7 +21,7 @@ class AuthController extends Controller
     
         if (!$user || !Hash::check($request->password, $user->password)) {
             return back()
-                ->withErrors(['email' => 'Credenciales incorrectas'])
+                ->withErrors(['password' => 'Credenciales incorrectas'])
                 ->withInput()
                 ->with('modal', 'login-modal'); // Indicar que se debe abrir el modal
         }
