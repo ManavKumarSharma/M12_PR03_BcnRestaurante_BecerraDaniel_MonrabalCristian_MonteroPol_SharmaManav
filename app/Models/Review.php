@@ -12,5 +12,14 @@ class Review extends Model
 
     protected $table = 'reviews';
 
-    protected $primaryKey = 'id_review';
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+
 }

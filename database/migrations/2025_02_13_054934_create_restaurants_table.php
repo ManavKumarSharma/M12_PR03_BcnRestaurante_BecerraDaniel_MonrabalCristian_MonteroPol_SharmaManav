@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up() {
         Schema::create('restaurants', function (Blueprint $table) {
-            $table->id('id_restaurant');
+            $table->id();
             $table->string('name');
             $table->text('description');
             $table->text('location');
@@ -16,12 +16,12 @@ return new class extends Migration {
             $table->string('phone', 15)->nullable();
             $table->time('opening_hours')->nullable();
             $table->time('closing_hours')->nullable();
-            $table->unsignedBigInteger('id_manager');
-            $table->unsignedBigInteger('id_zone');
+            $table->unsignedBigInteger('manager_id');
+            $table->unsignedBigInteger('zones_id');
             $table->timestamps();
 
-            $table->foreign('id_manager')->references('id_user')->on('users');
-            $table->foreign('id_zone')->references('id_zone')->on('zones');
+            $table->foreign('manager_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('zones_id')->references('id')->on('zones')->onDelete('cascade');
         });
     }
 

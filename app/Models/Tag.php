@@ -12,5 +12,8 @@ class Tag extends Model
 
     protected $table = 'tags';
 
-    protected $primaryKey = 'id_tag';
+    public function restaurants() {
+        return $this->belongsToMany(Restaurant::class,'restaurant_tags','tags_id','restaurants_id');
+    }
+
 }

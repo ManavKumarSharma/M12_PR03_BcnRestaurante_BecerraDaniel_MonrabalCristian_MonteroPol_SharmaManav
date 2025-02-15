@@ -12,11 +12,9 @@ class FoodImage extends Model
 
     protected $table = 'food_images';
 
-    protected $primaryKey = 'id_food_image';
-
     public function restaurant()
     {
-        return $this->belongsTo(Restaurant::class, 'id_restaurant');
+        return $this->belongsTo(Restaurant::class);
     }
 
 }
