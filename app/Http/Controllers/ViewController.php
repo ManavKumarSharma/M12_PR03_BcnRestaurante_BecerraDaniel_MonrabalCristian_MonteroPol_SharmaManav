@@ -16,4 +16,9 @@ class ViewController extends Controller
     {
         return view('about');
     }
+
+    // public function restaurantes()
+    // {
+    //     return view('restaurantes.todos');
+    // }
 }

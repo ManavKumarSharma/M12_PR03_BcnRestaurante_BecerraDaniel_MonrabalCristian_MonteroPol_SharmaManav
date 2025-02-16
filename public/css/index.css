@@ -68,6 +68,89 @@
     margin-right: 1rem;
 }
 
+/* GRID RESTAURANTES */
+
+.grid-container {
+    width: 65%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4vh 5vh;
+    justify-items: center;
+}
+
+.restaurante:hover>.informacionRestaurante a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
+.restaurante:hover .restaurante img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+    /* Mueve la transición aquí */
+}
+
+.restaurante {
+    width: 100%;
+    padding: 1vh;
+    margin: 1vh;
+    text-align: left;
+}
+
+.imagenesRestaurante {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.restaurante img {
+    max-width: 100%;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.tipocomidaRestaurante {
+    color: #718fa1;
+    text-transform: uppercase;
+}
+
+.informacionRestaurante {
+    margin: 1vh 0;
+    padding: 10px;
+    border: 1px solid #d2d2d2;
+}
+
+.informacionRestaurante a {
+    max-width: 75%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.informacionRestaurante h3 {
+    padding: 0 1vh;
+    margin: 0;
+    font-size: 2.5vh;
+}
+
+.informacionRestaurante p {
+    max-width: 80%;
+    padding: 0 1vh;
+    margin: 0;
+    font-size: 1.5vh;
+}
+
+.cuboinfoRestaurante {
+    align-items: center;
+    margin: 1vh 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.numerosRestaurantes {
+    font-size: 1.8vh !important;
+}
+
+
 @media (max-width: 768px) {
     .social-icons {
         margin-top: 10px;

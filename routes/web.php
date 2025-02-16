@@ -4,6 +4,7 @@ use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ViewController;
 
 Route::get('/', function () {
     return view('index');
@@ -24,6 +25,15 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::controller(RestaurantController::class)->group( function(){
+
+    Route::get('/restaurantes', 'todo')->name('views.restaurantes');
+
+    Route::get('/restaurantes/etiqueta', 'filtrarPorEtiqueta')->name('vistas.filtrar-restaurantes');    
+
+    Route::get('/{id}', 'mostrarElRestaurante')->name('vistas.restaurante');
+
+});
 
 
 Route::get('/perfil', [UserController::class, 'profile'])->name('user.profile');
