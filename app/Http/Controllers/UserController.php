@@ -25,8 +25,9 @@ class UserController
 
     public function getAllUsersFromDB () {
         // Devolver todos los usuarios con el rol incluído
-        return response()->json(User::select('id_user', 'name', 'email', 'created_at')->with('role: id_rol, name')->get());
+        return response()->json(User::select('id_user AS ID', 'name AS Nombre', 'email AS Email', 'created_at AS Fecha de creación')->get());
     }
+
     public function update(Request $request){
         // Aquí pones la lógica que necesites (por ejemplo, actualizar los datos del usuario).
         // Finalmente rediriges a la ruta que quieras, por ejemplo:

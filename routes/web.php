@@ -4,10 +4,9 @@ use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ViewController;
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [ViewController::class, 'home'])->name('home');
 
 // Rutas para el UserController
 Route::controller(UserController::class)->group(function () {

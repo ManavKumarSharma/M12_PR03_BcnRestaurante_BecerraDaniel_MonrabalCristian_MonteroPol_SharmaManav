@@ -40,7 +40,7 @@
                             <a class="nav-link {{ Route::currentRouteName() == 'admin.restaurants' ? 'text-custom-orange' : 'active' }} fs-5" href="{{ route('admin.restaurants') }}">Restaurantes</a>
                         </li>
                         <li class="nav-item me-4"> <!-- Agregar margen al final -->
-                            <a class="nav-link {{ Route::currentRouteName() == 'admin.users' ? 'text-custom-orange' : 'active' }} fs-5" href="{{ route('admin.users') }}">Página pública</a>
+                            <a class="nav-link {{ Route::currentRouteName() == 'admin.home' ? 'text-custom-orange' : 'active' }} fs-5" href="{{ route('home') }}">Página pública</a>
                         </li>
                     </ul>                    
 
