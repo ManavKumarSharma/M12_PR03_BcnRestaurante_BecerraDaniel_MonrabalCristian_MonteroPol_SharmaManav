@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up() {
         Schema::create('restaurant_tags', function (Blueprint $table) {
-            $table->id('id_restaurant_tags');
-            $table->unsignedBigInteger('id_restaurant');
-            $table->unsignedBigInteger('id_tag');
+            $table->id();
+            $table->unsignedBigInteger('restaurants_id');
+            $table->unsignedBigInteger('tags_id');
+            $table->timestamps();
 
-            $table->foreign('id_restaurant')->references('id_restaurant')->on('restaurants');
-            $table->foreign('id_tag')->references('id_tag')->on('tags');
+            $table->foreign('restaurants_id')->references('id')->on('restaurants');
+            $table->foreign('tags_id')->references('id')->on('tags');
         });
     }
 

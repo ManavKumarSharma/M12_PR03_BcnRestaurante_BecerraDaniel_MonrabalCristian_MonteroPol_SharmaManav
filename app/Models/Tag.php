@@ -9,4 +9,11 @@ class Tag extends Model
 {
     /** @use HasFactory<\Database\Factories\TagFactory> */
     use HasFactory;
+
+    protected $table = 'tags';
+
+    public function restaurants() {
+        return $this->belongsToMany(Restaurant::class,'restaurant_tags','tags_id','restaurants_id');
+    }
+
 }

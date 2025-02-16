@@ -48,7 +48,7 @@ class AuthController
 
         // Si falla la autenticación, redirige de vuelta con un error
         return back()->withErrors([
-            'email' => 'Las credenciales no coinciden con nuestros registros.'
+            'password' => 'Las credenciales son incorrectas.'
         ])->withInput();
     }
 

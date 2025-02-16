@@ -9,17 +9,9 @@ class Zone extends Model
     use HasFactory;
 
     protected $table = 'zones';
-
-    protected $primaryKey = 'id_zone';
-
-    protected $fillable = [
-        'name_zone',
-        'created_at',
-        'updated_at',
-    ];
-
+    
     public function restaurants()
     {
-        return $this->hasMany(Restaurant::class, 'id_zone', 'id_zone');
+        return $this->hasMany(Restaurant::class);
     }
 }
