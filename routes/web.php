@@ -10,7 +10,7 @@ Route::get('/', [ViewController::class, 'home'])->name('home');
 
 // Rutas para el UserController
 Route::controller(UserController::class)->group(function () {
-    Route::get('/admin/users', 'showUsersAdminView')->name('admin.users'); 
+    Route::get('/admin/users', 'showUsersAdminView')->name('admin.users');
     Route::get('/api/users/list', 'getAllUsersFromDB');
 });
 
@@ -20,19 +20,23 @@ Route::controller(RestaurantController::class)->group(function () {
 });
 
 // Rutas de autenticación
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showLoginForm')->name('login');
+    Route::post('/login', 'login');
+    Route::post('/logout', 'logout')->name('logout');
+});
 
 // Rutas relacionadas con restaurantes
 Route::controller(RestaurantController::class)->group(function () {
     Route::get('/restaurantes', 'todo')->name('views.restaurantes');
-    Route::get('/restaurantes/etiqueta', 'filtrarPorEtiqueta')->name('vistas.filtrar-restaurantes');    
-    Route::get('/restaurantes/{id}', 'mostrarElRestaurante')->name('vistas.restaurante'); // Se especifica el prefijo "restaurantes"
+    Route::get('/restaurantes/etiqueta', 'filtrarPorEtiqueta')->name('vistas.filtrar-restaurantes');
+    Route::get('/restaurantes/{id}', 'mostrarElRestaurante')->name('vistas.restaurante');
 });
 
 // Rutas del perfil de usuario
-Route::get('/perfil', [UserController::class, 'edit'])->name('user.edit');
-Route::put('/perfil', [UserController::class, 'update'])->name('user.update');
-Route::delete('/user/photo', [UserController::class, 'destroyPhoto'])->name('user.photo.delete');
-Route::get('/profile-all', [UserController::class, 'profileAll'])->name('profile.profile-all');
+Route::controller(UserController::class)->group(function () {
+    Route::get('/perfil', 'edit')->name('user.edit');
+    Route::put('/perfil', 'update')->name('user.update');
+    Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete');
+    Route::get('/profile-all', 'profileAll')->name('profile.profile-all');
+});

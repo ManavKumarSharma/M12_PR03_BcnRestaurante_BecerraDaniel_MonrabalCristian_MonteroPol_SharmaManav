@@ -25,7 +25,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'phone_number',
-        'password'
+        'password_hash'
     ];
 
     /**
@@ -64,6 +64,6 @@ class User extends Authenticatable
     }
 
     public function rol() {
-        return $this->belongsTo(Rol::class);
+        return $this->hasMany(Rol::class);
     }
 }
