@@ -7,11 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up() {
         Schema::create('food_images', function (Blueprint $table) {
-            $table->id('id_food_image');
-            $table->unsignedBigInteger('id_restaurant');
+            $table->id();
+            $table->unsignedBigInteger('restaurants_id');
             $table->text('image_url');
+            $table->timestamps();
             
-            $table->foreign('id_restaurant')->references('id_restaurant')->on('restaurants');
+            $table->foreign('restaurants_id')->references('id')->on('restaurants')->onDelete('cascade');
         });
     }
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
 
 class UserController 
 {
@@ -58,11 +60,13 @@ class UserController
             
             if ($request->hasFile('photo')) {
                 $file = $request->file('photo');
-                $filename = time().'_'.$file->getClientOriginalName();
-                // Mueve el archivo directamente a public/img para que asset('img/...') lo encuentre
+                $filename = time() . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('img'), $filename);
-                $user->update(['profile_image' => $filename]);
+                // Actualiza el campo en la base de datos:
+                $user->profile_image = $filename;
+                $user->save();
             }
+            
             return redirect()->route('user.edit')->with('status', 'Foto de perfil actualizada correctamente');
         }
         
@@ -72,7 +76,7 @@ class UserController
             'last_name'    => 'required|string|max:255',
             'email'        => 'required|email|max:255',
             'phone_number' => 'nullable|string|max:20',
-            'password'     => 'nullable|min:6|confirmed',
+            'password'     => 'nullable|min:6',
             'photo'        => 'nullable|image|max:2048',
         ]);
         
@@ -99,6 +103,22 @@ class UserController
         
         return redirect()->route('user.edit')->with('status', 'Perfil actualizado correctamente');
     }
+
+
+public function destroyPhoto(Request $request)
+{
+    $user = auth()->user();
+
+    if ($user->profile_image && File::exists(public_path('img/' . $user->profile_image))) {
+        File::delete(public_path('img/' . $user->profile_image));
+    }
+
+    $user->profile_image = null;
+    $user->save();
+
+    return redirect()->back()->with('success', 'Foto eliminada correctamente');
+}
+
     
     
 

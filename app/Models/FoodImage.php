@@ -9,4 +9,12 @@ class FoodImage extends Model
 {
     /** @use HasFactory<\Database\Factories\FoodImageFactory> */
     use HasFactory;
+
+    protected $table = 'food_images';
+
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+
 }

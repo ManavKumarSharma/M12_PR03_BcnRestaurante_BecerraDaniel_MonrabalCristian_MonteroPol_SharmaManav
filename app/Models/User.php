@@ -2,41 +2,68 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Rol;
 
 class User extends Authenticatable
 {
-    public $timestamps = true;
-    use Notifiable;
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, Notifiable;
 
-    // Indica cuál es la clave primaria
-    protected $primaryKey = 'id_user';
+    protected $table = 'users';
 
-    // Campos asignables masivamente
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'name',
         'last_name',
         'email',
-        'password_hash',
         'phone_number',
-        'id_rol',
-        'profile_image'
+        'password_hash'
     ];
 
-    // Ocultar estos campos en las respuestas JSON
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
     protected $hidden = [
-        'password_hash',
+        'password',
         'remember_token',
     ];
 
     /**
-     * Sobreescribe el método para obtener la contraseña
-     * para que use la columna "password_hash".
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    public function getAuthPassword()
+    protected function casts(): array
     {
-        return $this->password_hash;
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
-    
+
+    public function restaurants() {
+        return $this->hasMany(Restaurant::class);
+    }
+
+    public function favorites() {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function reviews() {
+        return $this->hasMany(Review::class);
+    }
+
+    public function rol() {
+        return $this->hasMany(Rol::class);
+    }
 }

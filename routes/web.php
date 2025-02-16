@@ -34,6 +34,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth')->group(function () {
     Route::get('/perfil', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/perfil', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/user/photo', [UserController::class, 'destroyPhoto'])->name('user.photo.delete');
+
     // Otras rutas protegidas...
 });
 
