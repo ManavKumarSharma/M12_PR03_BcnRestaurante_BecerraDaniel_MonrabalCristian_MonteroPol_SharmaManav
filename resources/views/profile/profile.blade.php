@@ -3,6 +3,15 @@
 @section('title', 'Mi Perfil')
 
 @section('content')
+
+@if(session('status'))
+    <div class="container mt-4">
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
+        </div>
+    </div>
+@endif
+
 <!-- Encabezado con imagen de fondo y avatar -->
 <div class="bg-dark text-center py-5" style="background: url('{{ asset('img/zona-usuario.jpg') }}') center/cover no-repeat;">
     <div class="container">
@@ -10,10 +19,10 @@
             <!-- Avatar -->
             <div class="rounded-circle border border-3 border-white overflow-hidden mb-3">
                 <img src="{{ asset($user->profile_image ? 'img/' . $user->profile_image : 'img/user.jpg') }}" 
-                     alt="Foto de perfil" 
+                     alt="Foto de perfil" style="width: 120px; height: 120px;
                      class="img-fluid rounded-circle profile-img">
             </div>
-            <h3 class="mb-1 text-dark">{{ $user->name }}</h3>
+            <h3 class="mb-1 text-dark">{{ $user->name }} {{ $user->last_name }}</h3>
             <p class="mb-3 text-dark">
                 Antigüedad: {{ $user->created_at?->diffForHumans() ?? 'No definido' }}
             </p>
@@ -60,7 +69,7 @@
 
     <!-- Botón lateral "Mi perfil" -->
     <div class="text-end mt-2">
-        <a href="#" class="btn btn-warning text-white" style="background-color: #f26522; border: none;">Mi perfil</a>
+        <a href="{{ route('profile.profile-all') }}" class="btn btn-warning text-white" style="background-color: #f26522; border: none;">Mi perfil</a>
     </div>
 
     <!-- Contenido de las pestañas -->
@@ -68,20 +77,20 @@
         <!-- Pestaña: Mis datos -->
         <div class="tab-pane fade show active" id="datos" role="tabpanel" aria-labelledby="datos-tab">
             <h5>Mis datos</h5>
-            <form action="{{ route('user.update') }}" method="POST" enctype="multipart/form-data">
+            <form id="datosForm" action="{{ route('user.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="name" value="{{ old('name', $user->name) }}">
+                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}">
                         @error('name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="apellidos" class="form-label">Apellidos</label>
-                        <input type="text" class="form-control" id="apellidos" name="last_name" value="{{ old('last_name', $user->last_name) }}">
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ old('last_name', $user->last_name) }}">
                         @error('last_name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -99,7 +108,7 @@
                         <label for="telefono" class="form-label">Teléfono</label>
                         <div class="input-group">
                             <span class="input-group-text">+34</span>
-                            <input type="text" class="form-control" id="telefono" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}">
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}">
                             @error('phone_number')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -144,34 +153,27 @@
     </div>
 </div>
 
-<!-- Scripts -->
-<script>
-    // Mostrar/Ocultar contraseña
-    document.querySelector(".toggle-password").addEventListener("click", function () {
-        let passwordInput = document.getElementById("password");
-        let icon = this.querySelector("i");
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            icon.classList.remove("bi-eye");
-            icon.classList.add("bi-eye-slash");
-        } else {
-            passwordInput.type = "password";
-            icon.classList.remove("bi-eye-slash");
-            icon.classList.add("bi-eye");
-        }
-    });
+<!-- Modal de confirmación para eliminar la foto -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de eliminar la foto de perfil?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    // Al hacer click en "Subir foto", se activa el input de archivo del formulario oculto
-    document.getElementById("btnSubirFoto").addEventListener("click", function() {
-        document.getElementById("photoInput").click();
-    });
+@endsection
 
-    // Evento para eliminar la foto de perfil
-    document.getElementById("btnEliminarFoto")?.addEventListener("click", function() {
-        if (confirm("¿Estás seguro de eliminar la foto de perfil?")) {
-            document.getElementById("deletePhotoForm").submit();
-        }
-    });
-</script>
-
+@section('scripts')
+    <script src="{{ asset('js/perfil.js') }}"></script>
 @endsection

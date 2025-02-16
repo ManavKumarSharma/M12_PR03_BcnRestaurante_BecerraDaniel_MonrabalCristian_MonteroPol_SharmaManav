@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/perfil', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/perfil', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/photo', [UserController::class, 'destroyPhoto'])->name('user.photo.delete');
+    Route::get('/profile-all', [UserController::class, 'profileAll'])->name('profile.profile-all');
+
 
     // Otras rutas protegidas...
 });

@@ -88,8 +88,9 @@ class UserController
         ];
         
         if (!empty($validated['password'])) {
-            $updateData['password_hash'] = bcrypt($validated['password']);
+            $updateData['password'] = bcrypt($validated['password']);
         }
+        
         
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
@@ -117,6 +118,13 @@ public function destroyPhoto(Request $request)
     $user->save();
 
     return redirect()->back()->with('success', 'Foto eliminada correctamente');
+}
+public function profileAll()
+{
+    // Aquí puedes procesar datos o lógica adicional si lo necesitas
+    $user = Auth::user();
+
+    return view('profile.profile-all',['user' => $user]); // Asegúrate de tener esta vista creada en resources/views
 }
 
     

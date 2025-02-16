@@ -8,68 +8,63 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
 </head>
 <body>
-    <header class="bg-white border-bottom py-3">
-        <div class="container">
-          <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
-            <!-- Logo -->
-            <div class="mb-3 mb-md-0">
-              <img src="{{ asset('img/bcn-logo.png') }}" alt="Bcn Restaurantes" class="img-fluid" style="max-height:50px;">
-            </div>
-            <!-- Buscador (siempre visible) -->
-            <div class="flex-grow-1 mb-3 mb-md-0 mx-md-3">
-              <input type="text" class="form-control" placeholder="Buscar restaurante">
-            </div>
-            <!-- Dropdowns (solo en md y superiores) -->
-            <div class="d-none d-md-flex align-items-center gap-3">
-              <!-- Dropdown de Cuenta -->
-              <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  @if(Auth::check())
-                    {{ Auth::user()->name }} (Autenticado)
-                  @else
-                    Mi cuenta (No autenticado)
-                  @endif
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-                  @if(Auth::check())
-                    <li>
-                      <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="dropdown-item">Cerrar sesión</button>
-                      </form>
-                    </li>
-                    <li><a class="dropdown-item" href="#">Tus reservas</a></li>
-                    <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mi Perfil</a></li>
-                  @else
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Entra</a></li>
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
-                    <li><a class="dropdown-item" href="#">Tus reservas</a></li>
-                  @endif
-                </ul>
-              </div>
-              <!-- Dropdown de Ayuda -->
-              <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="helpDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  Ayuda
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="helpDropdown">
-                  <li><a class="dropdown-item" href="#">Preguntas frecuentes</a></li>
-                  <li><a class="dropdown-item" href="#">Contacto</a></li>
-                  <li><a class="dropdown-item" href="#">Soporte</a></li>
-                </ul>
-              </div>
-            </div>
+  <header class="bg-white border-bottom py-3">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <!-- Logo -->
+        <div class="mb-3 mb-md-0">
+          <img src="{{ asset('img/bcn-logo.png') }}" alt="Bcn Restaurantes" class="img-fluid" style="max-height:50px;">
+        </div>
+        <!-- Buscador -->
+        <div class="flex-grow-1 mb-3 mb-md-0 mx-md-3">
+          <input type="text" class="form-control" placeholder="Buscar restaurante">
+        </div>
+        <!-- Dropdowns -->
+        <div class="d-none d-md-flex align-items-center gap-3">
+          <!-- Dropdown de Cuenta -->
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              @if(Auth::check())
+                {{ Auth::user()->name }} (Autenticado)
+              @else
+                Mi cuenta (No autenticado)
+              @endif
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+              @if(Auth::check())
+                <li>
+                  <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                  </form>
+                </li>
+                <li><a class="dropdown-item" href="#">Tus reservas</a></li>
+                <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mi Perfil</a></li>
+              @else
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Entra</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
+                <li><a class="dropdown-item" href="#">Tus reservas</a></li>
+              @endif
+            </ul>
+          </div>
+          <!-- Dropdown de Ayuda -->
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="helpDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              Ayuda
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="helpDropdown">
+              <li><a class="dropdown-item" href="#">Preguntas frecuentes</a></li>
+              <li><a class="dropdown-item" href="#">Contacto</a></li>
+              <li><a class="dropdown-item" href="#">Soporte</a></li>
+            </ul>
           </div>
         </div>
-      </header>
-      
-      
-      
+      </div>
+    </div>
+  </header>
   
-
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
@@ -101,7 +96,7 @@
   <div class="container mt-4">
     @yield('content')
   </div>
-
+  
   <!-- FOOTER -->
   <footer class="bg-dark text-white py-4 mt-5">
     <div class="container">
@@ -143,7 +138,8 @@
     </div>
   </footer>
 
-  <!-- Bootstrap JS -->
+  <!-- Bootstrap JS (Bundle incluye Popper) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  @yield('scripts')
 </body>
 </html>
