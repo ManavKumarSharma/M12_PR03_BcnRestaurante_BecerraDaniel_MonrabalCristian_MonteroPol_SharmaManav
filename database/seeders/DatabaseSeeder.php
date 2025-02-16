@@ -1,51 +1,26 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use App\Models\Rol;
-use App\Models\User;
+namespace Database\Seeders;
+
 use App\Models\Restaurant;
-use App\Models\Tag;
-use App\Models\RestaurantTag;
-use App\Models\FoodImage;
-use App\Models\Review;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder {
-    public function run() {
-        // Crear roles
-        Rol::factory()->count(3)->create();
-
-        // Crear usuarios (admin, manager, user)
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'id_rol' => 1
-        ]);
-        User::factory()->create([
-            'name' => 'Manager User',
-            'email' => 'manager@example.com',
-            'id_rol' => 2
-        ]);
-        User::factory()->create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'id_rol' => 3
-        ]);
-        User::factory()->count(10)->create();
-
-        // Crear restaurantes
-        Restaurant::factory()->count(5)->create();
-
-        // Crear tags
-        Tag::factory()->count(5)->create();
-
-        // Asignar tags a restaurantes
-        RestaurantTag::factory()->count(10)->create();
-
-        // Crear imágenes de comida
-        FoodImage::factory()->count(10)->create();
-
-        // Crear reviews
-        Review::factory()->count(20)->create();
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $this->call(RolSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(ZoneSeeder::class);
+        $this->call(RestaurantSeeder::class);
+        $this->call(TagSeeder::class);
+        $this->call(RestaurantTagSeeder::class);
+        $this->call(FoodImageSeeder::class);
+        $this->call(ReviewSeeder::class);
+        $this->call(FavoriteSeeder::class);
     }
 }
-

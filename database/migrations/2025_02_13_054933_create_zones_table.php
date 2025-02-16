@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up() {
         Schema::create('zones', function (Blueprint $table) {
-            $table->id('id_zone');
+            $table->id();
             $table->string('name_zone');
+            $table->timestamps();
         });
     }
 

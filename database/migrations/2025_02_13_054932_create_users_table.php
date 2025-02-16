@@ -7,16 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up() {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('id_user');
+            $table->id();
             $table->string('name');
+            $table->string('last_name');
             $table->string('email')->unique();
-            $table->string('password_hash');
-            $table->unsignedBigInteger('id_rol');
+            $table->string('password');
+            $table->string('phone_number')->nullable();
+            $table->unsignedBigInteger('rol_id');
             $table->text('profile_image')->nullable();
             $table->rememberToken();
             $table->timestamps();
-
-            $table->foreign('id_rol')->references('id_rol')->on('rol');
+            
+            $table->foreign('rol_id')->references('id')->on('rol')->onDelete('cascade');
         });
     }
 
