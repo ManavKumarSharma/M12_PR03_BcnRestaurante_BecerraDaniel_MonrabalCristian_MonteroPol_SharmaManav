@@ -11,27 +11,14 @@
     <div class="contenido">
         <div class="filtro1">
             <div class="filtroTipos">
-                <nav class="nav-item filtrozonas dropdown">
-                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <p class="filtros"><i class="fa-solid filtrozonas fa-filter"></i> {{ $filtro }}</p>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('views.restaurantes', ['etiqueta' => 'Todos']) }}">Todos los tipos</a></li>                                
-                            @foreach ($restaurantesPorEtiqueta as $etiqueta => $contados)
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('views.restaurantes', ['etiqueta' => $etiqueta]) }}">
-                                        {{ $etiqueta }} ({{ $contados }})
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-
-                    </a>
-                </nav>
-            </div>
-            <div class="filtroBuscar">
                 <form action="{{ route('views.restaurantes') }}" method="GET">
+                    <select name="etiqueta" onchange="this.form.submit()">
+                        <option value="Todos" {{ request('etiqueta') == 'Todos' ? 'selected' : '' }}>Todos</option>
+                        @foreach($restaurantesPorEtiqueta as $tag => $count)
+                            <option value="{{ $tag }}" {{ request('etiqueta') == $tag ? 'selected' : '' }}>{{ $tag }}</option>
+                        @endforeach
+                    </select>
                     <input type="text" name="busqueda" placeholder="Buscar restaurantes" value="{{ request('busqueda') }}">
-                    <button type="submit">Buscar</button>
                 </form>
             </div>
         </div>
