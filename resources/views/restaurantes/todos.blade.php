@@ -22,11 +22,11 @@
                         <option value="Todos" {{ request('etiqueta') == 'Todos' ? 'selected' : '' }}>Todos</option>
 
                         {{-- Por cada restaurantes contados por etiquetas, devuelveme la cuenta de cuantos tienen esa etiqueta --}}
-                        @foreach($restaurantesPorEtiqueta as $tag => $count)
+                        @foreach($restaurantesPorEtiqueta as $tag => $contados)
                             
                             {{-- Mostramos una opción por cada etiqueta que tenga un o varios restaurantes relacionados --}}
                             {{-- Si la etiqueta seleccionada coincide con la actual, la marca como seleccionada --}}
-                            <option value="{{ $tag }}" {{ request('etiqueta') == $tag ? 'selected' : '' }}>{{ $tag }}</option>
+                            <option value="{{ $tag }}" {{ request('etiqueta') == $tag ? 'selected' : '' }}>{{ $tag." ($contados)" }}</option>
 
                         @endforeach
                     </select>

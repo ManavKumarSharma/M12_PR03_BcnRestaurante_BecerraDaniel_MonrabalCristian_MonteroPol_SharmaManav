@@ -63,11 +63,11 @@ class RestaurantController extends Controller
                 $filtro2 = 'Peor Valorados';
                 break;
             case 'antiguos':
-                $consultaRestaurantes->orderBy('created_at');
+                $consultaRestaurantes->orderBy('id');
                 $filtro2 = 'Más Antiguos';
                 break;
             case 'nuevos':
-                $consultaRestaurantes->orderByDesc('created_at');
+                $consultaRestaurantes->orderByDesc('id');
                 $filtro2 = 'Más Nuevos';
                 break;
         }
@@ -80,20 +80,7 @@ class RestaurantController extends Controller
     
         $mediaEstrellas = [];
         $zonaRestaurante = [];
-    
-        // Contam los restaurantes por etiqueta
-        $restaurantesPorEtiqueta = Restaurant::with('tags')->get()
-        // Obtenemos todas las etiqueta que estén relacionadas con restaurantes (et1, et2,...)
-        ->flatMap(function ($restaurante) {
-            return $restaurante->tags;
-        })
-        // Agrupamos las etiquetas por su nombre
-        ->groupBy('name')
-        // Miramos cada grupo de etiquetas que hemos obtenido y contamos cuantos restaurantes tienen cada etiqueta
-        ->map(function ($etiquetas) {
-            return $etiquetas->count();
-        });
-    
+
         // Inicializamos las variables de estrellas y zona
         foreach ($restaurantes as $restaurante) {
             $id = $restaurante->id;
@@ -107,6 +94,21 @@ class RestaurantController extends Controller
             // Obtenemos la zona del restaurante
             $zonaRestaurante[$id] = Zone::where('id', $restaurante->zones_id)->select('name_zone')->first()->name_zone;
         }
+        
+        // Contamos los restaurantes por etiqueta
+        $restaurantesPorEtiqueta = Restaurant::with('tags')->get()
+        // Obtenemos todas las etiqueta que estén relacionadas con restaurantes (et1, et2,...)
+        ->flatMap(function ($restaurante) {
+            return $restaurante->tags;
+        })
+        // Agrupamos las etiquetas por su nombre
+        ->groupBy('name')
+        // Miramos cada grupo de etiquetas que hemos obtenido y contamos cuantos restaurantes tienen cada etiqueta
+        ->map(function ($etiquetas) {
+            return $etiquetas->count();
+        });
+
+        // dd($mediaEstrellas);
     
         // Indicador para mostrar el paginador
         $mostrarPaginador = true;
