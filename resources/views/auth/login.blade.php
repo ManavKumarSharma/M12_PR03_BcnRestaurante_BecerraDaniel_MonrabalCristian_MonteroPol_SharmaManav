@@ -35,7 +35,6 @@
                         @else
                             <li><a class="dropdown-item" href="#" data-modal="login-modal">Entra</a></li>
                             <li><a class="dropdown-item" href="#" data-modal="register-modal">Regístrate</a></li>
-                            <li><a class="dropdown-item" href="#">Tus reservas</a></li>
                         @endif
                     </ul>
                 </div>

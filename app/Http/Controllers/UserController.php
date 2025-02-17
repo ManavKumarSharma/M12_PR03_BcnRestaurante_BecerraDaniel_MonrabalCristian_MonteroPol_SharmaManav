@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+
 
 
 class UserController 
@@ -127,6 +129,20 @@ public function profileAll()
 
     return view('profile.profile-all',['user' => $user]); // Asegúrate de tener esta vista creada en resources/views
 }
+public function profile()
+{
+    $user = Auth::user();
+    
+    // Supongamos que tienes relaciones definidas en el modelo User para restaurantes y opiniones
+    $restaurants = $user->restaurants; // Relación: restaurantes asociados al usuario
+    // Si tienes lógica para restaurantes recomendados, podrías hacer:
+    $recommended = Restaurant::where('recommended', true)->get();
+    // Y para opiniones:
+    $opinions = $user->reviews;
+    
+    return view('profile.profile', compact('user', 'restaurants', 'recommended', 'opinions'));
+}
+
 
     
     

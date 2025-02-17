@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.plantilla_restaurante')
 
 @section('title', 'Mi Perfil')
 
@@ -14,14 +14,10 @@
 
 <!-- Encabezado con imagen de fondo y avatar -->
 <div class="container-fluid p-0">
-    <!-- Sección con fondo a pantalla completa -->
     <div class="text-center py-5" 
-         style="background: url('{{ asset('img/zona-usuario.jpg') }}') center/cover no-repeat; 
-                ;">
-        <!-- Si quieres mantener un .container interno para centrar el contenido -->
+         style="background: url('{{ asset('img/zona-usuario.jpg') }}') center/cover no-repeat;">
         <div class="container">
             <div class="d-flex flex-column align-items-center">
-                <!-- Tu contenido (avatar, nombre, etc.) aquí -->
                 <div class="rounded-circle border border-3 border-white overflow-hidden mb-2" 
                      style="width: 120px; height: 120px;">
                     <img src="{{ asset($user->profile_image ? 'img/' . $user->profile_image : 'img/user.jpg') }}" 
@@ -41,7 +37,6 @@
     </div>
 </div>
 
-
 <!-- Contenedor de pestañas -->
 <div class="container mt-4">
     <ul class="nav nav-tabs" id="perfilTab" role="tablist">
@@ -50,7 +45,7 @@
                     data-bs-toggle="tab" data-bs-target="#restaurantes" 
                     type="button" role="tab" aria-controls="restaurantes" 
                     aria-selected="true">
-                Mis restaurantes (0)
+                Mis restaurantes ({{ $restaurants->count() }})
             </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -58,7 +53,7 @@
                     data-bs-toggle="tab" data-bs-target="#recomendados" 
                     type="button" role="tab" aria-controls="recomendados" 
                     aria-selected="false">
-                Recomendados (1)
+                Recomendados ({{ $recommended->count() }})
             </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -66,23 +61,7 @@
                     data-bs-toggle="tab" data-bs-target="#opiniones" 
                     type="button" role="tab" aria-controls="opiniones" 
                     aria-selected="false">
-                Opiniones (1)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="siguiendo-tab" 
-                    data-bs-toggle="tab" data-bs-target="#siguiendo" 
-                    type="button" role="tab" aria-controls="siguiendo" 
-                    aria-selected="false">
-                Siguiendo (0)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="seguidores-tab" 
-                    data-bs-toggle="tab" data-bs-target="#seguidores" 
-                    type="button" role="tab" aria-controls="seguidores" 
-                    aria-selected="false">
-                Seguidores (0)
+                Opiniones ({{ $opinions->count() }})
             </button>
         </li>
     </ul>
@@ -92,56 +71,76 @@
         <!-- Pestaña: Mis restaurantes -->
         <div class="tab-pane fade show active" id="restaurantes" 
              role="tabpanel" aria-labelledby="restaurantes-tab">
-             
-            <!-- Filtros: Ordenar, Filtrar, Guardados -->
-            <div class="d-flex align-items-center mb-3">
-                <span class="me-2">Ordenar: relevancia</span>
-                <span class="me-2">|</span>
-                <span class="me-2">Filtrar</span>
-                <span class="me-2">|</span>
-                <span>Guardados</span>
-            </div>
-            
-            <!-- Mensaje de "No tienes restaurantes guardados" -->
-            <div class="alert alert-light text-center" role="alert">
-                No tienes restaurantes guardados
-            </div>
-            <!-- Botón "Ver todos" -->
+            @if($restaurants->isEmpty())
+                <div class="alert alert-light text-center" role="alert">
+                    No tienes restaurantes guardados
+                </div>
+            @else
+                <div class="row">
+                    @foreach($restaurants as $restaurant)
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="{{ asset('img/' . $restaurant->image) }}" class="card-img-top" alt="{{ $restaurant->name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $restaurant->name }}</h5>
+                                    <p class="card-text">{{ $restaurant->description }}</p>
+                                    <a href="{{ route('restaurant.show', $restaurant->id) }}" class="btn btn-primary">Ver más</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
             <div class="text-end">
-                <button class="btn btn-outline-secondary">
-                    Ver todos
-                </button>
+                <a href="{{ route('restaurants.all') }}" class="btn btn-outline-secondary">Ver todos</a>
             </div>
         </div>
 
         <!-- Pestaña: Recomendados -->
         <div class="tab-pane fade" id="recomendados" 
              role="tabpanel" aria-labelledby="recomendados-tab">
-            <h5 class="mt-3">Recomendados</h5>
-            <p>Contenido de la pestaña Recomendados (1).</p>
+            @if($recommended->isEmpty())
+                <div class="alert alert-light text-center" role="alert">
+                    No hay restaurantes recomendados
+                </div>
+            @else
+                <div class="row">
+                    @foreach($recommended as $restaurant)
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="{{ asset('img/' . $restaurant->image) }}" class="card-img-top" alt="{{ $restaurant->name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $restaurant->name }}</h5>
+                                    <p class="card-text">{{ $restaurant->description }}</p>
+                                    <a href="{{ route('restaurant.show', $restaurant->id) }}" class="btn btn-primary">Ver más</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <!-- Pestaña: Opiniones -->
         <div class="tab-pane fade" id="opiniones" 
              role="tabpanel" aria-labelledby="opiniones-tab">
-            <h5 class="mt-3">Opiniones</h5>
-            <p>Contenido de la pestaña Opiniones (1).</p>
-        </div>
-
-        <!-- Pestaña: Siguiendo -->
-        <div class="tab-pane fade" id="siguiendo" 
-             role="tabpanel" aria-labelledby="siguiendo-tab">
-            <h5 class="mt-3">Siguiendo</h5>
-            <p>Contenido de la pestaña Siguiendo (0).</p>
-        </div>
-
-        <!-- Pestaña: Seguidores -->
-        <div class="tab-pane fade" id="seguidores" 
-             role="tabpanel" aria-labelledby="seguidores-tab">
-            <h5 class="mt-3">Seguidores</h5>
-            <p>Contenido de la pestaña Seguidores (0).</p>
+            @if($opinions->isEmpty())
+                <div class="alert alert-light text-center" role="alert">
+                    No tienes opiniones publicadas
+                </div>
+            @else
+                <div class="list-group">
+                    @foreach($opinions as $opinion)
+                        <div class="list-group-item">
+                            <h5>{{ $opinion->title }}</h5>
+                            <p>{{ $opinion->body }}</p>
+                            <small class="text-muted">Publicado el {{ $opinion->created_at->format('d/m/Y') }}</small>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </div>
 
-@endsection
+@endsection --}}

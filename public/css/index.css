@@ -1,7 +1,8 @@
+/* MODALES */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1050; /* z-index mayor para superponer otros elementos */
     left: 0;
     top: 0;
     width: 100%;
@@ -17,6 +18,7 @@
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    max-width: 500px; /* Ancho máximo para dispositivos móviles */
 }
 
 .close-btn {
@@ -33,6 +35,7 @@
     cursor: pointer;
 }
 
+/* HEADER BOTTOM Y NAVBAR */
 .header-bottom {
     background-color: #f26522;
 }
@@ -69,24 +72,23 @@
 }
 
 /* GRID RESTAURANTES */
-
 .grid-container {
-    width: 65%;
+    width: 90%;           /* Se adapta al ancho de la pantalla */
+    margin: 0 auto;       /* Centrado horizontal */
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4vh 5vh;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Columnas responsive */
+    gap: 20px;            /* Espacio entre elementos */
     justify-items: center;
 }
 
-.restaurante:hover>.informacionRestaurante a {
+.restaurante:hover > .informacionRestaurante a {
     text-decoration: underline;
     text-decoration-thickness: 1px;
 }
 
-.restaurante:hover .restaurante img {
+.restaurante:hover img {
     transform: scale(1.1);
     transition: transform 0.3s ease;
-    /* Mueve la transición aquí */
 }
 
 .restaurante {
@@ -103,7 +105,6 @@
 }
 
 .restaurante img {
-    max-width: 100%;
     width: 100%;
     height: 200px;
     object-fit: cover;
@@ -140,21 +141,30 @@
 }
 
 .cuboinfoRestaurante {
-    align-items: center;
-    margin: 1vh 0;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin: 1vh 0;
 }
 
 .numerosRestaurantes {
     font-size: 1.8vh !important;
 }
 
-
+/* MEDIA QUERIES */
 @media (max-width: 768px) {
     .social-icons {
         margin-top: 10px;
         justify-content: center;
+    }
+    .grid-container {
+        width: 95%;
+    }
+    .imagenesRestaurante {
+        height: 150px;
+    }
+    .restaurante img {
+        height: 150px;
     }
 }
 

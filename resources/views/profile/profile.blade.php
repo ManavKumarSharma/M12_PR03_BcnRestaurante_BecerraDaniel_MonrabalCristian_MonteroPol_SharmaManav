@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.plantilla_restaurante')
 
 @section('title', 'Mi Perfil')
 
@@ -55,16 +55,7 @@
                 Mis datos
             </button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="reservas-tab" data-bs-toggle="tab" data-bs-target="#reservas" type="button" role="tab" aria-controls="reservas" aria-selected="false">
-                Mis reservas
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="delieuros-tab" data-bs-toggle="tab" data-bs-target="#delieuros" type="button" role="tab" aria-controls="delieuros" aria-selected="false">
-                Mis deliEuros
-            </button>
-        </li>
+        
     </ul>
 
     <!-- Botón lateral "Mi perfil" -->
@@ -140,16 +131,7 @@
                 </div>
             </form>
         </div>
-        <!-- Pestaña: Mis reservas -->
-        <div class="tab-pane fade" id="reservas" role="tabpanel" aria-labelledby="reservas-tab">
-            <h5 class="mt-4">Mis reservas</h5>
-            <p>Aquí aparecerá el listado de reservas del usuario.</p>
-        </div>
-        <!-- Pestaña: Mis deliEuros -->
-        <div class="tab-pane fade" id="delieuros" role="tabpanel" aria-labelledby="delieuros-tab">
-            <h5 class="mt-4">Mis deliEuros</h5>
-            <p>Aquí aparecerá el balance de deliEuros, transacciones, etc.</p>
-        </div>
+
     </div>
 </div>
 

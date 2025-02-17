@@ -39,4 +39,5 @@ Route::controller(UserController::class)->group(function () {
     Route::put('/perfil', 'update')->name('user.update');
     Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete');
     Route::get('/profile-all', 'profileAll')->name('profile.profile-all');
+    // Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
 });
