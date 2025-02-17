@@ -11,13 +11,11 @@
 
 </head>
 <body>
-  <!-- Header -->
   <header class="bg-white text-dark py-2">
     <div class="container d-flex flex-wrap justify-content-between align-items-center">
       <img src="{{ asset('img/bcn-logo.png') }}" class="logo h4 mb-2 mb-lg-0" alt="Logo BCN">
       <div class="d-flex flex-wrap align-items-center gap-3">
         <input type="text" class="form-control" placeholder="Buscar restaurante" style="max-width: 300px;">
-        <!-- Cuenta -->
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             @if(Auth::check())
@@ -44,7 +42,6 @@
             @endif
           </ul>
         </div>
-        <!-- Ayuda -->
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="helpDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             Ayuda
@@ -59,7 +56,6 @@
     </div>
   </header>
 
-  <!-- Navbar -->
   <nav class="header-bottom navbar navbar-expand-lg navbar-dark" style="background-color: #f26522;">
     <div class="container">
       <a class="navbar-brand d-lg-none" href="#">Menú</a>
@@ -83,81 +79,6 @@
     </div>
   </nav>
 
-  <!-- Login Modal -->
-  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="loginModalLabel">Iniciar sesión</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <form id="login-form" action="{{ route('login') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico:</label>
-              <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" onblur="validateEmail(this)">
-              <div class="error-message">
-                @error('email') {{ $message }} @enderror
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Contraseña:</label>
-              <input type="password" id="password" name="password" class="form-control" onblur="validatePassword(this)">
-              <div class="error-message">
-                @error('password') {{ $message }} @enderror
-              </div>
-            </div>
-            @if(session('error'))
-              <div class="text-danger">
-                <p>{{ session('error') }}</p>
-              </div>
-            @endif
-            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Register Modal -->
-  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="registerModalLabel">Registrarse</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="mb-3">
-              <label for="name" class="form-label">Nombre:</label>
-              <input type="text" id="name" name="name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="last_name" class="form-label">Apellidos:</label>
-              <input type="text" id="last_name" name="last_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="emailReg" class="form-label">Correo electrónico:</label>
-              <input type="email" id="emailReg" name="email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="phone" class="form-label">Número de teléfono:</label>
-              <input type="tel" id="phone" name="phone" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="passwordReg" class="form-label">Contraseña:</label>
-              <input type="password" id="passwordReg" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Registrarse</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts de Bootstrap y tus JS personalizados -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{ asset('js/form_modal.js') }}"></script>
   <script src="{{ asset('js/validation_login.js') }}"></script>
