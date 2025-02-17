@@ -4,14 +4,6 @@
 
 @section('content')
 
-@if(session('status'))
-    <div class="container mt-4">
-        <div class="alert alert-success" role="alert">
-            {{ session('status') }}
-        </div>
-    </div>
-@endif
-
 <!-- Encabezado con imagen de fondo y avatar -->
 <div class="bg-dark text-center py-5" style="background: url('{{ asset('img/zona-usuario.jpg') }}') center/cover no-repeat;">
     <div class="container">
@@ -19,7 +11,8 @@
             <!-- Avatar -->
             <div class="rounded-circle border border-3 border-white overflow-hidden mb-3">
                 <img src="{{ asset($user->profile_image ? 'img/' . $user->profile_image : 'img/user.jpg') }}" 
-                     alt="Foto de perfil" style="width: 120px; height: 120px;
+                     alt="Foto de perfil" 
+                     style="width: 120px; height: 120px;" 
                      class="img-fluid rounded-circle profile-img">
             </div>
             <h3 class="mb-1 text-dark">{{ $user->name }} {{ $user->last_name }}</h3>
@@ -32,20 +25,35 @@
                 @method('PUT')
                 <input type="file" name="photo" id="photoInput" onchange="document.getElementById('fotoForm').submit();">
             </form>
-            <!-- Botón para subir foto -->
-            <button class="btn btn-secondary" id="btnSubirFoto">Subir foto</button>
-            <!-- Botón para eliminar foto (visible solo si hay imagen subida) -->
-            @if($user->profile_image)
-                <form id="deletePhotoForm" action="{{ route('user.photo.delete') }}" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" class="btn btn-danger" id="btnEliminarFoto">Eliminar foto</button>
-                </form>
-            @endif
+            <!-- Botones para subir y eliminar foto -->
+            <div class="d-flex gap-2">
+                <!-- Botón para subir foto -->
+                <button class="btn btn-secondary" id="btnSubirFoto">
+                    <i class="bi bi-upload"></i>
+                  </button>
+                                  <!-- Botón para eliminar foto (visible solo si hay imagen subida) -->
+                @if($user->profile_image)
+                    <!-- Formulario oculto para eliminar la foto -->
+                    <form id="deletePhotoForm" action="{{ route('user.photo.delete') }}" method="POST" style="display: none;">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                    <!-- Botón que abre el modal de confirmación -->
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                @endif
+            </div>
         </div>
     </div>
 </div>
-
+@if(session('status'))
+    <div class="container mt-4">
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
+        </div>
+    </div>
+@endif
 <!-- Contenedor de pestañas -->
 <div class="container mt-4">
     <!-- Navegación de pestañas -->
@@ -55,7 +63,6 @@
                 Mis datos
             </button>
         </li>
-        
     </ul>
 
     <!-- Botón lateral "Mi perfil" -->
@@ -131,31 +138,33 @@
                 </div>
             </form>
         </div>
-
     </div>
 </div>
-
 <!-- Modal de confirmación para eliminar la foto -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        ¿Estás seguro de eliminar la foto de perfil?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          ¿Estás seguro de eliminar la foto de perfil?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  
 
 @endsection
 
 @section('scripts')
+
     <script src="{{ asset('js/perfil.js') }}"></script>
 @endsection
