@@ -21,6 +21,7 @@ class RestaurantController extends Controller
         $etiqueta = $request->input('etiqueta');
         $busqueda = $request->input('busqueda');
         $orden = $request->input('orden');
+        $pagina = $request->input('pagina', 1);
     
         $filtro = 'Todos los tipos';
         $filtro2 = 'Ordenar';
@@ -72,8 +73,11 @@ class RestaurantController extends Controller
                 break;
         }
     
+        // Realizar la paginación (si es la primera página, mostramos 3 restaurantes, si nó, 24)
+        $resultadosPorPágina = $pagina === 1 ? 3 : 24;
+        
         // Realizar la paginación después de aplicar los filtros
-        $restaurantes = $consultaRestaurantes->paginate(3);
+        $restaurantes = $consultaRestaurantes->paginate($resultadosPorPágina, ['*'], 'pagina', $pagina);
     
         // Obtener las zonas disponibles para usarlas en el filtro
         $zonas = Zone::all();
@@ -112,9 +116,13 @@ class RestaurantController extends Controller
     
         // Indicador para mostrar el paginador
         $mostrarPaginador = true;
+
+        $mostrarBarraInicio = true;
     
-        return view('restaurantes.todos', compact('filtro', 'filtro2', 'restaurantes', 'mediaEstrellas', 'zonaRestaurante', 'restaurantesPorEtiqueta', 'mostrarPaginador', 'zonas'));
+        return view('restaurantes.todos', compact('filtro', 'filtro2', 'restaurantes', 'mediaEstrellas', 'zonaRestaurante', 'restaurantesPorEtiqueta', 'mostrarPaginador', 'mostrarBarraInicio', 'zonas'));
     }
+
+
     
 
     public function mostrarElRestaurante($id)
@@ -122,10 +130,12 @@ class RestaurantController extends Controller
         $userId = session('user_id');
 
         $restaurante = Restaurant::find($id);
-        $valoraciones = Review::with('usuario')->where('restaurants_id', $id)->get();
+        $valoraciones = Review::with('user')->where('restaurants_id', $id)->get();
         $estrella = Review::where('users_id', $userId)->where('restaurants_id', $id)->first();
-        $mediaEstrellas = Review::where('restaurants_id', $id)->selectRaw('ROUND(AVG(core), 1) as media_estrellas')->first()->media_estrellas;
+        $mediaEstrellas = Review::where('restaurants_id', $id)->selectRaw('ROUND(AVG(score), 1) as media_estrellas')->first()->media_estrellas;
 
-        return view('vistas.restaurante', compact('userId', 'restaurante', 'valoraciones', 'estrella', 'mediaEstrellas'));
+        $mostrarBarraInicio = false;
+
+        return view('restaurantes.restaurante', compact('userId', 'restaurante', 'valoraciones', 'estrella', 'mediaEstrellas', 'mostrarBarraInicio'));
     }
 }

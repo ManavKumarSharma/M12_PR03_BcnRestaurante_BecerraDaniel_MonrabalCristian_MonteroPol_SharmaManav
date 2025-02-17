@@ -86,12 +86,6 @@
     background-color: #f5f5f5;
 }
 
-.restaurante:hover .restaurante img {
-    transform: scale(1.1);
-    transition: transform 0.3s ease;
-    /* Mueve la transición aquí */
-}
-
 .restaurante {
     width: 100%;
     padding: 1vh;
@@ -180,6 +174,25 @@
     top: -30px;
     text-align: right;
     line-height: 28px;
+}
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+}
+
+.btnPaginacion {
+    color: #ff6600;
+    background-color: white;
+    text-decoration: none;
+    border: 1px solid #ff6600;
+    font-size: 14px;
+    padding: 6px 12px;
+    margin: 15px 0px;
+}
+
+.btnPaginacion:hover {
+    background-color: lightgray;
 }
 
 

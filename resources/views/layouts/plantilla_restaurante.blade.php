@@ -49,23 +49,25 @@
         </div>
     </header>
 
-    <nav class="header-bottom navbar navbar-expand-lg">
-        <div class="container d-flex justify-content-center">
-            <ul class="navbar-nav d-flex justify-content-center">
-                <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('views.restaurantes') }}">Restaurantes</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Categorías</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
-            </ul>
-        </div>
-        
-        <div class="social-icons d-flex align-items-center">
-            <a href="https://www.instagram.com/bcnrestaurantescom/" class="bi bi-instagram"></a>
-            <a href="https://x.com/BcnRestaurantes" class="bi bi-twitter"></a>
-            <a href="https://www.facebook.com/bcnrestaurantes" class="bi bi-facebook"></a>
-        </div>
-    </nav>
+    @if ($mostrarBarraInicio === true)
+        <nav class="header-bottom navbar navbar-expand-lg">
+            <div class="container d-flex justify-content-center">
+                <ul class="navbar-nav d-flex justify-content-center">
+                    <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('views.restaurantes') }}">Restaurantes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Categorías</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
+                </ul>
+            </div>
+            
+            <div class="social-icons d-flex align-items-center">
+                <a href="https://www.instagram.com/bcnrestaurantescom/" class="bi bi-instagram"></a>
+                <a href="https://x.com/BcnRestaurantes" class="bi bi-twitter"></a>
+                <a href="https://www.facebook.com/bcnrestaurantes" class="bi bi-facebook"></a>
+            </div>
+        </nav>
+    @endif
 
     <div id="login-modal" class="modal">
         <div class="modal-content">
