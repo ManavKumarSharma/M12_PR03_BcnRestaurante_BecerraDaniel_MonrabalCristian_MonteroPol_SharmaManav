@@ -28,7 +28,5 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
-
-
 Route::get('/perfil', [UserController::class, 'profile'])->name('user.profile');
 Route::post('/update', [UserController::class, 'update'])->name('user.update');

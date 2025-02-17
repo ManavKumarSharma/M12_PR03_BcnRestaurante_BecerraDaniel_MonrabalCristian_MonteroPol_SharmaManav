@@ -17,9 +17,9 @@
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if(Auth::check())
-                            {{ Auth::user()->name }} (Autenticado)
+                            {{ Auth::user()->name }}
                         @else
-                            Mi cuenta (No autenticado)
+                            Mi cuenta
                         @endif
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="accountDropdown">

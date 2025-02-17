@@ -17,9 +17,9 @@
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if(Auth::check())
-                            {{ Auth::user()->name }} (Autenticado)
+                            {{ Auth::user()->name }}
                         @else
-                            Mi cuenta (No autenticado)
+                            Mi cuenta
                         @endif
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="accountDropdown">
@@ -32,8 +32,8 @@
                             </li>
                             <li><a class="dropdown-item" href="#">Tus reservas</a></li>
                         @else
-                            <li><a class="dropdown-item" href="#" data-modal="login-modal">Entra</a></li>
-                            <li><a class="dropdown-item" href="#" data-modal="register-modal">Regístrate</a></li>
+                            <li><a class="dropdown-item" href="{{ route('login') }}">Entra</a></li>
+                            <li><a class="dropdown-item" href="{{ route('login') }}">Regístrate</a></li>
                             <li><a class="dropdown-item" href="#">Tus reservas</a></li>
                         @endif
                     </ul>
@@ -72,95 +72,6 @@
         </div>
     </nav>
 
-    <!-- Modal de Login -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Iniciar sesión</h2>
-            <form id="login-form" action="{{ route('login') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="email" class="form-label">Correo electrónico:</label>
-                    <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" onblur="validateEmail(this)">
-                    <div class="error-message"></div>
-                </div>
-    
-                <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña:</label>
-                    <input type="password" id="password" name="password" class="form-control" onblur="validatePassword(this)">
-                    <div class="error-message">
-                        @error('password') {{ $message }} @enderror
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal de Registro -->
-    <div id="register-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Registrarse</h2>
-            <form action="{{ route('register') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nombre:</label>
-                    <input type="text" id="name" name="name" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="last_name" class="form-label">Apellidos:</label>
-                    <input type="text" id="last_name" name="last_name" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Correo electrónico:</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Número de teléfono:</label>
-                    <input type="tel" id="phone" name="phone_number" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña:</label>
-                    <input type="password" id="password" name="password" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password_confirmation" class="form-label">Confirmar contraseña:</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Registrarse</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Ejemplo de contenido condicional basado en la sesión -->
-    @if(session('ocultarOpcionesAdmin'))
-        <p style="color: red;">Opciones de administración ocultas (valor de sesión: ocultarOpcionesAdmin = true).</p>
-    @else
-        <p style="color: green;">Opciones de administración visibles (valor de sesión: ocultarOpcionesAdmin no establecido o false).</p>
-    @endif
-
-    @auth
-        <p>Bienvenido, {{ Auth::user()->name }}.</p>
-        @if(Auth::user()->role == 'admin')
-            <!-- Mostrar contenido exclusivo para administradores -->
-            <p>Contenido exclusivo para administradores.</p>
-        @endif
-    @endauth
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/form_modal.js') }}"></script>
-    <script src="{{ asset('js/validation_login.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            @if(session('modal') == 'login-modal' || $errors->any())
-                const loginModal = document.getElementById('login-modal');
-                if (loginModal) {
-                    loginModal.style.display = 'block';
-                }
-            @endif
-        });
-    </script>
 </body>
 </html>
