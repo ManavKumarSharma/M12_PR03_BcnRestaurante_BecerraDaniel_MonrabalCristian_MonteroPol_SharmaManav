@@ -7,7 +7,7 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class RestaurantController extends Controller
+class RestaurantController
 {
     // Método que muestra todos los restaurantes
     public function showRestaurantsAdminView() {

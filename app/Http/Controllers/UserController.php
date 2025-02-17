@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
@@ -29,19 +28,95 @@ class UserController
         return view('admin.users', ['title' => $title]);
     }
 
-    /**
-     * Devuelve todos los usuarios con su rol incluido.
-     */
-    public function getAllUsersFromDB()
+
+    public function getAllUsersFromDB(Request $request)
     {
-        // Se asume que en el modelo User está definida la relación 'role'
-        $users = User::select('id_user', 'name', 'email', 'created_at')
-                     ->with('role:id_rol,name')
-                     ->get();
-        
+        // Inicia la consulta
+        $query = User::select('id', 'name', 'last_name', 'email', 'phone_number', 'rol_id', 'created_at')
+            ->with('rol:id,name');
+
+        // Define los campos que pueden ser filtrados
+        $filters = [
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'email' => 'email',
+            'phone_number' => 'phone_number',
+            'rol' => 'rol:name',
+            'created_at' => 'created_at',
+            // No hace referencia a ninguna tabla
+            'end_date' => null
+        ];
+
+        // Aplica filtros dinámicos según los parámetros de la solicitud
+        foreach ($filters as $param => $column) {
+            if ($request->has($param)) {
+                // Si es un campo normal, aplica el filtro
+                if ($param !== 'rol' && $param !== 'created_at' && $param !== 'end_date') {
+                    $query->where($column, 'like', '%' . $request->input($param) . '%');
+                } else {
+                    // Si es el campo 'rol', usamos whereHas para la relación
+                    $query->whereHas('rol', function ($q) use ($request) {
+                        $q->where('name', 'like', '%' . $request->input('rol') . '%');
+                    });
+                }
+            }
+        }
+
+        // Filtro por fecha (rango de fechas)
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            
+            $query->whereBetween('created_at', [
+                $startDate . ' 00:00:00', // Hora de inicio
+                $endDate . ' 23:59:59'    // Hora de fin
+            ]);
+
+        } elseif ($request->has('start_date')) {
+            $startDate = $request->input('start_date');
+            $query->where('created_at', '>=', $startDate . ' 00:00:00');
+        } elseif ($request->has('end_date')) {
+            $endDate = $request->input('end_date');
+            $query->where('created_at', '<=', $endDate . ' 23:59:59');
+        }
+
+        // Obtiene los datos y los transforma
+        $users = $query->get()->map(function ($user) {
+            return [
+                'Id' => $user->id,
+                'Nombres' => $user->name,
+                'Apellidos' => $user->last_name,
+                'Email' => $user->email,
+                'Número de teléfono' => $user->phone_number,
+                'Rol' => $user->rol->name ?? null,
+                'Fecha de creación' => date("d/m/Y", strtotime($user->created_at))
+            ];
+        });
+
+        // Devuelve un json
         return response()->json($users);
     }
 
+
+
+    // Método que elimina el usuario de la base de datos
+    public function deleteUserFromDB(Request $request) {
+        // Validar el ID del usuario
+        $request->validate([
+            'userId' => 'required|exists:users,id'
+        ]);
+    
+        // Obtener el usuario por el ID proporcionado
+        $user = User::findOrFail($request->userId);
+    
+        // Eliminar el usuario de la base de datos
+        $user->delete();
+    
+        // Responder con un mensaje de éxito
+        return response()->json(['icon' => 'success', 'title' => 'Usuario eliminado', 'text' => 'El usuario se ha eliminado correctamente'], 200);
+    }
+
+    
     /**
      * Actualiza los datos del perfil del usuario.
      */
@@ -120,6 +195,7 @@ public function destroyPhoto(Request $request)
 
     return redirect()->back()->with('success', 'Foto eliminada correctamente');
 }
+
 public function profileAll()
 {
     // Aquí puedes procesar datos o lógica adicional si lo necesitas
