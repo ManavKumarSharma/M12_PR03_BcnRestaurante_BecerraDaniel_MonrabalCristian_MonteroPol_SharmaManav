@@ -98,39 +98,46 @@
     </div>
     
 
-<div id="register-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Registrarse</h2>
-        <form>
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre:</label>
-                <input type="text" id="name" name="name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="last_name" class="form-label">Apellidos:</label>
-                <input type="text" id="last_name" name="last_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Correo electrónico:</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="phone" class="form-label">Número de teléfono:</label>
-                <input type="tel" id="phone" name="phone" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Contraseña:</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Registrarse</button>
-        </form>
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Registrarse</h2>
+            <form action="{{ route('register') }}" method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre:</label>
+                    <input type="text" id="name" name="name" class="form-control">
+                    <div class="error-message"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="last_name" class="form-label">Apellidos:</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control">
+                    <div class="error-message"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico:</label>
+                    <input type="email" id="email_register" name="email" class="form-control">
+                    <div class="error-message"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Número de teléfono:</label>
+                    <input type="tel" id="phone" name="phone" class="form-control">
+                    <div class="error-message"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña:</label>
+                    <input type="password" id="password_register" name="password" class="form-control">
+                    <div class="error-message"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+        </div>
     </div>
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/form_modal.js') }}"></script>
     <script src="{{ asset('js/validation_login.js') }}"></script>
+    <script src="{{ asset('js/validation_register.js') }}"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             @if(session('modal') == 'login-modal' || $errors->any())

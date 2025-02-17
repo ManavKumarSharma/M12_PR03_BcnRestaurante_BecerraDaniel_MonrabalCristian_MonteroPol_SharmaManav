@@ -37,7 +37,7 @@
                             </form>
                         </li>
                     @else
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Entra</a></li>
+                        <li><a class="dropdown-item" href="{{ route('login') }}" data-bs-toggle="modal" data-bs-target="#loginModal">Entra</a></li>
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
                     @endif
                 </ul>
@@ -67,7 +67,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('views.restaurantes') }}">Restaurantes</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Categorías</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
@@ -122,12 +122,9 @@
   </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ asset('js/form_modal.js') }}"></script>
-  <script src="{{ asset('js/validation_login.js') }}"></script>
   
-  @yield('scripts')
 
   @yield('content')
-  
+  @yield('scripts')
 </body>
 </html>
