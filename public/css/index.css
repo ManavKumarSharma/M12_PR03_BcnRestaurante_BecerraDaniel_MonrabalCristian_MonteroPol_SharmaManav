@@ -151,23 +151,6 @@
     font-size: 1.8vh !important;
 }
 
-/* MEDIA QUERIES */
-@media (max-width: 768px) {
-    .social-icons {
-        margin-top: 10px;
-        justify-content: center;
-    }
-    .grid-container {
-        width: 95%;
-    }
-    .imagenesRestaurante {
-        height: 150px;
-    }
-    .restaurante img {
-        height: 150px;
-    }
-}
-
 .error-message {
     color: red;
 }

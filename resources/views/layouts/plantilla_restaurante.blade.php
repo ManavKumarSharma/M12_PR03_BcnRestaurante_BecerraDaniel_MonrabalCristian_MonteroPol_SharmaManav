@@ -12,49 +12,50 @@
 </head>
 <body>
   <header class="bg-white text-dark py-2 d-none d-lg-block">
-    <div class="container d-flex flex-wrap justify-content-between align-items-center">
-      <img src="{{ asset('img/bcn-logo.png') }}" class="logo h4 mb-2 mb-lg-0" alt="Logo BCN">
-      <div class="d-flex flex-wrap align-items-center gap-3">
-        <input type="text" class="form-control" placeholder="Buscar restaurante" style="max-width: 300px;">
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            @if(Auth::check())
-              {{ Auth::user()->name }}
-            @else
-              Mi cuenta
-            @endif
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-            @if(Auth::check())
-              <li><a class="dropdown-item" href="#">Tus reservas</a></li>
-              <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis datos</a></li>
-              <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis Opiniones</a></li>
-              <li><a class="dropdown-item" href="{{ route('user.edit') }}">Favoritos</a></li>
-              <li>
-                <form action="{{ route('logout') }}" method="POST">
-                  @csrf
-                  <button type="submit" class="dropdown-item">Cerrar sesión</button>
-                </form>
-              </li>
-            @else
-              <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Entra</a></li>
-              <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
-            @endif
-          </ul>
+    <div class="container d-flex justify-content-between align-items-center">
+        <img src="{{ asset('img/bcn-logo.png') }}" class="logo h4 mb-2 mb-lg-0" alt="Logo BCN">
+        <div class="d-flex align-items-center gap-3 flex-nowrap" style="white-space: nowrap;">
+            <input type="text" class="form-control" placeholder="Buscar restaurante" style="max-width: 250px; min-width: 200px;">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if(Auth::check())
+                        {{ Auth::user()->name }}
+                    @else
+                        Mi cuenta
+                    @endif
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                    @if(Auth::check())
+                        <li><a class="dropdown-item" href="#">Tus reservas</a></li>
+                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis datos</a></li>
+                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis Opiniones</a></li>
+                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Favoritos</a></li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                            </form>
+                        </li>
+                    @else
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Entra</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
+                    @endif
+                </ul>
+            </div>
+            <div class="dropdown order-last">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="helpDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ayuda
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="helpDropdown">
+                    <li><a class="dropdown-item" href="#">Preguntas frecuentes</a></li>
+                    <li><a class="dropdown-item" href="#">Contacto</a></li>
+                    <li><a class="dropdown-item" href="#">Soporte</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="helpDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            Ayuda
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="helpDropdown">
-            <li><a class="dropdown-item" href="#">Preguntas frecuentes</a></li>
-            <li><a class="dropdown-item" href="#">Contacto</a></li>
-            <li><a class="dropdown-item" href="#">Soporte</a></li>
-          </ul>
-        </div>
-      </div>
     </div>
-  </header>
+</header>
+
   
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #f26522;">
     <div class="container">
