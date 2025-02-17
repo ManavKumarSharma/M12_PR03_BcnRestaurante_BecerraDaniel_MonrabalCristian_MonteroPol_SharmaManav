@@ -29,7 +29,6 @@ Route::controller(AuthController::class)->group(function () {
 // Rutas relacionadas con restaurantes
 Route::controller(RestaurantController::class)->group(function () {
     Route::get('/restaurantes', 'todo')->name('views.restaurantes');
-    Route::get('/restaurantes/etiqueta', 'filtrarPorEtiqueta')->name('vistas.filtrar-restaurantes');
     Route::get('/restaurantes/{id}', 'mostrarElRestaurante')->name('vistas.restaurante');
 });
 

@@ -4,53 +4,23 @@
 
 @section('content')
 
+    @php
+        use Carbon\Carbon;
+    @endphp
+
     <div class="contenido">
         <div class="filtro1">
             <div class="filtroTipos">
-                <p>Restaurantes de &nbsp;</p>
-                <nav class="nav-item filtrozonas dropdown">
-                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <p class="filtros"><i class="fa-solid filtrozonas fa-filter"></i> {{ $filtro }}</p>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('views.restaurantes') }}">Todos los tipos</a></li>
-                                 
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Vegetariano']) }}">Vegetariano</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Vegano']) }}">Vegano</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Sin Gluten']) }}">Sin Gluten</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Comida Rápida']) }}">Comida Rápida</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Alta Cocina']) }}">Alta Cocina</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Buffet']) }}">Buffet</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Mariscos']) }}">Mariscos</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Carnes']) }}">Carnes</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Sushi']) }}">Sushi</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Postres']) }}">Postres</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Café']) }}">Café</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Comida Casera']) }}">Comida Casera</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Barbacoa']) }}">Barbacoa</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Mexicana']) }}">Mexicana</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Italiana']) }}">Italiana</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'China']) }}">China</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Japonesa']) }}">Japonesa</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Tailandesa']) }}">Tailandesa</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'India']) }}">India</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Mediterránea']) }}">Mediterránea</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Francesa']) }}">Francesa</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Española']) }}">Española</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Argentina']) }}">Argentina</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Peruana']) }}">Peruana</a></li>
-                            <li><a class="dropdown-item" href="{{ route('vistas.filtrar-restaurantes', ['etiqueta' => 'Hamburguesas']) }}">Hamburguesas</a></li>
-                        </ul>
-                        
-                    </a>
-                </nav>
-            </div>
-
-            {{-- <div class="filtroBuscar">
-                <form action="{{ route('vistas.buscar-restaurantes') }}" method="GET">
-                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <input type="text" name="busqueda" placeholder="Buscar restaurantes">
+                <form action="{{ route('views.restaurantes') }}" method="GET">
+                    <select name="etiqueta" onchange="this.form.submit()">
+                        <option value="Todos" {{ request('etiqueta') == 'Todos' ? 'selected' : '' }}>Todos</option>
+                        @foreach($restaurantesPorEtiqueta as $tag => $count)
+                            <option value="{{ $tag }}" {{ request('etiqueta') == $tag ? 'selected' : '' }}>{{ $tag }}</option>
+                        @endforeach
+                    </select>
+                    <input type="text" name="busqueda" placeholder="Buscar restaurantes" value="{{ request('busqueda') }}">
                 </form>
-            </div> --}}
+            </div>
         </div>
 
         {{-- <div class="filtro2">
@@ -78,14 +48,71 @@
                 @foreach ($restaurantes as $restaurante)
                     <div class="restaurante">
                         <div class="imagenesRestaurante">
-                            <a href="">
-                                @if (file_exists(public_path('img/' . $restaurante->img_restaurant)))
-                                    <img src="{{ asset('img/' . $restaurante->img_restaurant) }}"
-                                        alt="{{ $restaurante->nombre_restaurante }}">
-                                @else
-                                    <img src="{{ asset('img/predefinida.jpg') }}" alt="Imagen Predeterminada">
-                                    @endif
-                                </a>
+                            @if (file_exists(public_path('img/' . $restaurante->img_restaurant)))
+                                <img src="{{ asset('img/' . $restaurante->img_restaurant) }}" alt="{{ $restaurante->nombre_restaurante }}">
+                                <div style="position: relative;">
+                                    <div class="valoracionDiv">
+                                        @foreach ($mediaEstrellas as $id => $media)
+
+                                            @php
+
+                                                $valoracion = 'No hay valoraciones';
+                                            
+                                                if ($media !== null) {
+                                                    switch (true) {
+                                                        case $media <= 2:
+                                                            $valoracion = "$media · Mediocre";
+                                                            break;
+                                                        case $media <= 4:
+                                                            $valoracion = "$media · Bueno";
+                                                            break;
+                                                        case $media <= 4.5:
+                                                            $valoracion = "$media · Muy bueno";
+                                                            break;
+                                                        case $media <= 5:
+                                                            $valoracion = "$media · Excelente";
+                                                            break;
+                                                    }
+                                                }
+
+                                            @endphp
+
+                                            @if ($id == $restaurante->id)
+
+                                                @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
+                                                    <span class="nuevo">Nuevo</span>
+                                                @endif
+                                        
+                                                <span class="valoracion">{{ $valoracion }}</span>
+
+                                            @endif
+
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <img src="{{ asset('img/predefinida.jpg') }}" alt="Imagen Predeterminada">
+                                <div style="position: relative;">
+
+                                    <div class="valoracionDiv">
+
+                                        @foreach ($mediaEstrellas as $id => $media)
+
+                                            @if ($id == $restaurante->id)
+
+                                                @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
+                                                    <span class="nuevo">Nuevo</span>
+                                                @endif
+
+                                                <span class="valoracion">{{ $valoracion }}</span>
+
+                                            @endif
+
+                                        @endforeach
+
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         <div class="informacionRestaurante">
                             {{-- <p class="tipocomidaRestaurante">{{ $restaurante->tipo_comida }}</p> --}}
@@ -93,17 +120,16 @@
                                 <a href="{{ route('vistas.restaurante', $restaurante->id) }}">
                                     <h3>{{ $restaurante->name }}</h3>
                                 </a>
-                                <p class="numerosRestaurantes"><i class="fa-solid fa-dollar-sign"></i>
-                                    {{ number_format($restaurante->average_price) }}
+                                <p class="propiedadesRestaurante">
+                                    {{ $restaurante->tags->pluck('name')->implode(', ') }}
                                 </p>
-                            </div>
-                            <div class="cuboinfoRestaurante">
-                                <p><i class="fa-solid fa-location-dot fa-l"></i> {{ $restaurante->localizacion }}</p>
-                                @foreach ($mediaEstrellas as $id => $media)
-                                    @if ($id == $restaurante->id)
-                                        <p class="numerosRestaurantes"><i class="fa-solid fa-star"></i> {{ $media ?? '-' }}</p>
-                                    @endif
-                                @endforeach
+                                <p class="propiedadesRestaurante">
+                                    {{ $zonaRestaurante[$restaurante->id] }}
+                                </p>
+                                <p class="propiedadesRestaurante">
+                                    {{ number_format($restaurante->average_price)}} €
+                                </p>
+
                             </div>
                         </div>
                     </div>
