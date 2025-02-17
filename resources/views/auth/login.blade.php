@@ -31,6 +31,7 @@
                                 </form>
                             </li>
                             <li><a class="dropdown-item" href="#">Tus reservas</a></li>
+                            <li><a class="dropdown-item" href="{{route('user.edit')}}">Mi Perfil</a></li>
                         @else
                             <li><a class="dropdown-item" href="#" data-modal="login-modal">Entra</a></li>
                             <li><a class="dropdown-item" href="#" data-modal="register-modal">Regístrate</a></li>

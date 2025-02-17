@@ -30,7 +30,7 @@ class Restaurant extends Model
     }
 
     public function tags() {
-        return $this->belongsToMany(Tag::class,'restaurant_tags','restaurants_id','tags_id');
+        return $this->belongsToMany(Restaurant::class,'restaurant_tags','restaurants_id','tags_id');
     }
 
     public function zone() {

@@ -2,10 +2,7 @@
 
 namespace App\Models;
 
-<<<<<<< HEAD
-=======
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
->>>>>>> b0cab638c2756088eabe8095767ed42ad074ee52
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -28,7 +25,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'phone_number',
-        'password'
+        'password_hash'
     ];
 
     /**
@@ -67,6 +64,6 @@ class User extends Authenticatable
     }
 
     public function rol() {
-        return $this->belongsTo(Rol::class);
+        return $this->hasMany(Rol::class);
     }
 }

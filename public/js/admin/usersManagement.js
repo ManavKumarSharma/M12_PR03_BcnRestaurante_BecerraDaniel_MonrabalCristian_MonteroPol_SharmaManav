@@ -1,12 +1,18 @@
 // Función que carga la tabla
 function loadTable() {
+    // Función asíncrona que devuelve los usuarios
     getUsersFromAPIAsync()
         .then(users => {
-            console.log(users);
+            createTable(users)
         })
         .catch(error => {
             console.error("Error al cargar los usuarios:", error);
         });
+}
+
+// Función que crea la tabla
+function createTable(users) {
+    document.getElementById('')
 }
 
 // Función para obtener los usuarios desde la API usando fetch

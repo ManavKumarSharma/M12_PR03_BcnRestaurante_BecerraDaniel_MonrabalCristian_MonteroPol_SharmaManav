@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class ViewController
 {
@@ -15,4 +16,9 @@ class ViewController
     {
         return view('about');
     }
+
+    // public function restaurantes()
+    // {
+    //     return view('restaurantes.todos');
+    // }
 }

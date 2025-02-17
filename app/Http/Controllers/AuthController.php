@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController 
+class AuthController
 {
     /**
      * Muestra el formulario de inicio de sesión.
@@ -43,7 +43,7 @@ class AuthController
             // Regenera la sesión para prevenir ataques de fijación de sesión
             $request->session()->regenerate();
 
-            return redirect()->intended('/')->with('success', 'Inicio de sesión exitoso');
+            return redirect()->intended('/')->with('success', 'Inicio de sesión exitoso.');
         }
 
         // Si falla la autenticación, redirige de vuelta con un error
