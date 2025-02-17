@@ -122,32 +122,12 @@ public function destroyPhoto(Request $request)
 
     return redirect()->back()->with('success', 'Foto eliminada correctamente');
 }
-    /**
-     * Muestra el perfil del usuario con sus favoritos y reseñas.
-     */
-    public function profileAll()
+public function profileAll()
 {
+    // Aquí puedes procesar datos o lógica adicional si lo necesitas
     $user = Auth::user();
 
-    // Obtener reseñas y cargar la relación con 'restaurant'
-    $reviews = Review::where('users_id', $user->id) // Cambiado de users_id a user_id
-                     ->with('restaurant') // Asegurar carga de relación
-                     ->latest()
-                     ->get()
-                     ->filter(fn($review) => $review->restaurant !== null); // Filtrar reviews sin restaurante
-
-    // Obtener favoritos con los restaurantes asociados
-    $favorites = Favorite::where('users_id', $user->id) // Cambiado de users_id a user_id
-                         ->with('restaurant')
-                         ->get();
-
-    return view('profile.profile-all', compact('user', 'reviews', 'favorites'));
+    return view('profile.profile-all',['user' => $user]); // Asegúrate de tener esta vista creada en resources/views
 }
-
-    
-    
-
-    
-    
 
 }

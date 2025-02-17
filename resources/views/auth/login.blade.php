@@ -52,7 +52,6 @@
             </div>
         </div>
     </header>
-    
 
     <nav class="header-bottom navbar navbar-expand-lg">
         <div class="container d-flex justify-content-center">
@@ -64,7 +63,6 @@
                 <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
             </ul>
         </div>
-        
         <div class="social-icons d-flex align-items-center">
             <a href="https://www.instagram.com/bcnrestaurantescom/" class="bi bi-instagram"></a>
             <a href="https://x.com/BcnRestaurantes" class="bi bi-twitter"></a>
@@ -96,41 +94,49 @@
             </form>
         </div>
     </div>
-    
 
-<div id="register-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Registrarse</h2>
-        <form>
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre:</label>
-                <input type="text" id="name" name="name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="last_name" class="form-label">Apellidos:</label>
-                <input type="text" id="last_name" name="last_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Correo electrónico:</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="phone" class="form-label">Número de teléfono:</label>
-                <input type="tel" id="phone" name="phone" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Contraseña:</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Registrarse</button>
-        </form>
+    <div id="register-modal" class="modal" 
+        @if(session('showRegisterModal')) style="display: block;" @else style="display: none;" @endif>
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Registrarse</h2>
+            <form action="{{ route('register') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre:</label>
+                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}">
+                    <div class="error-message">{{ $errors->first('name') }}</div>
+                </div>
+                <div class="mb-3">
+                    <label for="last_name" class="form-label">Apellidos:</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control" value="{{ old('last_name') }}">
+                    <div class="error-message">{{ $errors->first('last_name') }}</div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico:</label>
+                    <input type="email" id="email_register" name="email" class="form-control" value="{{ old('email') }}">
+                    <div class="error-message">{{ $errors->first('email') }}</div>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Número de teléfono:</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" value="{{ old('phone') }}">
+                    <div class="error-message">{{ $errors->first('phone') }}</div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña:</label>
+                    <input type="password" id="password_register" name="password" class="form-control">
+                    <div class="error-message">{{ $errors->first('password') }}</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+        </div>
     </div>
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/form_modal.js') }}"></script>
     <script src="{{ asset('js/validation_login.js') }}"></script>
+    <script src="{{ asset('js/validation_register.js') }}"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             @if(session('modal') == 'login-modal' || $errors->any())
