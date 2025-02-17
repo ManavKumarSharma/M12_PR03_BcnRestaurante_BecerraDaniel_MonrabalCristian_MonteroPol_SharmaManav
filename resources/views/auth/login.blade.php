@@ -19,7 +19,7 @@
                         @if(Auth::check())
                             {{ Auth::user()->name }} (Autenticado)
                         @else
-                            Mi cuenta (No autenticado)
+                            Mi cuenta
                         @endif
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="accountDropdown">
