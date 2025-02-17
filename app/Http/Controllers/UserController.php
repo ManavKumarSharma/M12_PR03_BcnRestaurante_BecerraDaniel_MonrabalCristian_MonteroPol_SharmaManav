@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Restaurant;
+use App\Models\Favorite;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-
 
 
 class UserController 
@@ -122,27 +122,30 @@ public function destroyPhoto(Request $request)
 
     return redirect()->back()->with('success', 'Foto eliminada correctamente');
 }
-public function profileAll()
-{
-    // Aquí puedes procesar datos o lógica adicional si lo necesitas
-    $user = Auth::user();
-
-    return view('profile.profile-all',['user' => $user]); // Asegúrate de tener esta vista creada en resources/views
-}
-public function profile()
+    /**
+     * Muestra el perfil del usuario con sus favoritos y reseñas.
+     */
+    public function profileAll()
 {
     $user = Auth::user();
-    
-    // Supongamos que tienes relaciones definidas en el modelo User para restaurantes y opiniones
-    $restaurants = $user->restaurants; // Relación: restaurantes asociados al usuario
-    // Si tienes lógica para restaurantes recomendados, podrías hacer:
-    $recommended = Restaurant::where('recommended', true)->get();
-    // Y para opiniones:
-    $opinions = $user->reviews;
-    
-    return view('profile.profile', compact('user', 'restaurants', 'recommended', 'opinions'));
+
+    // Obtener reseñas y cargar la relación con 'restaurant'
+    $reviews = Review::where('users_id', $user->id) // Cambiado de users_id a user_id
+                     ->with('restaurant') // Asegurar carga de relación
+                     ->latest()
+                     ->get()
+                     ->filter(fn($review) => $review->restaurant !== null); // Filtrar reviews sin restaurante
+
+    // Obtener favoritos con los restaurantes asociados
+    $favorites = Favorite::where('users_id', $user->id) // Cambiado de users_id a user_id
+                         ->with('restaurant')
+                         ->get();
+
+    return view('profile.profile-all', compact('user', 'reviews', 'favorites'));
 }
 
+    
+    
 
     
     

@@ -30,13 +30,17 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(RestaurantController::class)->group(function () {
     Route::get('/restaurantes', 'todo')->name('views.restaurantes');
     Route::get('/restaurantes/{id}', 'mostrarElRestaurante')->name('vistas.restaurante');
+    
+
 });
+
 
 // Rutas del perfil de usuario
 Route::controller(UserController::class)->group(function () {
-    Route::get('/perfil', 'edit')->name('user.edit');
-    Route::put('/perfil', 'update')->name('user.update');
-    Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete');
-    Route::get('/profile-all', 'profileAll')->name('profile.profile-all');
-    // Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::get('/perfil', 'edit')->name('user.edit'); // Mostrar perfil editable
+    Route::put('/perfil', 'update')->name('user.update'); // Actualizar perfil
+    Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete'); // Eliminar foto
+    Route::get('/profile-all', 'profileAll')->name('profile.profile-all'); // Perfil con reviews y favoritos
+
+    
 });

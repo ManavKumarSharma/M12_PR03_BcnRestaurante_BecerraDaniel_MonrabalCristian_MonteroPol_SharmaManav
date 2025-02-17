@@ -3,7 +3,11 @@
 @section('title', 'Mi Perfil')
 
 @section('content')
-
+@if (!Auth::check())
+        <script>
+            window.location.href = "{{ route('login') }}";
+        </script>
+    @else
 <!-- Encabezado con imagen de fondo y avatar -->
 <div class="bg-dark text-center py-5" style="background: url('{{ asset('img/zona-usuario.jpg') }}') center/cover no-repeat;">
     <div class="container">
@@ -162,6 +166,7 @@
   </div>
   
 
+@endif
 @endsection
 
 @section('scripts')
