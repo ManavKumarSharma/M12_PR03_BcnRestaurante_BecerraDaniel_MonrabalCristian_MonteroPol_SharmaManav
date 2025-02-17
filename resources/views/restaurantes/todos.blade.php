@@ -9,19 +9,48 @@
     @endphp
 
     <div class="contenido">
+
         <div class="filtro1">
             <div class="filtroTipos">
                 <form action="{{ route('views.restaurantes') }}" method="GET">
+
+                    {{-- Menú desplegable (select) para elegir una etiqueta (tipo de restaurante) --}}
+                    {{-- Este select envía los datos al formulario cada vez que se selecciona una etiqueta --}}
                     <select name="etiqueta" onchange="this.form.submit()">
+                        
+                        {{-- Opción por defecto: "Todos", que muestra todos los restaurantes, si está seleccionado, esta opción estará seleccionada --}}
                         <option value="Todos" {{ request('etiqueta') == 'Todos' ? 'selected' : '' }}>Todos</option>
+
+                        {{-- Por cada restaurantes contados por etiquetas, devuelveme la cuenta de cuantos tienen esa etiqueta --}}
                         @foreach($restaurantesPorEtiqueta as $tag => $count)
+                            
+                            {{-- Mostramos una opción por cada etiqueta que tenga un o varios restaurantes relacionados --}}
+                            {{-- Si la etiqueta seleccionada coincide con la actual, la marca como seleccionada --}}
                             <option value="{{ $tag }}" {{ request('etiqueta') == $tag ? 'selected' : '' }}>{{ $tag }}</option>
+
                         @endforeach
                     </select>
+
+                    {{-- Campo de texto buscar los restaurantes por su nombre, mostramos el valor cuando lo recojemos por value="{{ request('busqueda') }}" --}}
                     <input type="text" name="busqueda" placeholder="Buscar restaurantes" value="{{ request('busqueda') }}">
+
+                    <!-- Menú desplegable para ordenar -->
+                    <select name="orden" onchange="this.form.submit()">
+                        <option value="" disabled selected>Ordenar por</option>
+                        <option value="precio-mayor-menor" {{ request('orden') == 'precio-mayor-menor' ? 'selected' : '' }}>Precio de Mayor a Menor</option>
+                        <option value="precio-menor-mayor" {{ request('orden') == 'precio-menor-mayor' ? 'selected' : '' }}>Precio de Menor a Mayor</option>
+                        <option value="mejor-valorados" {{ request('orden') == 'mejor-valorados' ? 'selected' : '' }}>Mejor Valorados</option>
+                        <option value="peor-valorados" {{ request('orden') == 'peor-valorados' ? 'selected' : '' }}>Peor Valorados</option>
+                        <option value="antiguos" {{ request('orden') == 'antiguos' ? 'selected' : '' }}>Más Antiguos</option>
+                        <option value="nuevos" {{ request('orden') == 'nuevos' ? 'selected' : '' }}>Más Nuevos</option>
+                    </select>
+
+                    <button type="button" onclick="window.location='{{ route('views.restaurantes') }}'">Borrar Filtros</button>
+                    
                 </form>
             </div>
         </div>
+
 
         {{-- <div class="filtro2">
             <nav class="nav-item filtrozonas dropdown">

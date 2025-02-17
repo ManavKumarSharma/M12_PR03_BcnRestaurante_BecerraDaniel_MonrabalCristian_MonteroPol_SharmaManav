@@ -20,9 +20,10 @@ class RestaurantController extends Controller
         // Obtener el parámetro 'etiqueta' y 'busqueda' de la URL
         $etiqueta = $request->input('etiqueta');
         $busqueda = $request->input('busqueda');
+        $orden = $request->input('orden');
     
         $filtro = 'Todos los tipos';
-        $filtro2 = '-';
+        $filtro2 = 'Ordenar';
     
         // Crear una consulta base de restaurantes
         $consultaRestaurantes = Restaurant::with('tags');
@@ -42,6 +43,34 @@ class RestaurantController extends Controller
         if ($busqueda) {
             $consultaRestaurantes->where('name', 'like', '%' . $busqueda . '%');
         }
+
+        // Aplicar ordenación según el filtro seleccionado
+        switch ($orden) {
+            case 'precio-mayor-menor':
+                $consultaRestaurantes->orderByDesc('average_price');
+                $filtro2 = 'Precio de Mayor a Menor';
+                break;
+            case 'precio-menor-mayor':
+                $consultaRestaurantes->orderBy('average_price');
+                $filtro2 = 'Precio de Menor a Mayor';
+                break;
+            case 'mejor-valorados':
+                $consultaRestaurantes->withAvg('reviews', 'score')->orderByDesc('reviews_avg_score');
+                $filtro2 = 'Mejor Valorados';
+                break;
+            case 'peor-valorados':
+                $consultaRestaurantes->withAvg('reviews', 'score')->orderBy('reviews_avg_score');
+                $filtro2 = 'Peor Valorados';
+                break;
+            case 'antiguos':
+                $consultaRestaurantes->orderBy('created_at');
+                $filtro2 = 'Más Antiguos';
+                break;
+            case 'nuevos':
+                $consultaRestaurantes->orderByDesc('created_at');
+                $filtro2 = 'Más Nuevos';
+                break;
+        }
     
         // Realizar la paginación después de aplicar los filtros
         $restaurantes = $consultaRestaurantes->paginate(3);
@@ -52,22 +81,28 @@ class RestaurantController extends Controller
         $mediaEstrellas = [];
         $zonaRestaurante = [];
     
-        // Contar los restaurantes por etiqueta
-        $restaurantesPorEtiqueta = Restaurant::with('tags')->get()->flatMap(function ($restaurante) {
+        // Contam los restaurantes por etiqueta
+        $restaurantesPorEtiqueta = Restaurant::with('tags')->get()
+        // Obtenemos todas las etiqueta que estén relacionadas con restaurantes (et1, et2,...)
+        ->flatMap(function ($restaurante) {
             return $restaurante->tags;
-        })->groupBy('name')->map(function ($etiquetas) {
+        })
+        // Agrupamos las etiquetas por su nombre
+        ->groupBy('name')
+        // Miramos cada grupo de etiquetas que hemos obtenido y contamos cuantos restaurantes tienen cada etiqueta
+        ->map(function ($etiquetas) {
             return $etiquetas->count();
         });
     
-        // Inicializar las variables de estrellas y zona
+        // Inicializamos las variables de estrellas y zona
         foreach ($restaurantes as $restaurante) {
             $id = $restaurante->id;
             
-            // Obtener la media de estrellas de cada restaurante
+            // Obtenemos la media de estrellas de cada restaurante
             $valoracion = Review::where('restaurants_id', $id)->selectRaw('ROUND(AVG(score), 1) as media_estrellas')->first();
             $mediaEstrellas[$id] = $valoracion ? $valoracion->media_estrellas : 'No hay valoraciones';
     
-            // Obtener la zona del restaurante
+            // Obtenemos la zona del restaurante
             $zonaRestaurante[$id] = Zone::where('id', $restaurante->zones_id)->select('name_zone')->first()->name_zone;
         }
     
