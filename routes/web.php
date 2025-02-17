@@ -23,6 +23,7 @@ Route::controller(RestaurantController::class)->group(function () {
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'login');
+    Route::get('/register', 'showRegisterForm')->name('register');
     Route::post('/logout', 'logout')->name('logout');
 });
 
