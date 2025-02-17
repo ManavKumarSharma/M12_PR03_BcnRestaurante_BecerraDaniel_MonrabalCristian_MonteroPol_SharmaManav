@@ -21,7 +21,7 @@ class Restaurant extends Model
     }
 
     public function reviews() {
-        return $this->hasMany(Favorite::class);
+        return $this->hasMany(Review::class, 'restaurants_id');
     }
 
     public function foodImage() {

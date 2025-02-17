@@ -85,7 +85,7 @@
 
                                             @php
 
-                                                $valoracion = 'No hay valoraciones';
+                                                $valoracion = "No hay valoraciones";
                                             
                                                 if ($media !== null) {
                                                     switch (true) {
@@ -112,7 +112,7 @@
                                                     <span class="nuevo">Nuevo</span>
                                                 @endif
                                         
-                                                <span class="valoracion">{{ $valoracion }}</span>
+                                                <span class="valoracion">{{ $valoracion ?? "No hay valoraciones" }}</span>
 
                                             @endif
 
@@ -133,7 +133,7 @@
                                                     <span class="nuevo">Nuevo</span>
                                                 @endif
 
-                                                <span class="valoracion">{{ $valoracion }}</span>
+                                                <span class="valoracion">{{ $valoracion ?? "No hay valoraciones" }}</span>
 
                                             @endif
 
@@ -153,7 +153,7 @@
                                     {{ $restaurante->tags->pluck('name')->implode(', ') }}
                                 </p>
                                 <p class="propiedadesRestaurante">
-                                    {{ $zonaRestaurante[$restaurante->id] }}
+                                    {{ $zonaRestaurante[$restaurante->id] ?? "No hay zona asignada" }}
                                 </p>
                                 <p class="propiedadesRestaurante">
                                     {{ number_format($restaurante->average_price)}} €

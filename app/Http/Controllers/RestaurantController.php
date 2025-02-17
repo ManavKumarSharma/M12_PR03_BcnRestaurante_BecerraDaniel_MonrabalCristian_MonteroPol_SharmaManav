@@ -100,6 +100,8 @@ class RestaurantController extends Controller
             
             // Obtenemos la media de estrellas de cada restaurante
             $valoracion = Review::where('restaurants_id', $id)->selectRaw('ROUND(AVG(score), 1) as media_estrellas')->first();
+
+            
             $mediaEstrellas[$id] = $valoracion ? $valoracion->media_estrellas : 'No hay valoraciones';
     
             // Obtenemos la zona del restaurante
