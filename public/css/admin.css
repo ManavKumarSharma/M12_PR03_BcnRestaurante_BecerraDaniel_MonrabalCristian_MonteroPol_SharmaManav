@@ -10,6 +10,43 @@
     color: white;
 }
 
+.btn-custom-black {
+    background-color: #686868;
+    border-color: #686868;
+    color: white;
+}
+
+.btn-custom-black:hover {
+    background-color: #131313;
+    border-color: #131313;
+    color: white;
+}
+
+
+.btn-custom-edit {
+    background-color: #686868;
+    border-color: #686868;
+    color: white;
+    border-radius: 15px;
+}
+
+.btn-custom-edit:hover {
+    background-color: #131313;
+    border-color: #131313;
+    color: white;
+}
+
+
+.btn-custom-delete {
+    color: white;
+    border-radius: 15px;
+}
+
+.btn-custom-delete:hover {
+    background-color: #ff0000;
+    color: white;
+}
+
 #loader {
     position: fixed;
     top: 0;

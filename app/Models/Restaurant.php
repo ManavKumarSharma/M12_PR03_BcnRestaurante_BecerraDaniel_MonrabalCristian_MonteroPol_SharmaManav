@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use PhpParser\Node\Stmt\For_;
 
 class Restaurant extends Model
 {
@@ -22,7 +21,7 @@ class Restaurant extends Model
     }
 
     public function reviews() {
-        return $this->hasMany(Favorite::class);
+        return $this->hasMany(Review::class, 'restaurants_id');
     }
 
     public function foodImage() {
