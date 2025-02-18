@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->text('profile_image')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            
             $table->foreign('rol_id')->references('id')->on('rol')->onDelete('cascade');
         });
     }

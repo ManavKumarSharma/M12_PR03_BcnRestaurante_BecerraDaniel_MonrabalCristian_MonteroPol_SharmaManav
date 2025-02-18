@@ -57,7 +57,7 @@
         <div class="container d-flex justify-content-center">
             <ul class="navbar-nav d-flex justify-content-center">
                 <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Restaurantes</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('views.restaurantes') }}">Restaurantes</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Categorías</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
