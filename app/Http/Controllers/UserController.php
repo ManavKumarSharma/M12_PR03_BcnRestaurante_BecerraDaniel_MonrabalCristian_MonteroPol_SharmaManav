@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 
+
 class UserController
 {
 
@@ -151,8 +152,8 @@ class UserController
         $validated = $request->validate([
             'name'         => 'required|string|max:255',
             'last_name'    => 'required|string|max:255',
-            'email'        => 'required|email|max:255',
-            'phone_number' => 'nullable|string|max:20',
+            'email'        => 'required|email|unique:users,email|max:255',
+            'phone_number' => 'nullable|string|max:20|unique:users,phone_number',
             'password'     => 'nullable|min:6',
             'photo'        => 'nullable|image|max:2048',
         ]);
