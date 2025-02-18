@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class RestaurantController extends Controller
+class RestaurantController
 {
     // Método que muestra todos los restaurantes
     public function showRestaurantsAdminView() {

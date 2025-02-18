@@ -4,6 +4,7 @@ use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RolController;
 use App\Http\Controllers\ViewController;
 
 Route::get('/', [ViewController::class, 'home'])->name('home');
@@ -12,7 +13,14 @@ Route::get('/', [ViewController::class, 'home'])->name('home');
 Route::controller(UserController::class)->group(function () {
     Route::get('/admin/users', 'showUsersAdminView')->name('admin.users');
     Route::get('/api/users/list', 'getAllUsersFromDB');
+    Route::delete('/api/user/delete', 'deleteUserFromDB');
 });
+
+// Rutas para el RolController
+Route::controller(RolController::class)->group(function () {
+    Route::get('/api/roles/list', 'getAllRolesFromDB')->name('admin.users');
+});
+
 
 // Rutas para el RestaurantController
 Route::controller(RestaurantController::class)->group(function () {
