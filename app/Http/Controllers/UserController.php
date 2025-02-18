@@ -152,9 +152,9 @@ class UserController
         $validated = $request->validate([
             'name'         => 'required|string|max:255',
             'last_name'    => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-        'phone_number' => 'required|string|max:20|unique:users,phone_number,' . $user->id,
-            'password'     => 'nullable|min:6',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phone_number' => 'required|string|min:9|max:9',
+            'password'     => 'nullable|min:8',
             'photo'        => 'nullable|image|max:2048',
         ]);
 
