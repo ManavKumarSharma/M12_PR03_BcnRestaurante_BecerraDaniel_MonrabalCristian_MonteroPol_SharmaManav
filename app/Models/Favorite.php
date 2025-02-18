@@ -10,13 +10,14 @@ class Favorite extends Model
 
     protected $table = 'favorites';
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function restaurant()
     {
-        return $this->belongsTo(Restaurant::class);
+        return $this->belongsTo(Restaurant::class, 'restaurants_id');
     }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
+    
 }

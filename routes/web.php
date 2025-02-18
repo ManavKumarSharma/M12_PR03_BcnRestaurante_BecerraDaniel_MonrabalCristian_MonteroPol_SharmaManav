@@ -34,11 +34,12 @@ Route::controller(RestaurantController::class)->group(function () {
     Route::post('/puntuar', 'puntuarRestaurante')->middleware('auth');
 });
 
-// Rutas del perfil de usuario
-Route::controller(UserController::class)->group(function () {
-    Route::get('/perfil', 'edit')->name('user.edit');
-    Route::put('/perfil', 'update')->name('user.update');
-    Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete');
-    Route::get('/profile-all', 'profileAll')->name('profile.profile-all');
-    // Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
+// Agrupamos las rutas bajo middleware de autenticación para asegurar que solo usuarios logueados puedan acceder
+Route::middleware(['auth'])->group(function () {
+    Route::controller(UserController::class)->group(function () {
+        Route::put('/perfil', 'update')->name('user.update');
+        Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete');
+        Route::get('/perfil', 'profileAll')->name('profile.profile-all');
+        Route::delete('/favorites/{favoriteId}', 'removeFavorite')->name('favorites.remove');
+    });
 });
