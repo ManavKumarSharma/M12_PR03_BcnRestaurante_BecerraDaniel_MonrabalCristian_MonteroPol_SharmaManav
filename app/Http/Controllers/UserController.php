@@ -11,17 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 
-class UserController 
+class UserController
 {
-    /**
-     * Muestra el formulario de edición de perfil.
-     */
-    public function edit()
-    {
-        $user = Auth::user();
-        return view('profile.profile', ['user' => $user]);
-    }
-    
+
     /**
      * Muestra la vista de usuarios para el administrador.
      */
@@ -38,9 +30,9 @@ class UserController
     {
         // Se asume que en el modelo User está definida la relación 'role'
         $users = User::select('id_user', 'name', 'email', 'created_at')
-                     ->with('role:id_rol,name')
-                     ->get();
-        
+            ->with('role:id_rol,name')
+            ->get();
+
         return response()->json($users);
     }
 
@@ -53,27 +45,32 @@ class UserController
         if (!$user) {
             return redirect()->back()->withErrors(['user' => 'Usuario no autenticado.']);
         }
-        
-        // Si el request tiene un archivo 'photo' y no se envían otros datos (o los otros campos están vacíos),
-        // asumimos que se trata solo de actualizar la foto.
+
+        // Caso: Solo se actualiza la foto (sin otros datos)
         if ($request->hasFile('photo') && !$request->filled('name')) {
             $validated = $request->validate([
                 'photo' => 'nullable|image|max:2048',
             ]);
-            
+
             if ($request->hasFile('photo')) {
                 $file = $request->file('photo');
                 $filename = time() . '.' . $file->getClientOriginalExtension();
+
+                // Elimina la foto anterior si existe
+                if ($user->profile_image && File::exists(public_path('img/' . $user->profile_image))) {
+                    File::delete(public_path('img/' . $user->profile_image));
+                }
+
                 $file->move(public_path('img'), $filename);
                 // Actualiza el campo en la base de datos:
                 $user->profile_image = $filename;
                 $user->save();
             }
-            
-            return redirect()->route('user.edit')->with('status', 'Foto de perfil actualizada correctamente');
+
+            return redirect()->route('profile.profile-all')->with('status', 'Foto de perfil actualizada correctamente');
         }
-        
-        // Si se envían otros datos, validamos y actualizamos todo el perfil
+
+        // Caso: Se actualizan otros datos junto con la foto (si se envía)
         $validated = $request->validate([
             'name'         => 'required|string|max:255',
             'last_name'    => 'required|string|max:255',
@@ -82,52 +79,90 @@ class UserController
             'password'     => 'nullable|min:6',
             'photo'        => 'nullable|image|max:2048',
         ]);
-        
+
         $updateData = [
             'name'         => $validated['name'],
             'last_name'    => $validated['last_name'],
             'email'        => $validated['email'],
             'phone_number' => $validated['phone_number'] ?? null,
         ];
-        
+
         if (!empty($validated['password'])) {
             $updateData['password'] = bcrypt($validated['password']);
         }
-        
-        
+
+        // Si se envía una nueva foto, eliminar la anterior antes de guardarla
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $filename = time().'_'.$file->getClientOriginalName();
-            // Usamos move() para guardar directamente en public/img
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // Elimina la foto anterior si existe
+            if ($user->profile_image && File::exists(public_path('img/' . $user->profile_image))) {
+                File::delete(public_path('img/' . $user->profile_image));
+            }
+
+            // Guarda la nueva foto
             $file->move(public_path('img'), $filename);
             $updateData['profile_image'] = $filename;
         }
-        
+
         $user->update($updateData);
-        
-        return redirect()->route('user.edit')->with('status', 'Perfil actualizado correctamente');
+
+        return redirect()->route('profile.profile-all')->with('status', 'Perfil actualizado correctamente');
     }
 
 
-public function destroyPhoto(Request $request)
-{
-    $user = auth()->user();
+    public function destroyPhoto(Request $request)
+    {
+        $user = auth()->user();
 
-    if ($user->profile_image && File::exists(public_path('img/' . $user->profile_image))) {
-        File::delete(public_path('img/' . $user->profile_image));
+        if ($user->profile_image && File::exists(public_path('img/' . $user->profile_image))) {
+            File::delete(public_path('img/' . $user->profile_image));
+        }
+
+        $user->profile_image = null;
+        $user->save();
+
+        return redirect()->route('profile.profile-all')
+            ->with('status', 'Foto eliminada correctamente');
     }
 
-    $user->profile_image = null;
-    $user->save();
 
-    return redirect()->back()->with('success', 'Foto eliminada correctamente');
-}
-public function profileAll()
-{
-    // Aquí puedes procesar datos o lógica adicional si lo necesitas
-    $user = Auth::user();
+    public function profileAll()
+    {
+        $user = Auth::user();
+        $reviews = Review::where('users_id', $user->id)
+            ->with('restaurant')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    return view('profile.profile-all',['user' => $user]); // Asegúrate de tener esta vista creada en resources/views
-}
+        $favorites = Favorite::where('users_id', $user->id)
+            ->with('restaurant')
+            ->get();
 
+        return view('profile.profile-all', compact('user', 'reviews', 'favorites'));
+    }
+
+    public function removeFavorite($favoriteId)
+    {
+        // Obtenemos el usuario autenticado
+        $user = Auth::user();
+
+        // Buscamos el registro Favorite por ID, asegurándonos de que pertenezca al usuario
+        $favorite = Favorite::where('id', $favoriteId)
+            ->where('users_id', $user->id)
+            ->first();
+
+        // Si no existe o no pertenece al usuario, mostramos un mensaje de error
+        if (!$favorite) {
+            return redirect()->route('profile.profile-all')->withErrors(['msg' => 'No se encontró el favorito o no te pertenece.']);
+        }
+
+        // Eliminamos el favorito
+        $favorite->delete();
+
+        // Redirigimos a la página de perfil con un mensaje de éxito
+        return redirect()->to(route('profile.profile-all') . '#favoritos-pane')
+            ->with('status', 'El restaurante se ha eliminado de tus favoritos.');
+    }
 }

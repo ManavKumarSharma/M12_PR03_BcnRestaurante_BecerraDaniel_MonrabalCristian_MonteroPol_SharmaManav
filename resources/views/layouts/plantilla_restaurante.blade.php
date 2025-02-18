@@ -8,7 +8,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-
 </head>
 <body>
   <header class="bg-white text-dark py-2 d-none d-lg-block">
@@ -26,10 +25,10 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                     @if(Auth::check())
-                        <li><a class="dropdown-item" href="#">Tus reservas</a></li>
-                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis datos</a></li>
-                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis Opiniones</a></li>
-                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Favoritos</a></li>
+                        <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}">Mis datos</a></li>
+                        <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#resenas-pane">Mis Reseñas</a></li>
+                        <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#favoritos-pane">Favoritos</a></li>
+                        
                         <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
@@ -37,8 +36,8 @@
                             </form>
                         </li>
                     @else
-                    <li><a class="dropdown-item" href="#" data-modal="login-modal">Entra</a></li>
-                    <li><a class="dropdown-item" href="#" data-modal="register-modal">Regístrate</a></li>
+                        <li><a class="dropdown-item" href="#" data-modal="login-modal">Entra</a></li>
+                        <li><a class="dropdown-item" href="#" data-modal="register-modal">Regístrate</a></li>
                     @endif
                 </ul>
             </div>
@@ -56,7 +55,6 @@
     </div>
   </header>
 
-  
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #f26522;">
     <div class="container">
       <a class="navbar-brand d-lg-none" href="#">
@@ -85,10 +83,9 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="accountDropdownMobile">
               @if(Auth::check())
-                <li><a class="dropdown-item" href="#">Tus reservas</a></li>
-                <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis datos</a></li>
-                <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis Opiniones</a></li>
-                <li><a class="dropdown-item" href="{{ route('user.edit') }}">Favoritos</a></li>
+                <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}">Mis datos</a></li>
+                <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#resenas-pane">Mis Reseñas</a></li>
+                <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#favoritos-pane">Favoritos</a></li>
                 <li>
                   <form action="{{ route('logout') }}" method="POST">
                     @csrf
@@ -123,9 +120,9 @@
 
   <!-- Scripts de Bootstrap y tus JS personalizados -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  
+  <script src="{{ asset('js/tabs-activation.js') }}"></script>
   @yield('scripts')
-
+  
   @yield('content')
   
 </body>

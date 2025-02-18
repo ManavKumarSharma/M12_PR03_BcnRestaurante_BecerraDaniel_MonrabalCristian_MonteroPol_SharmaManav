@@ -35,13 +35,12 @@ Route::controller(RestaurantController::class)->group(function () {
 
 });
 
-
-// Rutas del perfil de usuario
-Route::controller(UserController::class)->group(function () {
-    Route::get('/perfil', 'edit')->name('user.edit'); // Mostrar perfil editable
-    Route::put('/perfil', 'update')->name('user.update'); // Actualizar perfil
-    Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete'); // Eliminar foto
-    Route::get('/profile-all', 'profileAll')->name('profile.profile-all'); // Perfil con reviews y favoritos
-
-    
+// Agrupamos las rutas bajo middleware de autenticación para asegurar que solo usuarios logueados puedan acceder
+Route::middleware(['auth'])->group(function () {
+    Route::controller(UserController::class)->group(function () {
+        Route::put('/perfil', 'update')->name('user.update');
+        Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete');
+        Route::get('/perfil', 'profileAll')->name('profile.profile-all');
+        Route::delete('/favorites/{favoriteId}', 'removeFavorite')->name('favorites.remove');
+    });
 });
