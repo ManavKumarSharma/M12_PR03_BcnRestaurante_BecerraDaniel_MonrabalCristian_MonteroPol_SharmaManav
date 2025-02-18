@@ -138,39 +138,5 @@
             </div>
         </div>
     </div>
-
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <img src="{{ asset('img/bcn-logo.png') }}" class="logo h4 mb-2 mb-lg-0" alt="Logo BCN">
-                </div>
-                <div class="col-md-3 text-md-end">
-                    <h5>Síguenos en</h5>
-                    <a href="https://www.instagram.com/bcnrestaurantescom/" class="bi bi-instagram me-3"></a>
-                    <a href="https://x.com/BcnRestaurantes" class="bi bi-twitter me-3"></a>
-                    <a href="https://www.facebook.com/bcnrestaurantes" class="bi bi-facebook"></a>
-                </div>
-            </div>
-            <hr class="bg-white">
-            <div class="row text-center">
-                <div class="col">
-                    <a href="#" class="text-white me-3">Clientes</a>
-                    <a href="#" class="text-white me-3">Contactar</a>
-                    <a href="#" class="text-white me-3">Dar de alta un restaurante</a>
-                    <a href="#" class="text-white me-3">Tus reservas</a>
-                    <a href="#" class="text-white me-3">Español</a>
-                    <a href="#" class="text-white me-3">Català</a>
-                    <a href="#" class="text-white">English</a>
-                </div>
-            </div>
-            <div class="row text-center mt-3">
-                <div class="col">
-                    <p class="mb-0">&copy; 2025 AlDente.com - <a href="#" class="text-white">Aviso legal</a> - <a href="#" class="text-white">Política de privacidad</a> - <a href="#" class="text-white">Política de cookies</a> - 933 300 303</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
     @endif
 @endsection
