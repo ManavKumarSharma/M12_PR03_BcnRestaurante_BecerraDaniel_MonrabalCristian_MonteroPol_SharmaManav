@@ -7,57 +7,56 @@
     @php
         use Carbon\Carbon;
     @endphp
-
+    <link rel="stylesheet" href="{{ asset('css/restaurantes.css') }}">
     <div class="contenido">
-
         {{-- F I L T R O S --}}
-        <div class="filtro1">
-            <div class="filtroTipos">
-                <form action="{{ route('views.restaurantes') }}" method="GET">
+        <div class="filter-section text-white py-5" style="background: url('{{ asset('img/header.jpg') }}') no-repeat center center; background-size: cover;">
+            <div class="container">
+                <form action="{{ route('views.restaurantes') }}" method="GET" class="row g-3 align-items-center">
+                    <!-- Menú desplegable (select) para elegir una etiqueta (tipo de restaurante) -->
+                    <div class="col-md-4">
+                        <label for="etiqueta" class="form-label">Tipo de Restaurante</label>
+                        <select name="etiqueta" id="etiqueta" class="form-select" onchange="this.form.submit()">
+                            <option value="Todos" {{ request('etiqueta') == 'Todos' ? 'selected' : '' }}>Todos</option>
+                            @foreach($restaurantesPorEtiqueta as $tag => $contados)
+                                <option value="{{ $tag }}" {{ request('etiqueta') == $tag ? 'selected' : '' }}>{{ $tag." ($contados)" }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                    {{-- Menú desplegable (select) para elegir una etiqueta (tipo de restaurante) --}}
-                    {{-- Este select envía los datos al formulario cada vez que se selecciona una etiqueta --}}
-                    <select name="etiqueta" onchange="this.form.submit()">
-                        
-                        {{-- Opción por defecto: "Todos", que muestra todos los restaurantes, si está seleccionado, esta opción estará seleccionada --}}
-                        <option value="Todos" {{ request('etiqueta') == 'Todos' ? 'selected' : '' }}>Todos</option>
-
-                        {{-- Por cada restaurantes contados por etiquetas, devuelveme la cuenta de cuantos tienen esa etiqueta --}}
-                        @foreach($restaurantesPorEtiqueta as $tag => $contados)
-                            
-                            {{-- Mostramos una opción por cada etiqueta que tenga un o varios restaurantes relacionados --}}
-                            {{-- Si la etiqueta seleccionada coincide con la actual, la marca como seleccionada --}}
-                            <option value="{{ $tag }}" {{ request('etiqueta') == $tag ? 'selected' : '' }}>{{ $tag." ($contados)" }}</option>
-
-                        @endforeach
-                    </select>
-
-                    {{-- Campo de texto buscar los restaurantes por su nombre, mostramos el valor cuando lo recojemos por value="{{ request('busqueda') }}" --}}
-                    <input type="text" name="busqueda" placeholder="Buscar restaurantes" value="{{ request('busqueda') }}">
+                    <!-- Campo de texto para buscar los restaurantes por su nombre -->
+                    <div class="col-md-4">
+                        <label for="busqueda" class="form-label">Buscar Restaurantes</label>
+                        <input type="text" name="busqueda" id="busqueda" class="form-control" placeholder="Buscar restaurantes" value="{{ request('busqueda') }}">
+                    </div>
 
                     <!-- Menú desplegable para ordenar -->
-                    <select name="orden" onchange="this.form.submit()">
-                        <option value="" disabled selected>Ordenar por</option>
-                        <option value="precio-mayor-menor" {{ request('orden') == 'precio-mayor-menor' ? 'selected' : '' }}>Precio de Mayor a Menor</option>
-                        <option value="precio-menor-mayor" {{ request('orden') == 'precio-menor-mayor' ? 'selected' : '' }}>Precio de Menor a Mayor</option>
-                        <option value="mejor-valorados" {{ request('orden') == 'mejor-valorados' ? 'selected' : '' }}>Mejor Valorados</option>
-                        <option value="peor-valorados" {{ request('orden') == 'peor-valorados' ? 'selected' : '' }}>Peor Valorados</option>
-                        <option value="antiguos" {{ request('orden') == 'antiguos' ? 'selected' : '' }}>Más Antiguos</option>
-                        <option value="nuevos" {{ request('orden') == 'nuevos' ? 'selected' : '' }}>Más Nuevos</option>
-                    </select>
+                    <div class="col-md-4">
+                        <label for="orden" class="form-label">Ordenar por</label>
+                        <select name="orden" id="orden" class="form-select" onchange="this.form.submit()">
+                            <option value="" disabled selected>Ordenar por</option>
+                            <option value="precio-mayor-menor" {{ request('orden') == 'precio-mayor-menor' ? 'selected' : '' }}>Precio de Mayor a Menor</option>
+                            <option value="precio-menor-mayor" {{ request('orden') == 'precio-menor-mayor' ? 'selected' : '' }}>Precio de Menor a Mayor</option>
+                            <option value="mejor-valorados" {{ request('orden') == 'mejor-valorados' ? 'selected' : '' }}>Mejor Valorados</option>
+                            <option value="peor-valorados" {{ request('orden') == 'peor-valorados' ? 'selected' : '' }}>Peor Valorados</option>
+                            <option value="antiguos" {{ request('orden') == 'antiguos' ? 'selected' : '' }}>Más Antiguos</option>
+                            <option value="nuevos" {{ request('orden') == 'nuevos' ? 'selected' : '' }}>Más Nuevos</option>
+                        </select>
+                    </div>
 
-                    <button type="button" onclick="window.location='{{ route('views.restaurantes') }}'">Borrar Filtros</button>
-                    
+                    <div class="col-12 text-center mt-3">
+                        <button type="button" class="btn btn-secondary" onclick="window.location='{{ route('views.restaurantes') }}'">Borrar Filtros</button>
+                    </div>
                 </form>
             </div>
         </div>
         {{-- FIN FILTROS --}}
 
-        <div style="display: flex; justify-content: center;">
+        <div class="d-flex justify-content-center">
 
-            <div class="grid-container lista-restaurantes">
+            <div class="grid-container lista-restaurantes row">
                 @foreach ($restaurantes as $restaurante)
-                    <div class="restaurante">
+                    <div class="restaurante col-12 col-md-6 col-lg-4 mb-4">
                         <div class="imagenesRestaurante">
                             @if (file_exists(public_path('img/' . $restaurante->img_restaurant)))
                                 <img src="{{ asset('img/' . $restaurante->img_restaurant) }}" alt="{{ $restaurante->nombre_restaurante }}">
