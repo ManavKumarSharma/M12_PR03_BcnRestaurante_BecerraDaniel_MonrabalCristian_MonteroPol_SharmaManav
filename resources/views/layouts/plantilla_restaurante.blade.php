@@ -124,12 +124,11 @@
   </div>
 </nav>
 
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   
-
   <div class="content">
     @yield('content')
+    <br><br>
   </div>
 
   <footer class="bg-dark text-white py-4">
