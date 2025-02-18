@@ -120,89 +120,89 @@
             </div>
 
         </div>
-
     </div>
-@endsection
 
-@section('script')
+    @section('script')
     
-    <script>
+        <script>
 
-        var enviarPuntuacion = document.getElementById('enviarPuntuacion');
+            var enviarPuntuacion = document.getElementById('enviarPuntuacion');
 
-        // Se ejecuta cuando se hace clic en el botón de puntuar
-        enviarPuntuacion.onclick = = function() {
-            puntuar();
-        }
-
-        function puntuar() {
-
-            var puntuacionSeleccionada = document.querySelector('input[name="estrellas"]:checked');
-
-            if (!puntuacionSeleccionada) {
-                document.getElementById('mensajePuntuacion').innerHTML =
-                    '<p style="color: red;">Por favor, selecciona una puntuación</p>';
-                return;
+            // Se ejecuta cuando se hace clic en el botón de puntuar
+            enviarPuntuacion.onclick = function() {
+                puntuar();
             }
 
-            var puntuacion = puntuacionSeleccionada.value;
-            var restauranteId = {{ $restaurante->id }};
-            var userId = {{ $userId }};
+            function puntuar() {
 
-            var formData = new FormData();
-            formData.append('puntuacion', puntuacion);
-            formData.append('restaurante_id', restauranteId);
-            formData.append('user', userId);
+                var puntuacionSeleccionada = document.querySelector('input[name="estrellas"]:checked');
 
-            // Petición AJAX usando fetch
-            fetch('/puntuar', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                if (data.trim() === "ok") {
+                if (!puntuacionSeleccionada) {
                     document.getElementById('mensajePuntuacion').innerHTML =
-                        '<p style="color: green;">Puntuación insertada con éxito</p>';
-                } else {
-                    console.log(data);
-                    document.getElementById('mensajePuntuacion').innerHTML =
-                        '<p style="color: red;">Error al insertar la puntuación</p>';
+                        '<p style="color: red;">Por favor, selecciona una puntuación</p>';
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error('Error en la petición:', error);
-                document.getElementById('mensajePuntuacion').innerHTML =
-                    '<p style="color: red;">Error de conexión</p>';
-            });
-        }
+
+                var puntuacion = puntuacionSeleccionada.value;
+                var restauranteId = {{ $restaurante->id }};
+                var userId = {{ $userId }};
+
+                var formData = new FormData();
+                formData.append('puntuacion', puntuacion);
+                formData.append('restaurante_id', restauranteId);
+                formData.append('user', userId);
+
+                // Petición AJAX usando fetch
+                fetch('/puntuar', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.trim() === "ok") {
+                        document.getElementById('mensajePuntuacion').innerHTML =
+                            '<p style="color: green;">Puntuación insertada con éxito</p>';
+                    } else {
+                        console.log(data);
+                        document.getElementById('mensajePuntuacion').innerHTML =
+                            '<p style="color: red;">Error al insertar la puntuación</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la petición:', error);
+                    document.getElementById('mensajePuntuacion').innerHTML =
+                        '<p style="color: red;">Error de conexión</p>';
+                });
+            }
 
 
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     var valorar = document.getElementById('valorar');
-    //     var restaurante = document.getElementById('restaurante').value;
-    //     valorar.addEventListener("click", function() {
-    //         var errorValorar = document.getElementById('errorValorar');
-    //         var descripcion = document.getElementById('descripcion').value.trim();
-    //         if (descripcion === "") {
-    //             errorValorar.innerHTML = "Por favor, inserte texto en la valoracion.";
-    //         } else {
-    //             errorValorar.innerHTML = "";
-    //             var form = document.getElementById('valorarForm');
-    //             var formdata = new FormData(form);
-    //             var ajax = new XMLHttpRequest();
-    //             ajax.open('POST', '/acciones/valorar.php');
-    //             ajax.onload = function() {
-    //                 if (ajax.status === 200) {
-    //                     if (ajax.responseText === "ok") {
-    //                         window.location.replace(restaurante);
-    //                     }
-    //                 }
-    //             };
-    //             ajax.send(formdata);
-    //         }
-    //     });
-    // });
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     var valorar = document.getElementById('valorar');
+        //     var restaurante = document.getElementById('restaurante').value;
+        //     valorar.addEventListener("click", function() {
+        //         var errorValorar = document.getElementById('errorValorar');
+        //         var descripcion = document.getElementById('descripcion').value.trim();
+        //         if (descripcion === "") {
+        //             errorValorar.innerHTML = "Por favor, inserte texto en la valoracion.";
+        //         } else {
+        //             errorValorar.innerHTML = "";
+        //             var form = document.getElementById('valorarForm');
+        //             var formdata = new FormData(form);
+        //             var ajax = new XMLHttpRequest();
+        //             ajax.open('POST', '/acciones/valorar.php');
+        //             ajax.onload = function() {
+        //                 if (ajax.status === 200) {
+        //                     if (ajax.responseText === "ok") {
+        //                         window.location.replace(restaurante);
+        //                     }
+        //                 }
+        //             };
+        //             ajax.send(formdata);
+        //         }
+        //     });
+        // });
 
-    </script>
+        </script>
+    @endsection
+
 @endsection
