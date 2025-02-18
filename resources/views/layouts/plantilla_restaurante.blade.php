@@ -116,11 +116,11 @@
           </ul>
         </div>
       </div>
-      <div class="social-icons d-lg-none mt-3 text-center">
-        <a href="https://www.instagram.com/bcnrestaurantescom/" class="bi bi-instagram me-3"></a>
-        <a href="https://x.com/BcnRestaurantes" class="bi bi-twitter me-3"></a>
+      <div class="social-icons d-flex align-items-center">
+        <a href="https://www.instagram.com/bcnrestaurantescom/" class="bi bi-instagram"></a>
+        <a href="https://x.com/BcnRestaurantes" class="bi bi-twitter"></a>
         <a href="https://www.facebook.com/bcnrestaurantes" class="bi bi-facebook"></a>
-      </div>
+    </div>
     </div>
   </div>
 </nav>

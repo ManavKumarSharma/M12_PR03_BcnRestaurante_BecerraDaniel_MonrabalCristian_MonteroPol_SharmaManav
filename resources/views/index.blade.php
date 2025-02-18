@@ -47,54 +47,6 @@
         </div>
     </div>
 
-    {{-- RESTAURANTES POR CATEGORÍAS --}}
-    <div class="container my-5">
-        <h2 class="text-center fw-bold">RESTAURANTES POR CATEGORÍAS</h2>
-        <p class="text-center text-muted">TODAS LAS CATEGORÍAS</p>
-
-        <div class="row g-4 mt-4 justify-content-center">
-            <!-- Zona -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ asset('img/zona.png') }}" class="card-img-top" alt="Zona">
-                    <div class="card-body">
-                        <h5 class="card-title">Zona</h5>
-                        <ul class="list-unstyled">
-                            <li>Centro (476)</li>
-                            <li>Eixample Dret (278)</li>
-                            <li>Eixample Esquerre (276)</li>
-                            <li>St. Gervasi-Santaló (117)</li>
-                            <li>Gràcia (153)</li>
-                            <li>La Barceloneta (74)</li>
-                            <li>El Gòtic (128)</li>
-                            <li><a href="#" class="text-primary">Ver todas</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Comida -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ asset('img/comida.png') }}" class="card-img-top" alt="Comida">
-                    <div class="card-body">
-                        <h5 class="card-title">Comida</h5>
-                        <ul class="list-unstyled">
-                            <li>Paella. Arroces (109)</li>
-                            <li>Tapas. Medias raciones (342)</li>
-                            <li>Italiana. Pizzería. (166)</li>
-                            <li>Japonesa (119)</li>
-                            <li>Brasería. Carnes. (130)</li>
-                            <li>Catalana (264)</li>
-                            <li>Creativa. De autor (117)</li>
-                            <li><a href="#" class="text-primary">Ver todas</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     {{-- RESTAURANTES DESTACADOS --}}
 
     <div class="container my-5">
