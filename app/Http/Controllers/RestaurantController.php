@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FoodImage;
 use App\Models\Restaurant;
 use App\Models\Review;
+use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class RestaurantController extends Controller
 {
@@ -123,8 +126,6 @@ class RestaurantController extends Controller
     }
 
 
-    
-
     public function mostrarElRestaurante($id)
     {
         $userId = session('user_id');
@@ -132,10 +133,46 @@ class RestaurantController extends Controller
         $restaurante = Restaurant::find($id);
         $valoraciones = Review::with('user')->where('restaurants_id', $id)->get();
         $estrella = Review::where('users_id', $userId)->where('restaurants_id', $id)->first();
+        $zona = Zone::where('id', $restaurante->zones_id)->value('name_zone');
+        $fotosComidas = FoodImage::where('restaurants_id', $id)->pluck('image_url');
         $mediaEstrellas = Review::where('restaurants_id', $id)->selectRaw('ROUND(AVG(score), 1) as media_estrellas')->first()->media_estrellas;
 
         $mostrarBarraInicio = false;
 
-        return view('restaurantes.restaurante', compact('userId', 'restaurante', 'valoraciones', 'estrella', 'mediaEstrellas', 'mostrarBarraInicio'));
+        return view('restaurantes.restaurante', compact('userId', 'restaurante', 'valoraciones', 'estrella', 'zona', 'fotosComidas', 'mediaEstrellas', 'mostrarBarraInicio'));
+    }
+
+
+    public function puntuarRestaurante(Request $request)
+    {
+        $request->validate([
+            'puntuacion' => 'required|integer|min:1|max:5',
+            'restaurante_id' => 'required|exists:restaurants,id',
+        ]);
+
+        $userId = Auth::id(); // O usa session('user_id') si manejas sesiones manualmente
+        $restaurantId = $request->input('restaurante_id');
+        $puntuacion = $request->input('puntuacion');
+
+        // Verifica si el usuario ya ha puntuado el restaurante
+        $review = Review::where('users_id', $userId)
+                        ->where('restaurants_id', $restaurantId)
+                        ->first();
+
+        if ($review) {
+            // Si ya existe una puntuación, actualiza la existente
+            $review->update([
+                'score' => $puntuacion,
+            ]);
+        } else {
+            // Si no existe, crea una nueva puntuación
+            Review::create([
+                'users_id' => $userId,
+                'restaurants_id' => $restaurantId,
+                'score' => $puntuacion,
+            ]);
+        }
+
+        return response()->json(['message' => 'ok']);
     }
 }

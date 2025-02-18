@@ -10,6 +10,7 @@
 
     <div class="contenido">
 
+        {{-- F I L T R O S --}}
         <div class="filtro1">
             <div class="filtroTipos">
                 <form action="{{ route('views.restaurantes') }}" method="GET">
@@ -50,26 +51,7 @@
                 </form>
             </div>
         </div>
-
-
-        {{-- <div class="filtro2">
-            <nav class="nav-item filtrozonas dropdown">
-                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <p class="filtros">Ordenar por &nbsp;{{ $filtro2 }} &nbsp;<i
-                            class="fa-solid fa-arrow-down-short-wide"></i></p>
-                    <ul class="dropdown-menu dropdown-menu2">
-                        <li><a class="dropdown-item" href="{{ route('vistas.precio-mayor-menor') }}"><i class="fa-solid fa-money-bills"></i> Precio de Mayor a
-                                Menor</a></li>
-                        <li><a class="dropdown-item" href="{{ route('vistas.precio-menor-mayor') }}"><i class="fa-solid fa-money-bill"></i> Precio de Menor a
-                                Mayor</a></li>
-                        <li><a class="dropdown-item" href="{{ route('vistas.mejor-valorados') }}"><i class="fa-solid fa-thumbs-up"></i> Mejor Valorados</a></li>
-                        <li><a class="dropdown-item" href="{{ route('vistas.peor-valorados') }}"><i class="fa-solid fa-thumbs-down"></i> Peor Valorados</a></li>
-                        <li><a class="dropdown-item" href="{{ route('vistas.antiguos') }}"><i class="fa-regular fa-calendar"></i> Mas Antiguos</a></li>
-                        <li><a class="dropdown-item" href="{{ route('vistas.nuevos') }}"><i class="fa-regular fa-calendar"></i> Mas Nuevos</a></li>
-                    </ul>
-                </a>
-            </nav>
-        </div> --}}
+        {{-- FIN FILTROS --}}
 
         <div style="display: flex; justify-content: center;">
 
@@ -194,41 +176,43 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('script')
+    
     <script>
-    document.getElementById('cargar-mas').addEventListener('click', function() {
-        var paginaActual = {{ $restaurantes->currentPage() }};
-        var siguientePagina = paginaActual + 1;  // Aumentar la página
-        var url = "{{ route('views.restaurantes') }}?pagina=" + siguientePagina;
-        
-        // Agregar parámetros de filtro si existen
-        var etiqueta = "{{ request('etiqueta') }}";
-        var busqueda = "{{ request('busqueda') }}";
-        var orden = "{{ request('orden') }}";
-        url += "&etiqueta=" + etiqueta + "&busqueda=" + busqueda + "&orden=" + orden;
+        document.getElementById('cargar-mas').addEventListener('click', function() {
+            var paginaActual = {{ $restaurantes->currentPage() }};
+            var siguientePagina = paginaActual + 1;  // Aumentar la página
+            var url = "{{ route('views.restaurantes') }}?pagina=" + siguientePagina;
+            
+            // Agregar parámetros de filtro si existen
+            var etiqueta = "{{ request('etiqueta') }}";
+            var busqueda = "{{ request('busqueda') }}";
+            var orden = "{{ request('orden') }}";
+            url += "&etiqueta=" + etiqueta + "&busqueda=" + busqueda + "&orden=" + orden;
 
-        // Hacer la solicitud AJAX
-        fetch(url)
-            .then(response => response.text())
-            .then(data => {
-                var div = document.createElement('div');
-                div.innerHTML = data;
-                var nuevosRestaurantes = div.querySelector('.lista-restaurantes'); // Obtener solo los restaurantes
+            // Hacer la solicitud AJAX
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    var div = document.createElement('div');
+                    div.innerHTML = data;
+                    var nuevosRestaurantes = div.querySelector('.lista-restaurantes'); // Obtener solo los restaurantes
 
-                // Añadir los nuevos restaurantes al contenedor actual sin crear un div nuevo
-                document.querySelector('.lista-restaurantes').innerHTML += nuevosRestaurantes.innerHTML;
+                    // Añadir los nuevos restaurantes al contenedor actual sin crear un div nuevo
+                    document.querySelector('.lista-restaurantes').innerHTML += nuevosRestaurantes.innerHTML;
 
-                var nuevaPaginacion = div.querySelector('.paginacion'); // Obtener el nuevo paginador
+                    var nuevaPaginacion = div.querySelector('.paginacion'); // Obtener el nuevo paginador
 
-                // Si no hay más páginas, ocultar el botón de "Ver más"
-                if (!nuevaPaginacion.innerHTML.trim()) {
-                    document.getElementById('cargar-mas').style.display = 'none';
-                } else {
-                    document.querySelector('.paginacion').innerHTML = nuevaPaginacion.innerHTML;
-                }
-            })
-        .catch(error => console.log('Error al cargar más restaurantes:', error));
-    });
-
-
+                    // Si no hay más páginas, ocultar el botón de "Ver más"
+                    if (!nuevaPaginacion.innerHTML.trim()) {
+                        document.getElementById('cargar-mas').style.display = 'none';
+                    } else {
+                        document.querySelector('.paginacion').innerHTML = nuevaPaginacion.innerHTML;
+                    }
+                })
+            .catch(error => console.log('Error al cargar más restaurantes:', error));
+        });
     </script>
 @endsection

@@ -195,6 +195,65 @@
     background-color: lightgray;
 }
 
+/* FORMULARIO PUNTUAR (ESTRELLAS) */
+
+.puntuarForm {
+    margin: 0 auto;
+}
+
+.puntuarForm p {
+    text-align: left;
+}
+
+.puntuarForm label {
+    font-size: 20px;
+}
+
+.puntuarForm input[type="radio"] {
+    display: none;
+}
+
+.puntuarForm label {
+    color: grey;
+}
+
+.clasificacion {
+    margin: auto;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+.puntuarForm label:hover,
+.puntuarForm label:hover~label {
+    color: orange;
+}
+
+.puntuarForm input[type="radio"]:checked~label {
+    color: orange;
+}
+
+.puntuarForm button {
+    margin: 1vh 0 0 0;
+    width: 11vh;
+    background-color: #ffa500;
+    color: white;
+    border: none !important;
+    transition: 0.2s;
+    border-radius: 2vh !important;
+}
+
+.puntuarForm button:hover {
+    background-color: white;
+    color: #ffa500;
+    font-weight: 700;
+}
+
+#mensajePuntuacion {
+    font-size: 1.5vh;
+    margin: 0.5vh 0 0 0;
+    width: 100%;
+}
+
 
 @media (max-width: 768px) {
     .social-icons {

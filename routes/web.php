@@ -30,6 +30,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(RestaurantController::class)->group(function () {
     Route::get('/restaurantes', 'todo')->name('views.restaurantes');
     Route::get('/restaurantes/{id}', 'mostrarElRestaurante')->name('vistas.restaurante');
+    Route::post('/puntuar', 'puntuarRestaurante')->middleware('auth');
 });
 
 // Rutas del perfil de usuario
@@ -39,3 +40,4 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete');
     Route::get('/profile-all', 'profileAll')->name('profile.profile-all');
 });
+
