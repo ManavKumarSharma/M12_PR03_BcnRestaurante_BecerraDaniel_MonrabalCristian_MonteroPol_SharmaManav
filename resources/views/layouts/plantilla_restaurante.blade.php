@@ -26,9 +26,9 @@
                 <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                     @if(Auth::check())
                         <li><a class="dropdown-item" href="#">Tus reservas</a></li>
-                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis datos</a></li>
-                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis Opiniones</a></li>
-                        <li><a class="dropdown-item" href="{{ route('user.edit') }}">Favoritos</a></li>
+                        <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}">Mis datos</a></li>
+                        <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#resenas-pane">Mis Reseñas</a></li>
+                        <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#favoritos-pane">Favoritos</a></li>
                         <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
@@ -89,9 +89,9 @@
           <ul class="dropdown-menu" aria-labelledby="accountDropdownMobile">
             @if(Auth::check())
               <li><a class="dropdown-item" href="#">Tus reservas</a></li>
-              <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis datos</a></li>
-              <li><a class="dropdown-item" href="{{ route('user.edit') }}">Mis Opiniones</a></li>
-              <li><a class="dropdown-item" href="{{ route('user.edit') }}">Favoritos</a></li>
+              <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}">Mis datos</a></li>
+              <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#resenas-pane">Mis Reseñas</a></li>
+              <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#favoritos-pane">Favoritos</a></li>
               <li>
                 <form action="{{ route('logout') }}" method="POST">
                   @csrf
