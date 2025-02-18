@@ -1,5 +1,8 @@
 const content = document.getElementById('table-content');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const modalElement = document.getElementById('myModal');
+
+const modal = new bootstrap.Modal(modalElement); // Crear instancia de Bootstrap Modal
 
 // Evento al hacer click en algún botón dentro de 'content'
 content.addEventListener('click', function (event) {
@@ -93,3 +96,14 @@ function AsyncGetRolesFromAPI() {
         throw new Error("Error de conexión");
     });
 }
+
+ // Evento que se ejecuta al cerrar el modal
+ modalElement.addEventListener('hidden.bs.modal', function () {
+        
+    // Limpiar los campos del formulario modal
+    const inputs = document.querySelectorAll('.custom-modal-input');
+    inputs.forEach(input => {
+        input.classList.remove('is-invalid', 'is-valid');
+        input.value = ''; // Limpiar el valor del input
+    });
+});
