@@ -170,49 +170,5 @@
                 @endforeach
             </div>
         </div>
-        @if ($restaurantes->hasMorePages())
-            <div class="paginacion">
-                <button class="btnPaginacion" id="cargar-mas">Ver más restaurantes</button>
-            </div>
-        @endif
     </div>
-@endsection
-
-@section('script')
-    
-    <script>
-        document.getElementById('cargar-mas').addEventListener('click', function() {
-            var paginaActual = {{ $restaurantes->currentPage() }};
-            var siguientePagina = paginaActual + 1;  // Aumentar la página
-            var url = "{{ route('views.restaurantes') }}?pagina=" + siguientePagina;
-            
-            // Agregar parámetros de filtro si existen
-            var etiqueta = "{{ request('etiqueta') }}";
-            var busqueda = "{{ request('busqueda') }}";
-            var orden = "{{ request('orden') }}";
-            url += "&etiqueta=" + etiqueta + "&busqueda=" + busqueda + "&orden=" + orden;
-
-            // Hacer la solicitud AJAX
-            fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    var div = document.createElement('div');
-                    div.innerHTML = data;
-                    var nuevosRestaurantes = div.querySelector('.lista-restaurantes'); // Obtener solo los restaurantes
-
-                    // Añadir los nuevos restaurantes al contenedor actual sin crear un div nuevo
-                    document.querySelector('.lista-restaurantes').innerHTML += nuevosRestaurantes.innerHTML;
-
-                    var nuevaPaginacion = div.querySelector('.paginacion'); // Obtener el nuevo paginador
-
-                    // Si no hay más páginas, ocultar el botón de "Ver más"
-                    if (!nuevaPaginacion.innerHTML.trim()) {
-                        document.getElementById('cargar-mas').style.display = 'none';
-                    } else {
-                        document.querySelector('.paginacion').innerHTML = nuevaPaginacion.innerHTML;
-                    }
-                })
-            .catch(error => console.log('Error al cargar más restaurantes:', error));
-        });
-    </script>
 @endsection

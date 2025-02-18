@@ -75,12 +75,9 @@ class RestaurantController
                 $filtro2 = 'Más Nuevos';
                 break;
         }
-    
-        // Realizar la paginación (si es la primera página, mostramos 3 restaurantes, si nó, 24)
-        $resultadosPorPágina = $pagina === 1 ? 3 : 24;
         
         // Realizar la paginación después de aplicar los filtros
-        $restaurantes = $consultaRestaurantes->paginate($resultadosPorPágina, ['*'], 'pagina', $pagina);
+        $restaurantes = $consultaRestaurantes->get();
     
         // Obtener las zonas disponibles para usarlas en el filtro
         $zonas = Zone::all();
