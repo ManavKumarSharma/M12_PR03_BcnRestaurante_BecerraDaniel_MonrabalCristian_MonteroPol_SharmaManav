@@ -67,7 +67,7 @@ class AuthController
         'name'      => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
         'email'     => 'required|email|unique:users,email',
-        'phone'     => 'required|digits:9',
+        'phone_number'     => 'required|digits:9',
         'password'  => 'required|string|min:8',
     ]);
 
@@ -82,7 +82,7 @@ class AuthController
         'name'      => $request->name,
         'last_name' => $request->last_name,
         'email'     => $request->email,
-        'phone'     => $request->phone_number,
+        'phone_number'     => $request->phone_number,
         'password'  => Hash::make($request->password),
         'rol_id'    => 1
     ]);

@@ -119,8 +119,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">Número de teléfono:</label>
-                    <input type="tel" id="phone" name="phone" class="form-control" value="{{ old('phone') }}">
-                    <div class="error-message">{{ $errors->first('phone') }}</div>
+                    <input type="tel" id="phone" name="phone_number" class="form-control" value="{{ old('phone_number') }}">
+                    <div class="error-message">{{ $errors->first('phone_number') }}</div>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña:</label>

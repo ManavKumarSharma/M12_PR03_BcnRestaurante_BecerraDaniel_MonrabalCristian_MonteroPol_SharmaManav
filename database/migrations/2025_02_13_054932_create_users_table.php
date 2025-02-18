@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone_number')->nullable();
-            $table->unsignedBigInteger('rol_id')->nullable();
+            $table->unsignedBigInteger('rol_id')->default(1);
             $table->text('profile_image')->nullable();
             $table->rememberToken();
             $table->timestamps();
