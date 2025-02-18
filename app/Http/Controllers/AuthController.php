@@ -67,7 +67,7 @@ class AuthController
         'name'      => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
         'email'     => 'required|email|unique:users,email',
-        'phone'     => 'required|digits:9',
+        'phone'     => 'required|digits:9|unique:users,phone_number',
         'password'  => 'required|string|min:8',
     ]);
 
