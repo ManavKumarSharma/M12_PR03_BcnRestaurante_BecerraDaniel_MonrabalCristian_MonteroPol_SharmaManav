@@ -53,6 +53,7 @@
 
     {{-- RESTAURANTES POR CATEGORÍAS --}}
     <div class="container my-5">
+        
         <h2 class="text-center fw-bold">RESTAURANTES POR CATEGORÍAS</h2>
         <p class="text-center text-muted">TODAS LAS CATEGORÍAS</p>
 

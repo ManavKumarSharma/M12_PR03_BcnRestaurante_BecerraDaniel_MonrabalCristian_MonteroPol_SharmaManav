@@ -21,6 +21,27 @@ class RestaurantController
         return view('admin.restaurants', compact('title'));
     }
 
+    public function paginaCategorias() {
+
+        // Contamos los restaurantes por etiqueta
+        $restaurantesPorEtiqueta = Restaurant::with('tags')->get()
+        // Obtenemos todas las etiqueta que estén relacionadas con restaurantes (et1, et2,...)
+        ->flatMap(function ($restaurante) {
+            return $restaurante->tags;
+        })
+        // Agrupamos las etiquetas por su nombre
+        ->groupBy('name')
+        // Miramos cada grupo de etiquetas que hemos obtenido y contamos cuantos restaurantes tienen cada etiqueta
+        ->map(function ($etiquetas) {
+            return $etiquetas->count();
+        });
+
+        // Contamos los restaurantes por zona
+        $restaurantesPorZona = Zone::withCount('restaurants')->get();
+
+        return view('categorias', compact('restaurantesPorEtiqueta', 'restaurantesPorZona'));
+    }
+
     public function todo(Request $request) {
         // Obtener el parámetro 'etiqueta' y 'busqueda' de la URL
         $etiqueta = $request->input('etiqueta');
@@ -312,7 +333,5 @@ class RestaurantController
             return response("Error: " . $e->getMessage(), 500);
         }
     }
-    
-
 
 }
