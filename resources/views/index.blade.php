@@ -11,44 +11,8 @@
     @extends('layouts.plantilla_restaurante')
 
     <!-- Filtro -->
-    <div class="filter-section text-white py-5" style="background: url('{{ asset('img/header.jpg') }}') no-repeat center center; background-size: cover;">
-        <div class="container">
-            <form action="#" method="GET" class="row g-3 align-items-center">
-                <!-- Precio -->
-                <div class="col-md-4">
-                    <label for="precio" class="form-label">Precio (€)</label>
-                    <input type="number" name="precio" id="precio" class="form-control" placeholder="Ej. 20">
-                </div>
-
-                <!-- Valoración -->
-                <div class="col-md-4">
-                    <label for="valoracion" class="form-label">Valoración</label>
-                    <select name="valoracion" id="valoracion" class="form-select">
-                        <option value="">Selecciona</option>
-                        <option value="1">1 ⭐</option>
-                        <option value="2">2 ⭐</option>
-                        <option value="3">3 ⭐</option>
-                        <option value="4">4 ⭐</option>
-                        <option value="5">5 ⭐</option>
-                    </select>
-                </div>
-
-                <!-- Tipos de cocina -->
-                <div class="col-md-4">
-                    <label for="tipo_cocina" class="form-label">Tipo de Cocina</label>
-                    <select name="tipo_cocina" id="tipo_cocina" class="form-select">
-                        {{-- <option value="">Selecciona</option>
-                        @foreach ($tags as $tag)
-                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
-                        @endforeach --}}
-                    </select>
-                </div>
-
-                <div class="col-12 text-center mt-3">
-                    <button type="submit" class="btn btn-primary">Filtrar</button>
-                </div>
-            </form>
-        </div>
+    <div class="filter-section text-white" style="background: url('{{ asset('img/header.jpg') }}') no-repeat center center; background-size: cover;padding:7%">
+     
     </div>
 
     {{-- RESTAURANTES POR CATEGORÍAS --}}
