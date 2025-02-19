@@ -33,7 +33,7 @@ class Restaurant extends Model
     }
 
     public function zone() {
-        return $this->belongsTo(Zone::class);
+        return $this->belongsTo(Zone::class, 'zones_id');
     }
 
 }

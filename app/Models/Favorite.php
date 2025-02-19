@@ -10,6 +10,8 @@ class Favorite extends Model
 
     protected $table = 'favorites';
 
+    protected $fillable = ['users_id', 'restaurants_id'];
+
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class, 'restaurants_id');

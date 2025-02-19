@@ -12,6 +12,8 @@ class Review extends Model
 
     protected $table = 'reviews';
 
+    protected $fillable = ['users_id', 'restaurants_id', 'score', 'comment'];
+
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class, 'restaurants_id');
@@ -21,4 +23,5 @@ class Review extends Model
     {
         return $this->belongsTo(User::class, 'users_id');
     }
+    
 }
