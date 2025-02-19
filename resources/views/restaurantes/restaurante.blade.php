@@ -64,6 +64,7 @@
         </div>
 
         <div class="contenidoRestaurantes">
+
             <div class="nombre">
                 <p>{{ $restaurante->name }}</p>
             </div>
@@ -92,117 +93,254 @@
                 @endforeach
             </div>
 
-            <div>
+            <div class="puntuacion">
                 <form class="puntuarForm" id="puntuarForm">
                     <input type="hidden" name="user" id="user" value="{{ $userId }}">
                     <input type="hidden" name="restaurante" id="restaurante" value="{{ $restaurante->id }}">
                     <p class="clasificacion">
                         <label for="radio1"></label>
                         <input id="radio1" type="radio" name="estrellas" value="5"
-                            @if ($estrella && $estrella->num_estrellas == 5) checked @endif>
+                            @if ($estrella && $estrella->score == 5) checked @endif>
                         <label for="radio1">★</label>
                         <input id="radio2" type="radio" name="estrellas" value="4"
-                            @if ($estrella && $estrella->num_estrellas == 4) checked @endif>
+                            @if ($estrella && $estrella->score == 4) checked @endif>
                         <label for="radio2">★</label>
                         <input id="radio3" type="radio" name="estrellas" value="3"
-                            @if ($estrella && $estrella->num_estrellas == 3) checked @endif>
+                            @if ($estrella && $estrella->score == 3) checked @endif>
                         <label for="radio3">★</label>
                         <input id="radio4" type="radio" name="estrellas" value="2"
-                            @if ($estrella && $estrella->num_estrellas == 2) checked @endif>
+                            @if ($estrella && $estrella->score == 2) checked @endif>
                         <label for="radio4">★</label>
                         <input id="radio5" type="radio" name="estrellas" value="1"
-                            @if ($estrella && $estrella->num_estrellas == 1) checked @endif>
+                            @if ($estrella && $estrella->score == 1) checked @endif>
                         <label for="radio5">★</label>
                     </p>
                     <button type="button" id="enviarPuntuacion">Puntuar</button>
                 </form>
+                <button id="eliminarPuntuacion">Eliminar puntuación</button>
                 <div id="mensajePuntuacion"></div>
+            </div>
+
+            <div class="comentario">
+
+                <form class="valorarForm" id="valorarForm">
+                    <h6>VALORAR</h6>
+                    <label for="descripcion">Tu valoración:</label>
+                    <input type="hidden" name="user" id="user" value="{{ $userId }}">
+                    <input type="hidden" name="restaurante" id="restaurante" value="{{ $restaurante->id }}">
+                    <textarea name="descripcion" id="descripcion" rows="6" required></textarea>
+                    <span id="errorValorar"></span>
+                    <br>
+                    <input class="editarbtn" type="button" value="Valorar Restaurante" id="valorar">
+                </form>
+
+                <hr>
+
+                <h6>COMENTARIOS</h6>
+                @foreach ($valoraciones as $valoracion)
+                    <p class="comentario"><b>{{ $valoracion->user->name }}:</b> {{ $valoracion->comment }}</p>
+                @endforeach
+            </div>
+
+            <div class="favoritos">
+                <i id="noFavorito" class="bi bi-hand-thumbs-up" style="display: {{ $favorito ? 'none' : 'inline' }};"></i>
+                <i id="favorito" class="bi bi-hand-thumbs-up-fill {{ $favorito ? 'favorito-activo' : '' }}" style="display: {{ $favorito ? 'inline' : 'none' }};"></i>
             </div>
 
         </div>
     </div>
+@endsection
 
-    @section('script')
+@section('script')
     
-        <script>
+    <script>
 
-            var enviarPuntuacion = document.getElementById('enviarPuntuacion');
+        var enviarPuntuacion = document.getElementById('enviarPuntuacion');
 
-            // Se ejecuta cuando se hace clic en el botón de puntuar
-            enviarPuntuacion.onclick = function() {
-                puntuar();
+        var eliminarPuntuacion = document.getElementById('eliminarPuntuacion');
+
+        var comentarRestaurante = document.getElementById('valorar');
+
+        var mensajePuntuacion = document.getElementById('mensajePuntuacion');
+
+        var mensajeError = document.getElementById('errorValorar');
+
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        var noFavorito = document.getElementById('noFavorito');
+
+        var darFavorito = document.getElementById('favorito');
+
+
+        enviarPuntuacion.onclick = puntuar;
+
+        eliminarPuntuacion.onclick = eliminar;
+        
+        comentarRestaurante.onclick = comentar;
+
+        noFavorito.onmouseover = mostrarNoFavorito;
+
+        noFavorito.onmouseout = mostrarFavorito;
+
+        noFavorito.onclick = favorito;
+
+        darFavorito.onclick = favorito;
+
+
+        var restauranteId = {{ $restaurante->id }};
+        var userId = {{ $userId }};
+        
+        
+        function puntuar() {
+            
+            var puntuacionSeleccionada = document.querySelector('input[name="estrellas"]:checked');
+            
+            console.log('Puntuando...');
+            
+            if (!puntuacionSeleccionada) {
+                mensajePuntuacion.innerHTML = '<p style="color: red;">Por favor, selecciona una puntuación</p>';
+                return;
             }
 
-            function puntuar() {
+            var puntuacion = puntuacionSeleccionada.value;
 
-                var puntuacionSeleccionada = document.querySelector('input[name="estrellas"]:checked');
+            var formData = new FormData();
+            formData.append('puntuacion', puntuacion);
+            formData.append('restaurante_id', restauranteId);
+            formData.append('user', userId);
 
-                if (!puntuacionSeleccionada) {
-                    document.getElementById('mensajePuntuacion').innerHTML =
-                        '<p style="color: red;">Por favor, selecciona una puntuación</p>';
-                    return;
+            // Petición AJAX usando fetch
+            fetch('/puntuar', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === "ok") {
+                    mensajePuntuacion.innerHTML = "";
+                    mensajePuntuacion.innerHTML = '<p style="color: green;">Puntuación insertada con éxito</p>';
+                } else {
+                    console.log(data);
+                    mensajePuntuacion.innerHTML = "";
+                    mensajePuntuacion.innerHTML = '<p style="color: red;">Error al insertar la puntuación</p>';
                 }
+            })
+            .catch(error => {
+                console.error('Error en la petición:', error);
+                mensajePuntuacion.innerHTML = "";
+                mensajePuntuacion.innerHTML = '<p style="color: red;">Error de conexión</p>';
+            });
+        }
 
-                var puntuacion = puntuacionSeleccionada.value;
-                var restauranteId = {{ $restaurante->id }};
-                var userId = {{ $userId }};
+        function comentar() {
+            
+            var comentario = document.getElementById('descripcion').value.trim();
 
-                var formData = new FormData();
-                formData.append('puntuacion', puntuacion);
-                formData.append('restaurante_id', restauranteId);
-                formData.append('user', userId);
-
-                // Petición AJAX usando fetch
-                fetch('/puntuar', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.trim() === "ok") {
-                        document.getElementById('mensajePuntuacion').innerHTML =
-                            '<p style="color: green;">Puntuación insertada con éxito</p>';
-                    } else {
-                        console.log(data);
-                        document.getElementById('mensajePuntuacion').innerHTML =
-                            '<p style="color: red;">Error al insertar la puntuación</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error en la petición:', error);
-                    document.getElementById('mensajePuntuacion').innerHTML =
-                        '<p style="color: red;">Error de conexión</p>';
-                });
+            if (!comentario) {
+                mensajeError.innerHTML = '<p style="color: red;">Por favor, escribe un comentario</p>';
+                return;
             }
 
+            var formData = new FormData();
+            formData.append('comentario', comentario);
+            formData.append('restaurante_id', restauranteId);
+            formData.append('user', userId);
 
-        // document.addEventListener("DOMContentLoaded", function() {
-        //     var valorar = document.getElementById('valorar');
-        //     var restaurante = document.getElementById('restaurante').value;
-        //     valorar.addEventListener("click", function() {
-        //         var errorValorar = document.getElementById('errorValorar');
-        //         var descripcion = document.getElementById('descripcion').value.trim();
-        //         if (descripcion === "") {
-        //             errorValorar.innerHTML = "Por favor, inserte texto en la valoracion.";
-        //         } else {
-        //             errorValorar.innerHTML = "";
-        //             var form = document.getElementById('valorarForm');
-        //             var formdata = new FormData(form);
-        //             var ajax = new XMLHttpRequest();
-        //             ajax.open('POST', '/acciones/valorar.php');
-        //             ajax.onload = function() {
-        //                 if (ajax.status === 200) {
-        //                     if (ajax.responseText === "ok") {
-        //                         window.location.replace(restaurante);
-        //                     }
-        //                 }
-        //             };
-        //             ajax.send(formdata);
-        //         }
-        //     });
-        // });
+            fetch('/comentar', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === "ok") {
+                    mensajeError.innerHTML = '<p style="color: green;">Comentario agregado con éxito</p>';
+                } else {
+                    console.log(data);
+                    mensajeError.innerHTML = '<p style="color: red;">Error al agregar el comentario</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error en la petición:', error);
+                mensajeError.innerHTML = '<p style="color: red;">Error de conexión</p>';
+            });
+        }
 
-        </script>
-    @endsection
+
+        function favorito() {
+            var formData = new FormData();
+            formData.append('restaurante_id', {{ $restaurante->id }});
+
+            fetch('/favorito', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === 'añadido') {
+                    noFavorito.style.display = 'none';
+                    darFavorito.style.display = 'inline';
+                    darFavorito.classList.add('favorito-activo');
+                } else if (data.trim() === 'borrado') {
+                    noFavorito.style.display = 'inline';
+                    darFavorito.style.display = 'none';
+                    darFavorito.classList.remove('favorito-activo');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la petición:', error);
+            });
+        }
+
+        function mostrarNoFavorito() {
+            noFavorito.style.display = 'none';
+            darFavorito.style.display = 'inline';
+        }
+
+        function mostrarFavorito() {
+            if (!darFavorito.classList.contains('favorito-activo')) {
+                noFavorito.style.display = 'inline';
+                darFavorito.style.display = 'none';
+            }
+        }
+
+
+        function eliminar() {
+
+            var formData = new FormData();
+            formData.append('restaurante_id', restauranteId);
+
+            fetch(`/eliminar-puntuacion/${restauranteId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': token
+                }
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.trim() === "ok") {
+                    mensajePuntuacion.innerHTML = '<p style="color: green;">Puntuación eliminada con éxito</p>';
+                } else {
+                    console.log(data);
+                    mensajePuntuacion.innerHTML = '<p style="color: red;">Error al eliminar la puntuación</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error en la petición:', error);
+                mensajePuntuacion.innerHTML = '<p style="color: red;">Error de conexión</p>';
+            });
+        }
+
+
+
+    </script>
 
 @endsection
