@@ -43,8 +43,9 @@ class RestaurantController
     }
 
     public function todo(Request $request) {
-        // Obtener el parámetro 'etiqueta' y 'busqueda' de la URL
+
         $etiqueta = $request->input('etiqueta');
+        $zona = $request->input('zona');
         $busqueda = $request->input('busqueda');
         $orden = $request->input('orden');
         $pagina = $request->input('pagina', 1);
@@ -65,6 +66,14 @@ class RestaurantController
             $filtro = $etiqueta;
             
         }
+            
+        // Filtrar por zona si se pasó
+        if ($zona) {
+            $consultaRestaurantes->whereHas('zone', function ($query) use ($zona) {
+                $query->where('name_zone', $zona);
+            });
+        }
+            
     
         // Filtrar por búsqueda si se pasó
         if ($busqueda) {

@@ -327,6 +327,7 @@
     display: none;
 }
 
+
 @media (max-width: 768px) {
     .social-icons {
         margin-top: 10px;
