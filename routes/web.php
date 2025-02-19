@@ -7,7 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\ViewController;
 
-Route::get('/', [ViewController::class, 'home'])->name('home');
+Route::get('/', [RestaurantController::class, 'tresMejoresValoradosMasNuevos'])->name('tresMejoresValoradosMasNuevos');
+Route::get('/categorias', [RestaurantController::class, 'paginaCategorias'])->name('paginaCategorias');
 
 // Rutas para el UserController
 Route::controller(UserController::class)->group(function () {

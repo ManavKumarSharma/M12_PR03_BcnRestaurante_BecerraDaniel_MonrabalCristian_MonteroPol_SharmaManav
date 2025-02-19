@@ -163,7 +163,6 @@
                                 <p class="propiedadesRestaurante">
                                     {{ number_format($restaurante->average_price)}} €
                                 </p>
-
                             </div>
                         </div>
                     </div>

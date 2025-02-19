@@ -12,6 +12,6 @@ class Zone extends Model
     
     public function restaurants()
     {
-        return $this->hasMany(Restaurant::class);
+        return $this->hasMany(Restaurant::class, 'zones_id');
     }
 }

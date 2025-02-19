@@ -1,3 +1,7 @@
+@php
+    use Carbon\Carbon;
+@endphp
+
 @section('content')
     @if (!Auth::check())
         <script>
@@ -60,14 +64,10 @@
                     <div class="card-body">
                         <h5 class="card-title">Zona</h5>
                         <ul class="list-unstyled">
-                            <li>Centro (476)</li>
-                            <li>Eixample Dret (278)</li>
-                            <li>Eixample Esquerre (276)</li>
-                            <li>St. Gervasi-Santaló (117)</li>
-                            <li>Gràcia (153)</li>
-                            <li>La Barceloneta (74)</li>
-                            <li>El Gòtic (128)</li>
-                            <li><a href="#" class="text-primary">Ver todas</a></li>
+                            @foreach($restaurantesPorZona as $zona)
+                                <li>{{ $zona->name_zone }} ({{ $zona->restaurants_count }})</li>
+                            @endforeach
+                            <li><a href="{{ route('paginaCategorias') }}" class="text-primary">Ver todas</a></li>
                         </ul>
                     </div>
                 </div>
@@ -80,14 +80,10 @@
                     <div class="card-body">
                         <h5 class="card-title">Comida</h5>
                         <ul class="list-unstyled">
-                            <li>Paella. Arroces (109)</li>
-                            <li>Tapas. Medias raciones (342)</li>
-                            <li>Italiana. Pizzería. (166)</li>
-                            <li>Japonesa (119)</li>
-                            <li>Brasería. Carnes. (130)</li>
-                            <li>Catalana (264)</li>
-                            <li>Creativa. De autor (117)</li>
-                            <li><a href="#" class="text-primary">Ver todas</a></li>
+                            @foreach($restaurantesPorEtiqueta as $tag => $contados)
+                                <li>{{ $tag." ($contados)" }}</li>
+                            @endforeach
+                            <li><a href="{{ route('paginaCategorias') }}" class="text-primary">Ver todas</a></li>
                         </ul>
                     </div>
                 </div>
@@ -100,44 +96,112 @@
     <div class="container my-5">
         <h2 class="text-center fw-bold">RESTAURANTES DESTACADOS</h2>
         <p class="text-center text-muted">MEJORES RESEÑAS</p>
-
+    
         <div class="row g-4 mt-4">
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ asset('img/pacomeralgo.jpg') }}" class="card-img-top" alt="Restaurantes con encanto">
-                    <div class="card-body">
-                        <h5 class="card-title">Con encanto</h5>
-                        <p class="card-text">
-                            Hay restaurantes que, solo con poner un pie en ellos, te envuelven en un clima único asegurándote la mejor experiencia gastronómica. 
-                            Descubre los mejores restaurantes con encanto de Barcelona para ocasiones especiales.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            @foreach ($mejoresValorados as $restaurante)
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        @if (file_exists(public_path('img/' . $restaurante->img_restaurant)))
+                            <img src="{{ asset('img/' . $restaurante->img_restaurant) }}" class="card-img-top" alt="{{ $restaurante->name }}">
+                            <div style="position: relative;">
 
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ asset('img/disfrutar.jpg') }}" class="card-img-top" alt="Restaurantes italianos y pizzerías">
-                    <div class="card-body">
-                        <h5 class="card-title">Italiana. Pizzería.</h5>
-                        <p class="card-text">
-                            Conoce los mejores restaurantes italianos y las mejores pizzerías de la ciudad. ¡Te sentirás como en Italia!
-                        </p>
-                    </div>
-                </div>
-            </div>
+                                <div class="valoracionDiv">
 
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ asset('img/pacomeralgo.jpg') }}" class="card-img-top" alt="Restaurantes con oferta">
-                    <div class="card-body">
-                        <h5 class="card-title">Con oferta</h5>
-                        <p class="card-text">
-                            Aprovecha nuestras super ofertas y disfruta de los mejores restaurantes a un precio irresistible.
-                        </p>
+                                    @foreach ($mediaEstrellas as $id => $media)
+
+                                        @php
+
+                                        $valoracion = "No hay valoraciones";
+                                    
+                                        if ($media !== null) {
+                                            switch (true) {
+                                                case $media <= 2:
+                                                    $valoracion = "$media · Mediocre";
+                                                    break;
+                                                case $media <= 4:
+                                                    $valoracion = "$media · Bueno";
+                                                    break;
+                                                case $media <= 4.5:
+                                                    $valoracion = "$media · Muy bueno";
+                                                    break;
+                                                case $media <= 5:
+                                                    $valoracion = "$media · Excelente";
+                                                    break;
+                                            }
+                                        }
+
+                                        @endphp
+
+                                        @if ($id == $restaurante->id)
+
+                                            @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
+                                                <span class="nuevo">Nuevo</span>
+                                            @endif
+
+                                            <span class="valoracion">{{ $valoracion ?? "No hay valoraciones" }}</span>
+
+                                        @endif
+
+                                    @endforeach
+
+                                </div>
+                            </div>
+                        @else
+                            <img src="{{ asset('img/predefinida.jpg') }}" class="card-img-top" alt="Imagen Predeterminada">
+                            <div style="position: relative;">
+
+                                <div class="valoracionDiv">
+    
+                                    @foreach ($mediaEstrellas as $id => $media)
+    
+                                        @php
+    
+                                        $valoracion = "No hay valoraciones";
+                                    
+                                        if ($media !== null) {
+                                            switch (true) {
+                                                case $media <= 2:
+                                                    $valoracion = "$media · Mediocre";
+                                                    break;
+                                                case $media <= 4:
+                                                    $valoracion = "$media · Bueno";
+                                                    break;
+                                                case $media <= 4.5:
+                                                    $valoracion = "$media · Muy bueno";
+                                                    break;
+                                                case $media <= 5:
+                                                    $valoracion = "$media · Excelente";
+                                                    break;
+                                            }
+                                        }
+    
+                                        @endphp
+    
+                                        @if ($id == $restaurante->id)
+    
+                                            @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
+                                                <span class="nuevo">Nuevo</span>
+                                            @endif
+    
+                                            <span class="valoracion">{{ $valoracion ?? "No hay valoraciones" }}</span>
+    
+                                        @endif
+    
+                                    @endforeach
+    
+                                </div>
+
+                            </div>
+                        @endif
+                        <div class="card-body">
+                            <a href="{{ route('vistas.restaurante', $restaurante->id) }}" style="text-decoration: none; color: black;">
+                                <h5 class="card-title">{{ $restaurante->name }}</h5>
+                            </a>
+                            <p class="card-text">{{ $restaurante->description }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
 
@@ -148,44 +212,110 @@
         <p class="text-center text-muted">NUEVAS INCORPORACIONES</p>
 
         <div class="row g-4 mt-4">
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ asset('img/pacomeralgo.jpg') }}" class="card-img-top" alt="Restaurantes con encanto">
-                    <div class="card-body">
-                        <h5 class="card-title">Con encanto</h5>
-                        <p class="card-text">
-                            Hay restaurantes que, solo con poner un pie en ellos, te envuelven en un clima único asegurándote la mejor experiencia gastronómica. 
-                            Descubre los mejores restaurantes con encanto de Barcelona para ocasiones especiales.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            @foreach ($nuevosRestaurantes as $restaurante)
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        @if (file_exists(public_path('img/' . $restaurante->img_restaurant)))
+                            <img src="{{ asset('img/' . $restaurante->img_restaurant) }}" class="card-img-top" alt="{{ $restaurante->name }}">
+                            <div style="position: relative;">
+                                <div class="valoracionDiv">
 
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ asset('img/disfrutar.jpg') }}" class="card-img-top" alt="Restaurantes italianos y pizzerías">
-                    <div class="card-body">
-                        <h5 class="card-title">Italiana. Pizzería.</h5>
-                        <p class="card-text">
-                            Conoce los mejores restaurantes italianos y las mejores pizzerías de la ciudad. ¡Te sentirás como en Italia!
-                        </p>
-                    </div>
-                </div>
-            </div>
+                                    @foreach ($mediaEstrellas as $id => $media)
 
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ asset('img/pacomeralgo.jpg') }}" class="card-img-top" alt="Restaurantes con oferta">
-                    <div class="card-body">
-                        <h5 class="card-title">Con oferta</h5>
-                        <p class="card-text">
-                            Aprovecha nuestras super ofertas y disfruta de los mejores restaurantes a un precio irresistible.
-                        </p>
+                                        @php
+
+                                        $valoracion = "No hay valoraciones";
+                                    
+                                        if ($media !== null) {
+                                            switch (true) {
+                                                case $media <= 2:
+                                                    $valoracion = "$media · Mediocre";
+                                                    break;
+                                                case $media <= 4:
+                                                    $valoracion = "$media · Bueno";
+                                                    break;
+                                                case $media <= 4.5:
+                                                    $valoracion = "$media · Muy bueno";
+                                                    break;
+                                                case $media <= 5:
+                                                    $valoracion = "$media · Excelente";
+                                                    break;
+                                            }
+                                        }
+
+                                        @endphp
+
+                                        @if ($id == $restaurante->id)
+
+                                            @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
+                                                <span class="nuevo">Nuevo</span>
+                                            @endif
+
+                                            <span class="valoracion">{{ $valoracion ?? "No hay valoraciones" }}</span>
+
+                                        @endif
+
+                                    @endforeach
+
+                                </div>
+                            </div>
+                        @else
+                            <img src="{{ asset('img/predefinida.jpg') }}" class="card-img-top" alt="Imagen Predeterminada">
+                            <div style="position: relative;">
+                                <div class="valoracionDiv">
+
+                                    @foreach ($mediaEstrellas as $id => $media)
+
+                                        @php
+
+                                        $valoracion = "No hay valoraciones";
+                                    
+                                        if ($media !== null) {
+                                            switch (true) {
+                                                case $media <= 2:
+                                                    $valoracion = "$media · Mediocre";
+                                                    break;
+                                                case $media <= 4:
+                                                    $valoracion = "$media · Bueno";
+                                                    break;
+                                                case $media <= 4.5:
+                                                    $valoracion = "$media · Muy bueno";
+                                                    break;
+                                                case $media <= 5:
+                                                    $valoracion = "$media · Excelente";
+                                                    break;
+                                            }
+                                        }
+
+                                        @endphp
+
+                                        @if ($id == $restaurante->id)
+
+                                            @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
+                                                <span class="nuevo">Nuevo</span>
+                                            @endif
+
+                                            <span class="valoracion">{{ $valoracion ?? "No hay valoraciones" }}</span>
+
+                                        @endif
+
+                                    @endforeach
+                                    
+                                </div>
+                            </div>
+                        @endif
+                        <div class="card-body">
+                            <a href="{{ route('vistas.restaurante', $restaurante->id) }}" style="text-decoration: none; color: black;">
+                                <h5 class="card-title">{{ $restaurante->name }}</h5>
+                            </a>
+                            <p class="card-text">{{ $restaurante->description }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
+
 
     <footer class="bg-dark text-white py-4">
         <div class="container">
