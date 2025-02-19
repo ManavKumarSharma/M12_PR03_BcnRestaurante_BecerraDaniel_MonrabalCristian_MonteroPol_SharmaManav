@@ -66,7 +66,7 @@
                     <div class="row">
                         @foreach($fotosComidas as $foto)
                             <div class="col-6 col-md-4 mb-3">
-                                <img src="{{ asset('img/' . $foto) }}" alt="Imagen de comida" class="img-fluid rounded">
+                                <img src="{{ asset('img/food/' . $foto) }}" alt="Imagen de comida" class="img-fluid rounded">
                             </div>
                         @endforeach
                     </div>
