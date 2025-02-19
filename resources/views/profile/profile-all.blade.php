@@ -8,15 +8,15 @@
         window.location.href = "{{ route('login') }}";
     </script>
 @else
-    <!-- Encabezado (igual que antes) -->
+    <!-- Encabezado -->
     <div class="bg-dark text-center py-5" style="background: url('{{ asset('img/zona-usuario.jpg') }}') center/cover no-repeat;">
         <div class="container">
             <div class="d-flex flex-column align-items-center">
                 <div class="rounded-circle border border-3 border-white overflow-hidden mb-3" style="width: 120px; height: 120px;">
                     <img src="{{ asset($user->profile_image ? 'img/' . $user->profile_image : 'img/user.jpg') }}" 
-                         alt="Foto de perfil" 
-                         style="width: 120px; height: 120px;" 
-                         class="img-fluid rounded-circle profile-img">
+                        alt="Foto de perfil" 
+                        style="width: 120px; height: 120px;" 
+                        class="img-fluid rounded-circle profile-img">
                 </div>
                 <h3 class="mb-1 text-dark">{{ $user->name }} {{ $user->last_name }}</h3>
                 <p class="mb-3 text-dark">
@@ -98,27 +98,27 @@
     <!-- Modal de confirmación para eliminar la foto -->
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
+            <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-              ¿Estás seguro de eliminar la foto de perfil?
+                ¿Estás seguro de eliminar la foto de perfil?
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
                 <i class="bi bi-trash"></i>
-              </button>
+                </button>
             </div>
-          </div>
+            </div>
         </div>
     </div>
-@endif
-@endsection
+    @endif
+    @endsection
 
-@section('scripts')
+    @section('scripts')
     <script src="{{ asset('js/perfil.js') }}"></script>
     <script src="{{ asset('js/favorites.js') }}"></script>
 

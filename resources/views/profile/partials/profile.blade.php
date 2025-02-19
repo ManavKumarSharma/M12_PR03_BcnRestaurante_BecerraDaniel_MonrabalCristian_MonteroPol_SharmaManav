@@ -7,14 +7,14 @@
         <div class="row g-3">
             <div class="col-md-6">
                 <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}">
+                <input type="text" class="form-control" id="name" name="name" value="{{$user->name }}">
                 @error('name')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="col-md-6">
                 <label for="last_name" class="form-label">Apellidos</label>
-                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ old('last_name', $user->last_name) }}">
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{$user->last_name }}">
                 @error('last_name')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -23,20 +23,17 @@
         <div class="row g-3 mt-3">
             <div class="col-md-6">
                 <label for="email" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}">
+                <input type="email" class="form-control" id="email" name="email" value="{{$user->email }}">
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="col-md-6">
                 <label for="phone_number" class="form-label">Teléfono</label>
-                <div class="input-group">
-                    <span class="input-group-text">+34</span>
-                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}">
+                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{$user->phone_number }}">
                     @error('phone_number')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
-                </div>
             </div>
         </div>
         <div class="row g-3 mt-3">
@@ -62,3 +59,7 @@
         </div>
     </form>
 </div>
+
+<script src="{{ asset('js/validation_edit_profile.js') }}"></script>
+
+

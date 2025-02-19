@@ -8,90 +8,71 @@
         use Carbon\Carbon;
     @endphp
 
-    <div class="paginaRestaurante">
+    <div class="container mt-5">
 
-        <div class="imagenRestaurante">
-
-            @php
-                $valoracion = "No hay valoraciones";
-            
-                if ($mediaEstrellas !== null) {
-                    switch (true) {
-                        case $mediaEstrellas <= 2:
-                            $valoracion = "$mediaEstrellas · Mediocre";
-                            break;
-                        case $mediaEstrellas <= 4:
-                            $valoracion = "$mediaEstrellas · Bueno";
-                            break;
-                        case $mediaEstrellas <= 4.5:
-                            $valoracion = "$mediaEstrellas · Muy bueno";
-                            break;
-                        case $mediaEstrellas <= 5:
-                            $valoracion = "$mediaEstrellas · Excelente";
-                            break;
-                    }
-                }
-
-            @endphp
-            @if (file_exists(public_path('img/' . $restaurante->img_restaurant)))
-                <img src="{{ asset('img/' . $restaurante->img_restaurant) }}" alt="{{ $restaurante->nombre_restaurante }}">
-                <div style="position: relative;">
-                    <div class="valoracionDiv">
-
-                    @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
-                        <span class="nuevo">Nuevo</span>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="position-relative mb-4">
+                    @php
+                        $valoracion = "No hay valoraciones";
+                    
+                        if ($mediaEstrellas !== null) {
+                            switch (true) {
+                                case $mediaEstrellas <= 2:
+                                    $valoracion = "$mediaEstrellas · Mediocre";
+                                    break;
+                                case $mediaEstrellas <= 4:
+                                    $valoracion = "$mediaEstrellas · Bueno";
+                                    break;
+                                case $mediaEstrellas <= 4.5:
+                                    $valoracion = "$mediaEstrellas · Muy bueno";
+                                    break;
+                                case $mediaEstrellas <= 5:
+                                    $valoracion = "$mediaEstrellas · Excelente";
+                                    break;
+                            }
+                        }
+                    @endphp
+                    @if (file_exists(public_path('img/' . $restaurante->img_restaurant)))
+                        <img src="{{ asset('img/' . $restaurante->img_restaurant) }}" alt="{{ $restaurante->nombre_restaurante }}" class="img-fluid rounded">
+                        <div class="position-absolute top-0 start-0 p-2 bg-dark text-white rounded">
+                            @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
+                                <span class="badge bg-success">Nuevo</span>
+                            @endif
+                            <span>{{ $valoracion ?? "No hay valoraciones" }}</span>
+                        </div>
+                    @else
+                        <img src="{{ asset('img/predefinida.jpg') }}" alt="Imagen Predeterminada" class="img-fluid rounded">
+                        <div class="position-absolute top-0 start-0 p-2 bg-dark text-white rounded">
+                            @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
+                                <span class="badge bg-success">Nuevo</span>
+                            @endif
+                            <span>{{ $valoracion ?? "No hay valoraciones" }}</span>
+                        </div>
                     @endif
-            
-                    <span class="valoracion">{{ $valoracion ?? "No hay valoraciones" }}</span>
-
-                    </div>
                 </div>
-            @else
-                <img src="{{ asset('img/predefinida.jpg') }}" alt="Imagen Predeterminada">
-                <div style="position: relative;">
-                    <div class="valoracionDiv">
+            </div>
 
-                        @if (Carbon::parse($restaurante->created_at)->diffInDays(Carbon::now()) < 7)
-                            <span class="nuevo">Nuevo</span>
-                        @endif
+            <div class="col-12 col-md-6">
+                <div class="p-4 bg-light rounded shadow-sm">
+                    <h1 class="mb-3">{{ $restaurante->name }}</h1>
+                    <p><strong>Zona:</strong> {{ $zona ?? "No hay zona asignada" }}</p>
+                    <p><strong>Dirección:</strong> {{ $restaurante->address }}</p>
+                    <p><strong>Precio medio:</strong> {{ $restaurante->average_price }}€</p>
+                    <p><strong>Teléfono:</strong> {{ $restaurante->phone }}</p>
+                    <p><strong>Horario:</strong> {{ $restaurante->opening_hours }} - {{ $restaurante->closing_hours }}</p>
 
-                        <span class="valoracion">{{ $valoracion ?? "No hay valoraciones" }}</span>
-
+                    <h3 class="mt-4">P L A T O S:</h3>
+                    <div class="row">
+                        @foreach($fotosComidas as $foto)
+                        <div class="col-6 col-md-4 mb-3">
+                            <img src="{{ asset('img/food/' . $foto) }}" 
+                                 alt="Imagen de comida" 
+                                 class="img-fluid rounded img-fixed-size">
+                        </div>
+                        
+                        @endforeach
                     </div>
-                </div>
-            @endif
-
-        </div>
-
-        <div class="contenidoRestaurantes">
-
-            <div class="nombre">
-                <p>{{ $restaurante->name }}</p>
-            </div>
-            <div class="zona">
-                <p>Zona: {{ $zona ?? "No hay zona asignada" }}</p>
-            </div>
-            <div class="ubicacion">
-                <p>Dirección:</p>
-
-            </div>
-            <div class="precio">
-                <p>{{ $restaurante->average_price }}€</p>
-            </div>
-            <div class="precio">
-                <p>{{ $restaurante->phone }}</p>
-            </div>
-            <div class="horario">
-                <p>Horario:</p>
-                <p>{{ $restaurante->opening_hours }} - {{ $restaurante->closing_hours }}</p>
-            </div>
-
-            <div class="comidas">
-                <p>P L A T O S:</p>
-                @foreach($fotosComidas as $foto)
-                    <img src="{{ asset('img/' . $foto) }}" alt="Imagen de comida">
-                @endforeach
-            </div>
 
             <div class="puntuacion">
                 <form class="puntuarForm" id="puntuarForm">

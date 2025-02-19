@@ -1,0 +1,37 @@
+@media (max-width: 768px) {
+    .filter-section {
+        padding: 2rem 1rem;
+    }
+
+    .filter-section .form-label {
+        font-size: 1rem;
+    }
+
+    .filter-section .form-select,
+    .filter-section .form-control {
+        font-size: 0.9rem;
+    }
+
+    .grid-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .restaurante {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .imagenesRestaurante img {
+        height: auto;
+    }
+
+    .informacionRestaurante h3 {
+        font-size: 1.2rem;
+    }
+
+    .informacionRestaurante p {
+        font-size: 0.9rem;
+    }
+}

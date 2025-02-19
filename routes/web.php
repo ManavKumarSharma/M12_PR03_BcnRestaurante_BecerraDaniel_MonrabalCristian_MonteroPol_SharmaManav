@@ -10,6 +10,7 @@ use App\Http\Controllers\ViewController;
 Route::get('/', [RestaurantController::class, 'tresMejoresValoradosMasNuevos'])->name('tresMejoresValoradosMasNuevos');
 Route::get('/categorias', [RestaurantController::class, 'paginaCategorias'])->name('paginaCategorias');
 
+
 // Rutas para el UserController
 Route::controller(UserController::class)->group(function () {
     Route::get('/admin/users', 'showUsersAdminView')->name('admin.users');
@@ -47,11 +48,10 @@ Route::controller(RestaurantController::class)->group(function () {
 });
 
 // Agrupamos las rutas bajo middleware de autenticación para asegurar que solo usuarios logueados puedan acceder
-Route::middleware(['auth'])->group(function () {
+
     Route::controller(UserController::class)->group(function () {
         Route::put('/perfil', 'update')->name('user.update');
         Route::delete('/user/photo', 'destroyPhoto')->name('user.photo.delete');
         Route::get('/perfil', 'profileAll')->name('profile.profile-all');
         Route::delete('/favorites/{favoriteId}', 'removeFavorite')->name('favorites.remove');
     });
-});
