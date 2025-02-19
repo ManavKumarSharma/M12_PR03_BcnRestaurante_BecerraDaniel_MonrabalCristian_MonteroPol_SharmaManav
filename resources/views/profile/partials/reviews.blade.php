@@ -17,6 +17,8 @@
                     <p class="card-text">Calificación: {{ $review->score }} ⭐</p>
                     <p class="card-text">{{ $review->comment }}</p>
                     <small class="text-muted">Publicado el {{ $review->created_at->format('d/m/Y') }}</small>
+                    <a href="{{ route('vistas.restaurante', $review->restaurant->id) }}" class="btn btn-sm btn-primary">Ver reseña</a>
+
                 </div>
             </div>
         @endforeach

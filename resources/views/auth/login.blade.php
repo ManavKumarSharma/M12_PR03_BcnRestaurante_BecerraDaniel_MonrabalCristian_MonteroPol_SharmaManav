@@ -68,7 +68,7 @@
         <ul class="navbar-nav mx-auto">
         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Inicio</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ route('views.restaurantes') }}">Restaurantes</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Categorías</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{route('paginaCategorias')}}">Categorías</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
         
         @if(Auth::check() && Auth::user()->rol_id == 2)

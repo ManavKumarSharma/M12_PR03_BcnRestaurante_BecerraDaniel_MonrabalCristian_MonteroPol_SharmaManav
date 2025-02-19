@@ -22,8 +22,9 @@ class RestaurantController
     }
 
     public function todo(Request $request) {
-        // Obtener el parámetro 'etiqueta' y 'busqueda' de la URL
+
         $etiqueta = $request->input('etiqueta');
+        $zona = $request->input('zona');
         $busqueda = $request->input('busqueda');
         $orden = $request->input('orden');
         $pagina = $request->input('pagina', 1);
@@ -44,6 +45,14 @@ class RestaurantController
             $filtro = $etiqueta;
             
         }
+            
+        // Filtrar por zona si se pasó
+        if ($zona) {
+            $consultaRestaurantes->whereHas('zone', function ($query) use ($zona) {
+                $query->where('name_zone', $zona);
+            });
+        }
+            
     
         // Filtrar por búsqueda si se pasó
         if ($busqueda) {
@@ -147,7 +156,7 @@ class RestaurantController
         }
 
         // Contamos los restaurantes por etiqueta
-        $restaurantesPorEtiqueta = Restaurant::with('tags')->get()
+        $restaurantesPorEtiqueta = Restaurant::with('tags')->limit(4)->get()
         // Obtenemos todas las etiqueta que estén relacionadas con restaurantes (et1, et2,...)
         ->flatMap(function ($restaurante) {
             return $restaurante->tags;
@@ -160,7 +169,7 @@ class RestaurantController
         });
 
         // Contamos los restaurantes por zona
-        $restaurantesPorZona = Zone::withCount('restaurants')->get();
+        $restaurantesPorZona = Zone::withCount('restaurants')->limit(7)->get();
 
         return view('index', compact('mejoresValorados', 'nuevosRestaurantes', 'restaurantesPorZona', 'mediaEstrellas','restaurantesPorEtiqueta'));
     }
@@ -311,6 +320,26 @@ class RestaurantController
             Log::error("Error en darFavorito: " . $e->getMessage());
             return response("Error: " . $e->getMessage(), 500);
         }
+    }
+    public function paginaCategorias() {
+
+        // Contamos los restaurantes por etiqueta
+        $restaurantesPorEtiqueta = Restaurant::with('tags')->get()
+        // Obtenemos todas las etiqueta que estén relacionadas con restaurantes (et1, et2,...)
+        ->flatMap(function ($restaurante) {
+            return $restaurante->tags;
+        })
+        // Agrupamos las etiquetas por su nombre
+        ->groupBy('name')
+        // Miramos cada grupo de etiquetas que hemos obtenido y contamos cuantos restaurantes tienen cada etiqueta
+        ->map(function ($etiquetas) {
+            return $etiquetas->count();
+        });
+
+        // Contamos los restaurantes por zona
+        $restaurantesPorZona = Zone::withCount('restaurants')->get();
+
+        return view('categorias', compact('restaurantesPorEtiqueta', 'restaurantesPorZona'));
     }
     
 
