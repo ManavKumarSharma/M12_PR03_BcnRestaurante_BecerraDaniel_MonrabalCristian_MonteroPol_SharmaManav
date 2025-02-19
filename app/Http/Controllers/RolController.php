@@ -8,13 +8,8 @@ use Illuminate\Http\Request;
 class RolController
 {
     public function getAllRolesFromDB() {
-        // Selecciona
-        try {
-            $roles = Rol::select('name')->get();
+        $roles = Rol::all();
 
-            return response()->json($roles, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return response()->json($roles, 200);
     }
 }

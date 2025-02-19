@@ -11,25 +11,20 @@ Route::get('/', [ViewController::class, 'home'])->name('home');
 
 // Rutas para el UserController
 Route::controller(UserController::class)->group(function () {
-    Route::get('/admin/users', 'showUsersAdminView')->name('admin.users'); // Endpoint de CRUD usuarios
-    Route::get('/api/users/list', 'getAllUsersFromDB'); // Endpoint para listar usuarios
-    Route::get('/api/users/email', 'getUserByEmailFromDB'); // Endpoint para conseguir un usuario con un correo
-    Route::delete('/api/user/delete/{user}', 'deleteUserFromDB'); // Endpoint para eliminar un usuario de la BBDD
-    Route::put('/api/user/edit/{user}', 'editUserFromDB'); // Endpoint para editar el usuario
-    Route::post('/api/user/create', 'createUser'); // Endpoint para crear un nuevo usuario
-    Route::get('/api/user/{user}', 'getUserFromDB'); // Endpoint para conseguir un usuario
+    Route::get('/admin/users', 'showUsersAdminView')->name('admin.users');
+    Route::get('/api/users/list', 'getAllUsersFromDB');
+    Route::delete('/api/user/delete', 'deleteUserFromDB');
 });
 
 // Rutas para el RolController
 Route::controller(RolController::class)->group(function () {
-    Route::get('/api/roles/list', 'getAllRolesFromDB');
+    Route::get('/api/roles/list', 'getAllRolesFromDB')->name('admin.users');
 });
 
 
 // Rutas para el RestaurantController
 Route::controller(RestaurantController::class)->group(function () {
     Route::get('/admin/restaurants', 'showRestaurantsAdminView')->name('admin.restaurants'); // Endpoint de CRUD restaurantes
-    Route::get('/api/restaurants/list', 'getAllRestaurantsFromDB');
 });
 
 // Rutas de autenticación

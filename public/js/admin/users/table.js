@@ -1,8 +1,6 @@
 function loadContent(filters) {
-    // Recogemos elementos del DOM
     const contentContainer = document.getElementById('table-content');
-    
-    // Función asíncrona que recoge los usuarios
+
     AsyncGetUsersFromAPI(filters)
         .then(data => {
             contentContainer.innerHTML = "";
@@ -11,79 +9,26 @@ function loadContent(filters) {
                 throw new Error(data.error);
             }
 
-            // Botón para crear nuevo usuario
             createButton('Crear', 'btn-custom-orange', 'displayModalBtn', '#myModal', contentContainer);
 
-            // Botón de filtros
-            createButton('Filtrar', 'btn-custom-black', 'filterButton', '', contentContainer); 
-
-            // Agregar el buscador al lado de los botones
-            createSearcher(contentContainer);
-
-            if (data.data.length === 0) {
-                // Si no hay usuarios en la página actual, verificamos si hay más páginas anteriores
-                if (filters.page > 1) {
-                    filters.page -= 1; // Reducir página
-                    loadContent(filters); // Recargar con la página anterior
-                    return; // Salir de la función para evitar renderizar una tabla vacía
-                }
-                // Si estamos en la página 1 y no hay resultados, mostramos un mensaje
-                throw new Error('No se encontraron usuarios');
+            if (data.length === 0) {
+                throw new Error('No se encontraron usuarios.');
             }
 
+            createButton('Filtrar', 'btn-custom-black', '', '', contentContainer);
+            
             const tableWrapper = document.createElement('div');
             tableWrapper.classList.add('table-responsive'); // Hace la tabla responsive
-            const table = createTable(data.data);
+            const table = createTable(data);
             tableWrapper.appendChild(table);
             contentContainer.appendChild(tableWrapper);
-
-            // Agregar el contenedor de paginación
-            createPaginationControls(contentContainer, filters, data.pagination);
         })
         .catch(error => handleError(error, contentContainer));
 }
 
-function createPaginationControls(container, filters, pagination) {
-    const paginationWrapper = document.createElement('div');
-    paginationWrapper.classList.add('d-flex', 'justify-content-center', 'align-items-center', 'mt-3', 'mb-3'); // Contenedor d-flex centrado
-
-    // Botón de "Anterior"
-    const prevButton = document.createElement('button');
-    prevButton.textContent = '←';
-    prevButton.classList.add('btn', 'btn-outline-secondary', 'me-2');
-    prevButton.disabled = filters.page <= 1; // Deshabilitar si estamos en la primera página
-    prevButton.addEventListener('click', function() {
-        filters.page -= 1;
-        loadContent(filters);
-    });
-
-    // Mostrar número de página actual
-    const pageNumber = document.createElement('span');
-    pageNumber.classList.add('mx-2');
-    pageNumber.textContent = `Página ${filters.page} de ${pagination.total_pages}`;
-
-    // Botón de "Siguiente"
-    const nextButton = document.createElement('button');
-    nextButton.textContent = '→';
-    nextButton.classList.add('btn', 'btn-outline-secondary');
-    nextButton.disabled = filters.page >= pagination.total_pages; // Deshabilitar si estamos en la última página
-    nextButton.addEventListener('click', function() {
-        filters.page += 1;
-        loadContent(filters);
-    });
-
-    // Agregar botones y el número de página al contenedor
-    paginationWrapper.appendChild(prevButton);
-    paginationWrapper.appendChild(pageNumber);
-    paginationWrapper.appendChild(nextButton);
-
-    // Agregar los controles de paginación al contenedor
-    container.appendChild(paginationWrapper);
-}
-
 function createTable(data) {
     const table = document.createElement('table');
-    table.classList.add('table', 'table-striped', 'table-hover', 'mb-4');  // Cambiado a table-striped
+    table.classList.add('table', 'table-bordered', 'table-hover', 'mb-4');
 
     const thead = createTableHeader(Object.keys(data[0]));
     table.appendChild(thead);
@@ -96,35 +41,14 @@ function createTable(data) {
 
 function createTableHeader(keys) {
     const thead = document.createElement('thead');
-    // thead.classList.add('');
+    thead.classList.add('thead-dark');
     const tr = document.createElement('tr');
 
     keys.forEach(key => {
         const th = document.createElement('th');
         th.scope = 'col';
         th.textContent = key;
-        th.classList.add('text-center', 'clickable-sort-column');
-        th.id = key;
-
-        // Si filters existe y la columna actual es la ordenada, agregamos el ícono
-        if (typeof filters !== 'undefined' && filters.sortColumn === columnDictionary[key]) {
-            const sortIcon = document.createElement('i');
-            // Según el orden actual, agrega la flecha correspondiente
-            if (filters.orderColumn === 'asc') {
-                sortIcon.classList.add('bi', 'bi-arrow-up');
-            } else {
-                sortIcon.classList.add('bi', 'bi-arrow-down');
-            }
-            // Agrega un pequeño margen para separar el texto del ícono
-            sortIcon.style.marginLeft = '5px';
-            th.appendChild(sortIcon);
-        }
-
-        // Aplicar clases de Bootstrap para ocultar en pantallas pequeñas
-        if (['Fecha de creación', 'Nombres', 'Apellidos', 'Número de teléfono'].includes(key)) {
-            th.classList.add('d-none', 'd-sm-table-cell');
-        }
-
+        th.classList.add('text-center'); // Alineación para mejor visualización
         tr.appendChild(th);
     });
 
@@ -145,16 +69,8 @@ function createTableBody(data) {
 
         Object.keys(element).forEach(field => {
             const td = document.createElement('td');
-
-            // console.log(field);
-
             td.textContent = element[field];
             td.classList.add('text-center');
-
-            if (['Nombres', 'Apellidos', 'Fecha de creación', 'Número de teléfono'].includes(field)) {
-                td.classList.add('d-none', 'd-sm-table-cell');
-            }
-
             trow.appendChild(td);
         });
 
@@ -175,6 +91,7 @@ function createActionsCell(elementID) {
     const btnDelete = createActionButton('🗑️', 'btn-custom-delete');
     btnEdit.id = elementID;
     btnDelete.id = elementID;
+    btnEdit.classList.add('editUserButton');
     btnDelete.classList.add('deleteUserButton');
 
     tdActions.appendChild(btnEdit);
@@ -189,44 +106,6 @@ function createActionButton(text, btnClass) {
     button.classList.add('btn', btnClass, 'm-2');
     return button;
 }
-
-function createSearcher(container) {
-    // Crear un grupo de entrada con Bootstrap
-    const inputGroup = document.createElement('div');
-    inputGroup.classList.add('input-group', 'mb-2', 'me-2');
-
-    // Crear el campo de búsqueda
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.classList.add('form-control');
-    input.placeholder = 'Buscar...';
-    input.setAttribute('aria-label', 'Buscar');
-    
-    // Rellenar el input con el valor que ya exista en filters.search (si lo hubiera)
-    if (filters.search) {
-        input.value = filters.search;
-    }
-
-    // Crear el botón de búsqueda
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.classList.add('btn', 'btn-outline-secondary');
-    button.textContent = 'Buscar';
-
-    // Al hacer clic en el botón, actualizamos los filtros y recargamos el contenido
-    button.addEventListener('click', function() {
-        filters.search = input.value;   // Guardamos la búsqueda
-        loadContent(filters);           // Recargamos con el nuevo filtro
-    });
-
-    // Agregar el input y el botón al grupo
-    inputGroup.appendChild(input);
-    inputGroup.appendChild(button);
-
-    // Agregar el grupo al contenedor
-    container.appendChild(inputGroup);
-}
-
 
 function handleError(error, container) {
     const errorMessage = error.message === 'No se encontraron usuarios.' 
@@ -264,20 +143,17 @@ function createButton(text, btnClass, id, target, container) {
 }
 
 function AsyncGetUsersFromAPI(filters) {
-    let url = "http://127.0.0.1:8000/api/users/list";
+    let url = `http://127.0.0.1:8000/api/users/list`;
 
-    if (filters && Object.keys(filters).length > 0) {
-        const queryParams = Object.entries(filters)
-            .filter(([key, value]) => value != null && value !== '')
-            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-            .join("&");
+    if (filters && filters.length > 0) {
+        const queryParams = filters.map(param => {
+            return `${encodeURIComponent(param.key)}=${encodeURIComponent(param.value)}`;
+        }).join('&');
         
-        if (queryParams) {
-            url += "?" + queryParams;
-        }
+        url += '?' + queryParams;
     }
 
-    // console.log(url);
+    console.log(url);
 
     return fetch(url)
         .then(response => {
@@ -291,20 +167,10 @@ function AsyncGetUsersFromAPI(filters) {
         });
 }
 
-// Cuando se carguen todos los elementos del DOM
 window.onload = function() {
-    // Inicializamos la variable filtros por defecto (Ordenar por ID, orden ASC, 10 páginas)
-    filters = {
-        'sortColumn': 'id',
-        'orderColumn': 'asc',
-        'per_page': 10,
-        'page': 1
-    };
-
-    // Ocultamos el loader y mostramos le contenido
+    // Inicializamos la variable de filtros como vacío para recuperar todos los usuarios
+    filters = [];
     document.getElementById('loader').style.display = 'none';
     document.getElementById('main').style.display = 'block';
-
-    // Llamamos a la función
     loadContent(filters);
 };

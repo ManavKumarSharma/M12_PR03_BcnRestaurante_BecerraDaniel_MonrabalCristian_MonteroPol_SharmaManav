@@ -1,131 +1,109 @@
 const content = document.getElementById('table-content');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const modalElement = document.getElementById('myModal');
 
-// Diccionario de columnas referenciales a la base de datos
-const columnDictionary = {
-    'Id': 'id',
-    'Nombres': 'name',
-    'Apellidos': 'last_name',
-    'Email': 'email',
-    'Número de teléfono': 'phone_number',
-    'Rol': 'rol_id',
-    'Fecha de creación': 'created_at'
-}
+const modal = new bootstrap.Modal(modalElement); // Crear instancia de Bootstrap Modal
 
-// Delegación de eventos
-content.addEventListener('click', handleContentClick);
+// Evento al hacer click en algún botón dentro de 'content'
+content.addEventListener('click', function (event) {
+    detectButton(event);
+});
 
-function handleContentClick(event) {
-    const target = event.target;
-
-    if (target.classList.contains("deleteUserButton")) {
-        handleDeleteUser(target.id);
-    } else if (target.classList.contains("clickable-sort-column")) {
-        const th = target.closest('th');
-        orderByClickedColumn(th);
-    } else if (target.classList.contains("btn-custom-edit")) {
-        listRoles();
-        handleEditUser(target.id);
-    } else if (target.id === 'displayModalBtn') {
-        listRoles();
-    } else if (target.id === 'searcherButton') {
-        const searchValue = document.getElementById('input-search').value;
-        search(searchValue);
-    }else if (target.id === 'filterButton') {
-        const searchValue = document.getElementById('input-search').value;
-        search(searchValue);
-    }
-}
-
-// Función para la búsqueda de usuarios
-function search(searchValue) {
-    if (searchValue && searchValue.trim().length > 0) {
-        filters.search = searchValue;
-        AsyncGetUsersFromAPI(filters);
-    }
-}
-
-// Ordenar las columnas
-function orderByClickedColumn(th) {
-    if (filters.sortColumn === columnDictionary[th.id]) {
-        filters.orderColumn = filters.orderColumn === 'asc' ? 'desc' : 'asc';
-    } else {
-        filters.sortColumn = columnDictionary[th.id];
-        filters.orderColumn = 'asc';
-    }
-    loadContent(filters);
-}
-
-// Eliminar usuario
-function handleDeleteUser(userId) {
-    askSweetAlert()
-        .then(confirmation => {
-            if (!confirmation) return;
-            deleteUser(userId)
-                .then(response => {
-                    if (response.icon === 'success') {
-                        displaySweetAlert(response);
-                        loadContent(filters);
-                    }
-                })
-                .catch(error => {
-                    displaySweetAlert({ icon: 'error', title: 'Error', text: 'No se pudo eliminar el usuario por un problema del servidor' });
-                });
+function detectButton(event) {
+    if (event.target && event.target.classList.contains("deleteUserButton")) {
+        askSweetAlert().then((answer) => {
+            if (answer) {
+                const id = event.target.id; // Obtener el ID del producto a eliminar
+                
+                deleteUser(id)
+                    .then(response => {
+                        if (response.icon === 'success') {
+                            displaySweetAlert(response); // Mostrar alerta con la respuesta del servidor
+                            loadContent();
+                        } else {
+                            displaySweetAlert({ icon: 'error', title: 'Error', text: 'No se pudo eliminar el producto' });
+                        }
+                    })
+                    .catch(error => {
+                        displaySweetAlert({ icon: 'error', title: 'Error', text: error.message });
+                    });
+            }
         });
+    }
+
+    if (event.target && event.target.id === 'displayModalBtn') {
+        listRoles();
+    }
 }
 
-// Abrir el modal y cargar los datos del usuario
-function handleEditUser(userId) {
-    fetch(`/api/user/${userId}`)
-        .then(response => response.json())
-        .then(user => {
-            populateModalWithUserData(user);
-            setupEditUserButton(userId);
-            modal.show();
+// Función que lista los roles para el modal
+function listRoles() {
+    const rolSelect = document.getElementById('rol_id');
+
+    // Limpiar el select de roles para evitar agregar roles duplicados
+    rolSelect.innerHTML = '';
+
+    // Agregar el primer select option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Seleccione un rol';
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    rolSelect.appendChild(defaultOption);
+
+    AsyncGetRolesFromAPI()
+        .then(response => {
+            if (Array.isArray(response) && response.length > 0) {
+                // Recorre cada uno de los roles y agrega una nueva opción
+                response.forEach(rol => {
+                    const option = document.createElement('option');
+                    option.value = rol.id;
+                    option.textContent = rol.name;
+
+                    rolSelect.appendChild(option);
+                });
+            } else {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No hay roles disponibles';
+                option.disabled = true;
+                rolSelect.appendChild(option);
+            }
         })
         .catch(error => {
-            console.error("Error al obtener los datos del usuario:", error);
+            console.error('Error al listar los roles', error);
+            const option = document.createElement('option');
+            option.value = '';
+            option.textContent = 'Error al cargar roles';
+            option.disabled = true;
+            rolSelect.appendChild(option);
         });
 }
 
-// Rellenar el modal con los datos del usuario
-function populateModalWithUserData(user) {
-    const roleNames = { 1: 'administrator', 2: 'client', 3: 'manager' };
-    document.getElementById("name").value = user.name;
-    document.getElementById("last_name").value = user.last_name;
-    document.getElementById("email").value = user.email;
-    document.getElementById("phone_number").value = user.phone_number;
-
-    // Asignar el rol en el select
-    const roleSelect = document.getElementById("rol_id");
-    roleSelect.value = roleNames[user.rol_id];
-
-    // Ocultar los campos de contraseña y sus etiquetas si estamos editando un usuario
-    document.getElementById("password").hidden = true;
-    document.getElementById("password_confirmation").hidden = true;
-    document.querySelector('label[for="password"]').hidden = true;
-    document.querySelector('label[for="password_confirmation"]').hidden = true;
-
-    // Cambiar el botón de 'Crear' a 'Editar'
-    document.getElementById("addUserButton").hidden = true;
-    document.getElementById("editUserButton").hidden = false;
-
-    // Asignar el id del usuario al botón de editar dentro del modal
-    document.getElementById("editUserButton").setAttribute("data-user-id", user.id);
-}
-
-// Configurar el botón de edición para actualizar al usuario
-function setupEditUserButton(userId) {
-    const editUserButton = document.getElementById("editUserButton");
-    
-    editUserButton.hidden = false;
-    editUserButton.setAttribute("data-user-id", userId);
-    
-    editUserButton.replaceWith(editUserButton.cloneNode(true));
-    
-    const newEditUserButton = document.getElementById("editUserButton");
-    newEditUserButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        validateData(userId);
+function AsyncGetRolesFromAPI() {
+    return fetch(`http://127.0.0.1:8000/api/roles/list`, {
+        method: "GET",
+        headers: {
+            'X-CSRF-TOKEN': csrfToken // Asegúrate de enviar el CSRF token si es necesario
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+        }
+        
+        return response.json();
+    }).catch(error => {
+        throw new Error("Error de conexión");
     });
 }
+
+ // Evento que se ejecuta al cerrar el modal
+ modalElement.addEventListener('hidden.bs.modal', function () {
+        
+    // Limpiar los campos del formulario modal
+    const inputs = document.querySelectorAll('.custom-modal-input');
+    inputs.forEach(input => {
+        input.classList.remove('is-invalid', 'is-valid');
+        input.value = ''; // Limpiar el valor del input
+    });
+});

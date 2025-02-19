@@ -25,8 +25,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'phone_number',
-        'password',
-        'rol_id'
+        'password'
     ];
 
     /**
@@ -53,18 +52,18 @@ class User extends Authenticatable
     }
 
     public function restaurants() {
-        return $this->hasMany(Restaurant::class, 'manager_id');
+        return $this->hasMany(Restaurant::class);
     }
 
     public function favorites() {
-        return $this->hasMany(Favorite::class, 'users_id');
+        return $this->hasMany(Favorite::class);
     }
 
     public function reviews() {
-        return $this->hasMany(Review::class, 'users_id');
+        return $this->hasMany(Review::class);
     }
 
     public function rol() {
-        return $this->belongsTo(Rol::class, 'rol_id');
+        return $this->belongsTo(Rol::class);
     }
 }
