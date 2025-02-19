@@ -49,7 +49,10 @@
                     </ul>                    
 
                     <div class="text-end"> 
-                        <button class="btn btn-custom-orange">Cerrar Sesión</button>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-custom-orange">Cerrar sesión</button>
+                        </form>
                     </div>
                 </div>
     
