@@ -16,7 +16,6 @@
         <div class="container d-flex justify-content-between align-items-center">
             <img src="{{ asset('img/bcn-logo.png') }}" class="logo h4 mb-2 mb-lg-0" alt="Logo BCN">
             <div class="d-flex align-items-center gap-3 flex-nowrap" style="white-space: nowrap;">
-                <input type="text" class="form-control" placeholder="Buscar restaurante" style="max-width: 250px; min-width: 200px;">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if(Auth::check())
@@ -71,7 +70,6 @@
         <li class="nav-item"><a class="nav-link" href="{{ route('views.restaurantes') }}">Restaurantes</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Categorías</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
         
         @if(Auth::check() && Auth::user()->rol_id == 2)
             <li class="nav-item"><a class="nav-link" href="/admin/users">Admin site</a></li>
@@ -116,11 +114,7 @@
             </ul>
         </div>
         </div>
-        <div class="social-icons d-flex align-items-center">
-        <a href="https://www.instagram.com/bcnrestaurantescom/" class="bi bi-instagram"></a>
-        <a href="https://x.com/BcnRestaurantes" class="bi bi-twitter"></a>
-        <a href="https://www.facebook.com/bcnrestaurantes" class="bi bi-facebook"></a>
-    </div>
+
     </div>
     </div>
 </nav>
