@@ -31,10 +31,47 @@ function handleContentClick(event) {
     } else if (target.id === 'searcherButton') {
         const searchValue = document.getElementById('input-search').value;
         search(searchValue);
-    }else if (target.id === 'filterButton') {
-        const searchValue = document.getElementById('input-search').value;
-        search(searchValue);
+    } else if (target.id === 'filterButton') {
+        var filterModal = new bootstrap.Modal(document.getElementById('filterModal'));
+        filterModal.show();
     }
+}
+
+document.getElementById('applyFiltersButton').addEventListener('click', function () {
+    applyFilters();
+});
+
+function applyFilters() {
+    const roleIds = {
+        'administrator': 1,
+        'client': 2,
+        'manager': 3
+    };
+
+    // Obtener valores del formulario de filtros
+    const filterValues = {
+        name: document.getElementById('filter_name').value.trim(),
+        last_name: document.getElementById('filter_last_name').value.trim(),
+        email: document.getElementById('filter_email').value.trim(),
+        phone_number: document.getElementById('filter_phone_number').value.trim(),
+        rol_id: roleIds[document.getElementById('filter_rol').value.trim()],
+        created_at_start: document.getElementById('filter_creation_date_start').value.trim(),
+        created_at_end: document.getElementById('filter_creation_date_end').value.trim(),
+    };
+
+    // Actualizar el objeto filters global
+    filters = {
+        ...filters, // Mantiene los valores originales (paginación, orden, etc.)
+        ...filterValues, // Agrega los valores del formulario
+        page: 1, // Resetear a la primera página al filtrar
+    };
+
+    // Cerrar el modal
+    var filterModal = bootstrap.Modal.getInstance(document.getElementById('filterModal'));
+    filterModal.hide();
+
+    // Recargar contenido con los filtros aplicados
+    loadContent(filters);
 }
 
 // Función para la búsqueda de usuarios

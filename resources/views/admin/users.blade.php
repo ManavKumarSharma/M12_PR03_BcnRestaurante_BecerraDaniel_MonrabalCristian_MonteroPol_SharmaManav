@@ -6,6 +6,7 @@
 {{-- Incluímos el modal --}}
 @section('modal')
     @include('admin.includes.userModal')
+    @include('admin.includes.filterModal')
 @endsection
 
 

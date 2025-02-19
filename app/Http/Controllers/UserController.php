@@ -6,6 +6,7 @@ use App\Models\Favorite;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
@@ -152,8 +153,14 @@ class UserController
         try {
             // Validar los parámetros de entrada
             $validated = $request->validate([
-                'search' => 'nullable|string|max:255',
-                'sortColumn' => 'nullable|string|in:id,name,last_name,email,phone_number,rol_id',
+                'name' => 'nullable|string|max:255',
+                'last_name' => 'nullable|string|max:255',
+                'email' => 'nullable|string|email|max:255',
+                'phone_number' => 'nullable|string|max:20',
+                'rol_id' => 'nullable|integer|exists:rol,id',
+                'created_at_start' => 'nullable|date',
+                'created_at_end' => 'nullable|date|after_or_equal:created_at_start',
+                'sortColumn' => 'nullable|string|in:id,name,last_name,email,phone_number,rol_id,created_at',
                 'orderColumn' => 'nullable|string|in:asc,desc',
                 'per_page' => 'nullable|integer|min:1|max:100',
                 'page' => 'nullable|integer|min:1',
@@ -176,6 +183,36 @@ class UserController
                         });
                 });
             }
+
+            // Aplicar filtros dinámicamente
+            if (!empty($validated['name'])) {
+                $query->where('name', 'like', "%{$validated['name']}%");
+            }
+            if (!empty($validated['last_name'])) {
+                $query->where('last_name', 'like', "%{$validated['last_name']}%");
+            }
+            if (!empty($validated['email'])) {
+                $query->where('email', 'like', "%{$validated['email']}%");
+            }
+            if (!empty($validated['phone_number'])) {
+                $query->where('phone_number', 'like', "%{$validated['phone_number']}%");
+            }
+            if (!empty($validated['rol_id'])) {
+                $query->where('rol_id', $validated['rol_id']);
+            }
+            
+            
+            // Aplicar filtro de rango de fechas con rango completo del día
+            if (!empty($validated['created_at_start']) && !empty($validated['created_at_end'])) {
+                $startDate = Carbon::parse($validated['created_at_start'])->startOfDay(); // 00:00:00
+                $endDate = Carbon::parse($validated['created_at_end'])->endOfDay(); // 23:59:59
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            } elseif (!empty($validated['created_at_start'])) {
+                $query->where('created_at', '>=', Carbon::parse($validated['created_at_start'])->startOfDay());
+            } elseif (!empty($validated['created_at_end'])) {
+                $query->where('created_at', '<=', Carbon::parse($validated['created_at_end'])->endOfDay());
+            }
+
 
             // Aplicar ordenación si se proporciona
             if (!empty($validated['sortColumn']) && !empty($validated['orderColumn'])) {
