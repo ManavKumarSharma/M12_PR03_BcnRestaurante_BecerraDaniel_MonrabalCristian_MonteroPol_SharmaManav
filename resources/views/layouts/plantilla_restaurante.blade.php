@@ -70,6 +70,9 @@
           <li class="nav-item"><a class="nav-link" href="#">Categorías</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
+          @if(Auth::check() && Auth::user()->rol_id == 2)
+          <li class="nav-item"><a class="nav-link" href="/admin/users">Admin site</a></li>
+          @endif
         </ul>
         <div class="d-lg-none">
           <input type="text" class="form-control mb-2" placeholder="Buscar restaurante">

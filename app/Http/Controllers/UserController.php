@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController
@@ -22,94 +24,233 @@ class UserController
         return view('admin.users', ['title' => $title]);
     }
 
+    // Método que busca el usuario por id
+    public function getUserFromDB(User $user)  // Laravel automáticamente encuentra el usuario
+    {
+        return response()->json($user, 200);  // Devuelve el usuario encontrado en formato JSON
+    }
+
+    public function editUserFromDB(User $user, Request $request)
+    {
+        // Validación de los datos
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'phone_number' => 'required|string|max:20',
+            'rol_id' => 'required|integer|in:1,2,3',  // Roles disponibles: 1 => admin, 2 => client, 3 => manager
+            // 'password' => 'nullable|string|min:8|confirmed', // Contraseña opcional, pero si está presente debe cumplir con los requisitos
+        ]);
+
+        try {
+            // Asignar los valores al usuario
+            $user->name = $validatedData['name'];
+            $user->last_name = $validatedData['last_name'];
+            $user->email = $validatedData['email'];
+            $user->phone_number = $validatedData['phone_number'];
+            $user->rol_id = $validatedData['rol_id'];
+
+            // Si se ha enviado una nueva contraseña, la actualizamos
+            // if ($request->filled('password')) {
+            //     $user->password = Hash::make($validatedData['password']);
+            // }
+
+            // Guardar los cambios en el usuario
+            $user->save();
+
+            // Devolver respuesta json
+            return response()->json([
+                'icon' => 'success', 
+                'title' => 'Usuario editado', 
+                'text' => 'El usuario se ha editado correctamente.'
+            ], 200);
+
+        } catch (\Exception $e) {
+            // Respuesta de error si algo salió mal
+            return response()->json([
+                'icon' => 'error', 
+                'title' => 'Error', 
+                'text' => 'Error al editar el usuario.'
+            ], 500);
+        }
+    }
+
+    // Método que busca el usuario por email
+    public function getUserByEmailFromDB(Request $request) {
+        try {
+            // Validar los parámetros de entrada
+            $validated = $request->validate([
+                'search' => 'required|string|email|max:255', // El email es requerido y debe ser un formato válido
+            ]);
+    
+            // Obtener el email del request
+            $email = $validated['search'];
+    
+            // Buscar el usuario en la base de datos
+            $user = User::where('email', $email)->first();
+    
+            // Verificar si el usuario existe
+            if ($user) {
+                // Si existe, devolvemos 'exists' true y el objeto 'user'
+                return response()->json(['exists' => true], 200);
+            } else {
+                // Si no existe, devolvemos 'exists' false
+                return response()->json(['exists' => false], 200);
+            }
+        } catch (\Exception $e) {
+            // En caso de error, devolvemos un error con el mensaje
+            return response()->json(['error' => 'Error al verificar el usuario: ' . $e->getMessage()], 500);
+        }
+    }
+
+    // Método que crea un usuario
+    public function createUser(Request $request) {
+        try {
+            // Validación de entrada
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'lastName' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users,email',
+                'phoneNumber' => 'required|string|min:9|max:15',
+                'role' => 'required|int|exists:rol,id',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
+    
+            // Crear usuario
+            $user = User::create([
+                'name' => $validated['name'],
+                'last_name' => $validated['lastName'],
+                'email' => $validated['email'],
+                'phone_number' => $validated['phoneNumber'],
+                'rol_id' => $validated['role'],
+                'password' => Hash::make($validated['password']),
+            ]);
+    
+            // Devolver respuesta json
+            return response()->json([
+                'icon' => 'success', 
+                'title' => 'Usuario creado', 
+                'text' => 'El usuario se ha creado correctamente'
+            ], 200);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => 'Hubo un problema al crear el usuarios.',
+                'details' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+
     /**
      * Devuelve todos los usuarios con su rol incluido.
      */
     public function getAllUsersFromDB(Request $request)
     {
-        // Inicia la consulta
-        $query = User::select('id', 'name', 'last_name', 'email', 'phone_number', 'rol_id', 'created_at')
-            ->with('rol:id,name');
-
-        // Define los campos que pueden ser filtrados
-        $filters = [
-            'name' => 'name',
-            'last_name' => 'last_name',
-            'email' => 'email',
-            'phone_number' => 'phone_number',
-            'rol' => 'rol:name',
-            'created_at' => 'created_at',
-            // No hace referencia a ninguna tabla
-            'end_date' => null
-        ];
-
-        // Aplica filtros dinámicos según los parámetros de la solicitud
-        foreach ($filters as $param => $column) {
-            if ($request->has($param)) {
-                // Si es un campo normal, aplica el filtro
-                if ($param !== 'rol' && $param !== 'created_at' && $param !== 'end_date') {
-                    $query->where($column, 'like', '%' . $request->input($param) . '%');
-                } else {
-                    // Si es el campo 'rol', usamos whereHas para la relación
-                    $query->whereHas('rol', function ($q) use ($request) {
-                        $q->where('name', 'like', '%' . $request->input('rol') . '%');
-                    });
-                }
-            }
-        }
-
-        // Filtro por fecha (rango de fechas)
-        if ($request->has('start_date') && $request->has('end_date')) {
-            $startDate = $request->input('start_date');
-            $endDate = $request->input('end_date');
-            
-            $query->whereBetween('created_at', [
-                $startDate . ' 00:00:00', // Hora de inicio
-                $endDate . ' 23:59:59'    // Hora de fin
+        try {
+            // Validar los parámetros de entrada
+            $validated = $request->validate([
+                'search' => 'nullable|string|max:255',
+                'sortColumn' => 'nullable|string|in:id,name,last_name,email,phone_number,rol_id',
+                'orderColumn' => 'nullable|string|in:asc,desc',
+                'per_page' => 'nullable|integer|min:1|max:100',
+                'page' => 'nullable|integer|min:1',
             ]);
 
-        } elseif ($request->has('start_date')) {
-            $startDate = $request->input('start_date');
-            $query->where('created_at', '>=', $startDate . ' 00:00:00');
-        } elseif ($request->has('end_date')) {
-            $endDate = $request->input('end_date');
-            $query->where('created_at', '<=', $endDate . ' 23:59:59');
+            // Construcción de la consulta
+            $query = User::select('id', 'name', 'last_name', 'email', 'phone_number', 'rol_id', 'created_at')
+                ->with('rol:id,name');
+
+            // Aplicar búsqueda si se proporciona
+            if (!empty($validated['search'])) {
+                $searchTerm = $validated['search'];
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->where('name', 'like', "%$searchTerm%")
+                        ->orWhere('last_name', 'like', "%$searchTerm%")
+                        ->orWhere('email', 'like', "%$searchTerm%")
+                        ->orWhere('phone_number', 'like', "%$searchTerm%")
+                        ->orWhereHas('rol', function ($q) use ($searchTerm) {
+                            $q->where('name', 'like', "%$searchTerm%");
+                        });
+                });
+            }
+
+            // Aplicar ordenación si se proporciona
+            if (!empty($validated['sortColumn']) && !empty($validated['orderColumn'])) {
+                $query->orderBy($validated['sortColumn'], $validated['orderColumn']);
+            }
+
+            // Definir paginación con valores por defecto
+            $perPage = $validated['per_page'] ?? 10;
+            $users = $query->paginate($perPage);
+
+            // Formatear los datos
+            $formattedUsers = $users->map(function ($user) {
+                return [
+                    'Id' => $user->id,
+                    'Nombres' => $user->name,
+                    'Apellidos' => $user->last_name,
+                    'Email' => $user->email,
+                    'Número de teléfono' => $user->phone_number,
+                    'Rol' => $user->rol->name ?? null,
+                    'Fecha de creación' => $user->created_at
+                ];
+            });
+
+            // Responder con los datos y la paginación
+            return response()->json([
+                'data' => $formattedUsers,
+                'pagination' => [
+                    'total_items' => $users->total(),
+                    'total_pages' => $users->lastPage(),
+                    'current_page' => $users->currentPage(),
+                    'per_page' => $users->perPage(),
+                ]
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => 'Hubo un problema al obtener los usuarios.',
+                'details' => $e->getMessage(),
+            ], 500);
         }
-
-        // Obtiene los datos y los transforma
-        $users = $query->get()->map(function ($user) {
-            return [
-                'Id' => $user->id,
-                'Nombres' => $user->name,
-                'Apellidos' => $user->last_name,
-                'Email' => $user->email,
-                'Número de teléfono' => $user->phone_number,
-                'Rol' => $user->rol->name ?? null,
-                'Fecha de creación' => date("d/m/Y", strtotime($user->created_at))
-            ];
-        });
-
-        // Devuelve un json
-        return response()->json($users);
     }
 
 
+    public function deleteUserFromDB(User $user) {
+        DB::beginTransaction(); // Inicia la transacción
 
-    // Método que elimina el usuario de la base de datos
-    public function deleteUserFromDB(Request $request) {
-        // Validar el ID del usuario
-        $request->validate([
-            'userId' => 'required|exists:users,id'
-        ]);
-    
-        // Obtener el usuario por el ID proporcionado
-        $user = User::findOrFail($request->userId);
-    
-        // Eliminar el usuario de la base de datos
-        $user->delete();
-    
-        // Responder con un mensaje de éxito
-        return response()->json(['icon' => 'success', 'title' => 'Usuario eliminado', 'text' => 'El usuario se ha eliminado correctamente'], 200);
+        try {
+            // Eliminar primero los registros relacionados en otras tablas
+            $user->favorites()->delete(); 
+            $user->reviews()->delete(); 
+            $user->restaurants()->delete();
+
+            // Luego, eliminar el usuario
+            $user->delete();
+
+            DB::commit(); // Confirmar la transacción
+
+            // Devolver respuesta json
+            return response()->json([
+                'icon' => 'success', 
+                'title' => 'Usuario eliminado', 
+                'text' => 'El usuario se ha eliminado correctamente'
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Revierte la transacción si hay error
+
+            return response()->json([
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => $e->getMessage()
+            ], 500);
+        }
     }
 
     
