@@ -7,10 +7,9 @@ use Illuminate\Routing\Controller;
 
 class ViewController
 {
-    public function home()
-    {
-        return view('index');
-    }
+    // public function home() {
+    //     return view('index');
+    // }
 
     public function about()
     {

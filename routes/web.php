@@ -7,7 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\ViewController;
 
-Route::get('/', [ViewController::class, 'home'])->name('home');
+Route::get('/', [RestaurantController::class, 'tresMejoresValoradosMasNuevos'])->name('tresMejoresValoradosMasNuevos');
+Route::get('/categorias', [RestaurantController::class, 'paginaCategorias'])->name('paginaCategorias');
 
 // Rutas para el UserController
 Route::controller(UserController::class)->group(function () {
@@ -39,7 +40,10 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(RestaurantController::class)->group(function () {
     Route::get('/restaurantes', 'todo')->name('views.restaurantes');
     Route::get('/restaurantes/{id}', 'mostrarElRestaurante')->name('vistas.restaurante');
-    Route::post('/puntuar', 'puntuarRestaurante')->middleware('auth');
+    Route::post('/puntuar', 'puntuarRestaurante')->name('puntuar');
+    Route::delete('/eliminar-puntuacion/{restauranteId}', 'eliminarPuntuacion')->name('eliminar-puntuacion');
+    Route::post('/comentar', 'comentarRestaurante')->name('comentar');
+    Route::post('/favorito', 'darFavorito')->name('favorito');
 });
 
 // Agrupamos las rutas bajo middleware de autenticación para asegurar que solo usuarios logueados puedan acceder
