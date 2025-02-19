@@ -75,3 +75,19 @@
 #main {
     display: none;
 }
+
+.clickable-sort-column {
+    cursor: pointer; /* Cambia el cursor para indicar que es cliclable */
+  }
+
+.clickable-sort-column:hover {
+background-color: #f8f9fa; /* Cambia el fondo cuando el cursor pasa por encima */
+}
+
+.clickable-sort-column i {
+    margin-left: 5px; /* Espacio entre el texto y la flecha */
+}
+
+.bg-custom-orange {
+    background-color: #ff6600;
+}

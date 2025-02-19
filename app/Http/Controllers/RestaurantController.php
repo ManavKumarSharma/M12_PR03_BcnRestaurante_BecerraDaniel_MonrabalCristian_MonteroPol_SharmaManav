@@ -13,6 +13,29 @@ use Illuminate\Support\Facades\Auth;
 
 class RestaurantController
 {
+    public function getAllRestaurantsFromDB(Request $request) {
+        // Inicia la consulta
+        $query = Restaurant::select('id', 'name', 'description', 'location', 'average_price', 'phone');
+
+        
+        // Obtiene los elementos para la página actual
+        $restaurants = $query->get();
+
+        // Transforma los datos
+        $restaurants = $restaurants->map(function ($restaurant) {
+        return [
+            'Id' => $restaurant->id,
+            'Nombre' => $restaurant->name,
+            'Descripción' => $restaurant->description,
+            'Localización' => $restaurant->location,
+            'Precio medio' => $restaurant->average_price,
+            'Teléfono' => $restaurant->phone
+        ];
+    });
+
+        return response()->json($restaurants);
+    }
+
     // Método que muestra todos los restaurantes
     public function showRestaurantsAdminView() {
         $title = 'restaurantes';
