@@ -160,11 +160,12 @@
         <div class="row text-center mt-3">
             <div class="col">
                 <p class="mb-0">&copy; 2025 AlDente.com - <a href="#" class="text-white">Aviso legal</a> - <a href="#" class="text-white">Política de privacidad</a> - <a href="#" class="text-white">Política de cookies</a> - 933 300 303</p>
-            </div>
+            </div>  
         </div>
     </div>
 </footer>
-  @yield('scripts')
 
+<script src="{{ asset('js/tabs-activation.js') }}"></script>
+  @yield('scripts')
 </body>
 </html>

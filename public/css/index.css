@@ -337,3 +337,13 @@
 .error-message {
     color: red;
 }
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+.img-fixed-size {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+}
+

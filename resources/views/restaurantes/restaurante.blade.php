@@ -51,31 +51,6 @@
                         </div>
                     @endif
                 </div>
-            @endif
-
-        </div>
-
-        <div class="contenidoRestaurantes">
-
-            <div class="nombre">
-                <p>{{ $restaurante->name }}</p>
-            </div>
-            <div class="zona">
-                <p>Zona: {{ $zona ?? "No hay zona asignada" }}</p>
-            </div>
-            <div class="ubicacion">
-                <p>Dirección:</p>
-
-            </div>
-            <div class="precio">
-                <p>{{ $restaurante->average_price }}€</p>
-            </div>
-            <div class="precio">
-                <p>{{ $restaurante->phone }}</p>
-            </div>
-            <div class="horario">
-                <p>Horario:</p>
-                <p>{{ $restaurante->opening_hours }} - {{ $restaurante->closing_hours }}</p>
             </div>
 
             <div class="col-12 col-md-6">
@@ -90,9 +65,12 @@
                     <h3 class="mt-4">P L A T O S:</h3>
                     <div class="row">
                         @foreach($fotosComidas as $foto)
-                            <div class="col-6 col-md-4 mb-3">
-                                <img src="{{ asset('img/food/' . $foto) }}" alt="Imagen de comida" class="img-fluid rounded">
-                            </div>
+                        <div class="col-6 col-md-4 mb-3">
+                            <img src="{{ asset('img/food/' . $foto) }}" 
+                                 alt="Imagen de comida" 
+                                 class="img-fluid rounded img-fixed-size">
+                        </div>
+                        
                         @endforeach
                     </div>
 
