@@ -69,9 +69,8 @@
         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Inicio</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ route('views.restaurantes') }}">Restaurantes</a></li>
         <li class="nav-item"><a class="nav-link" href="{{route('paginaCategorias')}}">Categorías</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
-        
-        @if(Auth::check() && Auth::user()->rol_id == 2)
+        {{-- <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li> --}}
+        @if(Auth::check() && Auth::user()->rol_id === 1)
             <li class="nav-item"><a class="nav-link" href="/admin/users">Admin site</a></li>
         @endif
         </ul>

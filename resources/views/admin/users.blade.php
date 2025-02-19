@@ -1,13 +1,14 @@
-{{-- Incluir la plantilla --}}
 @extends('admin.layout.crud')
 
-@if (!Auth::check())
-    <script>
-        window.location.href = "{{ route('login') }}";
-    </script>
-@else
-
 @section('title', "Gestión de $title")
+
+{{-- Verificación de autenticación y autorización --}}
+@unless(Auth::check() && Auth::user()->rol_id === 1)
+    @php
+        header("Location: " . route('login'));
+        exit();
+    @endphp
+@endunless
 
 {{-- Incluimos el modal --}}
 @section('modal')
@@ -24,5 +25,3 @@
     <script src="{{ asset('js/admin/users/edit.js') }}"></script>
     <script src="{{ asset('js/admin/users/admin.js') }}"></script>
 @endpush
-
-@endif

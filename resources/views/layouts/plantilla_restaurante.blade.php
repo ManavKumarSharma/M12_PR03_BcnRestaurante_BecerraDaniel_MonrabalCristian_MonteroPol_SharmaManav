@@ -28,10 +28,6 @@
               <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}">Mis datos</a></li>
               <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#resenas-pane">Mis Reseñas</a></li>
               <li><a class="dropdown-item" href="{{ route('profile.profile-all') }}#favoritos-pane">Favoritos</a></li>
-              {{-- Botón de admin solo para el usuario administrador --}}
-              @if(Auth::user()->rol === 'administrator')
-                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Ir a admin</a></li>
-              @endif
               <li>
                 <form action="{{ route('logout') }}" method="POST">
                   @csrf
@@ -72,7 +68,10 @@
           <li class="nav-item"><a class="nav-link" href="{{route ('login')}}">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('views.restaurantes') }}">Restaurantes</a></li>
           <li class="nav-item"><a class="nav-link" href="{{route('paginaCategorias')}}">Categorías</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
+          {{-- <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li> --}}
+          @if(Auth::user()->rol_id === 1)
+            <li class="nav-item"><a class="nav-link " href="{{ route('admin.users') }}">Admin</a></li>
+          @endif
         </ul>
         <div class="d-lg-none">
           <div class="dropdown mb-2">
