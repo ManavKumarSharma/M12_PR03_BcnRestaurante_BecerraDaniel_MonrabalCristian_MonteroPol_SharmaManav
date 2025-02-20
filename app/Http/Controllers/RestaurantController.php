@@ -177,7 +177,7 @@ class RestaurantController
         }
 
         // Contamos los restaurantes por etiqueta
-        $restaurantesPorEtiqueta = Restaurant::with('tags')->get()
+        $restaurantesPorEtiqueta = Restaurant::with('tags')->limit(4)->get()
         // Obtenemos todas las etiqueta que estén relacionadas con restaurantes (et1, et2,...)
         ->flatMap(function ($restaurante) {
             return $restaurante->tags;
@@ -190,7 +190,7 @@ class RestaurantController
         });
 
         // Contamos los restaurantes por zona
-        $restaurantesPorZona = Zone::withCount('restaurants')->get();
+        $restaurantesPorZona = Zone::withCount('restaurants')->limit(7)->get();
 
         return view('index', compact('mejoresValorados', 'nuevosRestaurantes', 'restaurantesPorZona', 'mediaEstrellas','restaurantesPorEtiqueta'));
     }
